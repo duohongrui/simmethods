@@ -1,3 +1,13 @@
+#' Get Information of PROSSTT
+#'
+#' @param ... ...
+#'
+#' @return A list contains the information of method and default parameters
+#' @import simutils
+#' @export
+#'
+#' @examples
+#' PROSSTT_method_definition <- PROSSTT_method_definition()
 PROSSTT_method_definition <- function(...){
 
   PROSSTT_parameters <- parameter_sets(

@@ -1,11 +1,28 @@
 Package: simmethods
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: A collection of 40+ simulation methods for singlce-cell RNA seqencing data
+Version: 0.0.0.9000
+Authors@R: 
+    c(person("Hongrui", "Duo", role = c("aut", "cre"),
+      email = "Duohongrui@cqnu.edu.cn",
+      comment = c(ORCID = "0000-0001-8683-015X")),
+      person("Bo", "Li", role = c("aut"),
+      email = "libo@cqnu.edu.cn",
+      comment = c(ORCID = "0000-0001-9944-0003")))
+Maintainer: Hongrui Duo <duohongrui@cqnu.edu.cn>
+Description: A package contains the information and core execution functions of
+    simulation methods for singlce-cell RNA seqencing data.
+License: GPL-3
+Depends: R (>= 4.0)
+Imports: simutils (>= 0.0.0.9000)
+Suggests:
+URL: https://github.com/duohongrui/simmethods
+BugReports: https://github.com/duohongrui/simmethods/issues
 Encoding: UTF-8
 LazyData: true
+biocViews:
+Author: Hongrui Duo [aut, cre] (<https://orcid.org/0000-0001-8683-015X>),
+  Bo Li [aut] (<https://orcid.org/0000-0001-9944-0003>)
+RoxygenNote: 7.1.2
+Roxygen: list(markdown = TRUE)
+

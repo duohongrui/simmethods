@@ -1,3 +1,13 @@
+#' Get Information of Splat
+#'
+#' @param ... ...
+#'
+#' @return A list contains the information of method and default parameters
+#' @import simutils
+#' @export
+#'
+#' @examples
+#' splat_method_definition <- splat_method_definition()
 splat_method_definition <- function(...){
 
   splat_parameters <- parameter_sets(
@@ -218,6 +228,3 @@ splat_method_definition <- function(...){
   list(splat_method = splat_method,
        splat_parameters = splat_parameters)
 }
-
-d <- splat_method_definition()
-
