@@ -30,10 +30,15 @@ PROSSTT_method_definition <- function(...){
       description = "Total number of expression programs for the lineage tree."
     ),
     param_integer(
-      id = "G",
+      id = "nGenes",
       default = 10000L,
       lower = 1L,
       description = "Total number of genes."
+    ),
+    param_integer(
+      id = "nCells",
+      default = 100L,
+      lower = 1L
     ),
     param_numeric(
       id = "rel_exp_cutoff",
