@@ -3,3 +3,4 @@
 export(PROSSTT_method_definition)
 export(splat_method_definition)
 import(simutils)
+importFrom(splatter,newSplatParams)

@@ -4,6 +4,7 @@
 #'
 #' @return A list contains the information of method and default parameters
 #' @import simutils
+#' @importFrom splatter newSplatParams
 #' @export
 #'
 #' @examples
@@ -20,6 +21,7 @@ splat_method_definition <- function(...){
     param_others(
       id = "splatParams",
       type = "SplatParams",
+      default = splatter::newSplatParams(),
       process = "estimation",
       description = "Usually it is default by splatter::newSplatParams function. Users can change the parameters by splatter::setParam function."
     ),

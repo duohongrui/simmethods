@@ -20,7 +20,8 @@ PROSSTT_method_definition <- function(...){
     param_others(
       id = "newick_tree_format_string",
       type = "string",
-      description = "Usually it is learned by simutils::make_tree function. Users can also provide a defined one."
+      default = "(B:100,C:60)A:70;",
+      description = "Usually it is learned by simutils::make_tree function. Note that the number in the string refers to the pseudotime which is similar to the length"
     ),
     param_integer(
       id = "modules",
