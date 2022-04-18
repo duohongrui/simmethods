@@ -15,14 +15,12 @@ PROSSTT_method_definition <- function(...){
       id = "input_refernece",
       type = c("matrix"),
       process = "estimation",
-      description = "Note that the input matrix for estimation is nessesary unless you
-                     can provide newick tree format string."
+      description = "Note that the input matrix for estimation is nessesary unless you can provide newick tree format string."
     ),
     param_others(
       id = "newick_tree_format_string",
       type = "string",
-      description = "Usually it is learned by simutils::make_tree function.
-                     Users can also provide a defined one."
+      description = "Usually it is learned by simutils::make_tree function. Users can also provide a defined one."
     ),
     param_integer(
       id = "modules",
@@ -99,16 +97,13 @@ PROSSTT_method_definition <- function(...){
       orcid = NULL
     ),
     manuscript = manuscript_definition(
-      title = "PROSSTT: probabilistic simulation of single-cell RNA-seq data for complex
-               differentiation processes",
+      title = "PROSSTT: probabilistic simulation of single-cell RNA-seq data for complex differentiation processes",
       doi = "10.1093/bioinformatics/btz078",
       journal = "Bioinformatics",
       date = "2019",
       peer_review = TRUE
     ),
-    description = "PROSSTT(PRObabilistic Simulations of ScRNA-seq Tree-like Topologies) is a package
-                   with code for the simulation of scRNAseq data for dynamic processes such as cell
-                   differentiation.")
+    description = "PROSSTT is a package with code for the simulation of scRNAseq data for dynamic processes such as cell differentiation.")
 
   list(PROSSTT_method = PROSSTT_method,
        PROSSTT_parameters = PROSSTT_parameters)
