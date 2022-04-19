@@ -21,6 +21,8 @@ Imports: simutils (>= 0.0.0.9000),
          crayon,
          dplyr
 Suggests:
+Remotes:  
+    duohongrui/duohongrui@master
 URL: https://github.com/duohongrui/simmethods
 BugReports: https://github.com/duohongrui/simmethods/issues
 Encoding: UTF-8
