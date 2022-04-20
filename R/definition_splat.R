@@ -15,13 +15,14 @@ splat_method_definition <- function(...){
     param_reference(
       id = "input_refernece",
       type = c("matrix", "SingleCellExperiment"),
+      default = NULL,
       process = "estimation",
       description = "The reference data to go through estimation and evaluation process. Usually, no reference data is also OK."
     ),
     param_others(
       id = "splatParams",
       type = "SplatParams",
-      default = splatter::newSplatParams(),
+      default = "splatter::newSplatParams()",
       process = "estimation",
       description = "Usually it is default by splatter::newSplatParams function. Users can change the parameters by splatter::setParam function."
     ),
