@@ -15,11 +15,14 @@ Description: A package contains the information and core execution functions of
 License: GPL-3
 Depends: R (>= 4.0)
 Imports: simutils (>= 0.0.0.9000),
+         BiocManager,
          splatter (>= 1.14.1),
          purrr,
          stringr,
          crayon,
-         dplyr
+         glue,
+         dplyr,
+         peakRAM
 Suggests:
 Remotes:  
     duohongrui/simutils@master

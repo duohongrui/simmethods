@@ -16,5 +16,5 @@ A list.
 Get Information of Methods
 }
 \examples{
-get_method <- get_method(method = c("splat", "PROSSTT"))
+# get_method <- get_method(method = c("splat", "PROSSTT"))
 }

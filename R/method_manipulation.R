@@ -14,7 +14,7 @@ NULL
 #' @export
 #'
 #' @examples
-#' get_method <- get_method(method = c("splat", "PROSSTT"))
+#' # get_method <- get_method(method = c("splat", "PROSSTT"))
 get_method <-function(method = "all"){
   env <- asNamespace("simmethods")
   func_name <- as.character(lsf.str(env, pattern = "_definition"))
@@ -28,7 +28,7 @@ get_method <-function(method = "all"){
   }
   # Get the information of methods
   methods_return <- purrr::map(func_name, .f = function(x){
-    fun <- paste0(x,"()") %>% parse(text = .) %>% eval()
+    paste0(x,"()") %>% parse(text = .) %>% eval()
   }) %>% setNames(right_name)
   methods_return
 }
