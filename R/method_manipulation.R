@@ -14,6 +14,7 @@ NULL
 #' @export
 #'
 #' @examples
+#' # get_method <- get_method()
 #' # get_method <- get_method(method = c("splat", "PROSSTT"))
 get_method <-function(method = "all"){
   env <- asNamespace("simmethods")
@@ -25,10 +26,13 @@ get_method <-function(method = "all"){
       if(!z %in% right_name) stop(crayon::red(paste(z, "is not wrapped in simmethods package. Please check your spelling or use () to get the right name")))
     })
     func_name <- paste0(method, "_method_definition")
+    set_name_method <- method
+  }else{
+    set_name_method <- right_name
   }
   # Get the information of methods
   methods_return <- purrr::map(func_name, .f = function(x){
     paste0(x,"()") %>% parse(text = .) %>% eval()
-  }) %>% setNames(method)
+  }) %>% setNames(set_name_method)
   methods_return
 }
