@@ -197,3 +197,4 @@ splat_simulation <- function(parameters,
                           simulate_detection = simulate_detection)
   return(simulate_output)
 }
+
