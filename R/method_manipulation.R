@@ -24,11 +24,11 @@ get_method <-function(method = "all"){
       # Make sure the method name is valid
       if(!z %in% right_name) stop(crayon::red(paste(z, "is not wrapped in simmethods package. Please check your spelling or use () to get the right name")))
     })
-    func_name <- method
+    func_name <- paste0(method, "_method_definition")
   }
   # Get the information of methods
   methods_return <- purrr::map(func_name, .f = function(x){
     paste0(x,"()") %>% parse(text = .) %>% eval()
-  }) %>% setNames(right_name)
+  }) %>% setNames(method)
   methods_return
 }
