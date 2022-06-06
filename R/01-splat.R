@@ -67,6 +67,14 @@ splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
 #'
+#' @importFrom splatter getParams
+#' @importFrom assertthat assert_that
+#' @importFrom glue glue
+#' @importFrom SingleCellExperiment counts colData rowData
+#' @importFrom Seurat as.Seurat
+#' @importFrom SeuratDisk SaveH5Seurat Convert
+#' @importFrom stringr str_replace
+#'
 #' @export
 #'
 splat_simulation <- function(parameters,
@@ -145,6 +153,9 @@ splat_simulation <- function(parameters,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
+  if(return_format == "SingleCellExperiment"){
+    simulate_result <- simulate_result
+  }
   if(return_format == "list"){
     count_data <- SingleCellExperiment::counts(simulate_result)
     col_meta <- as.data.frame(SingleCellExperiment::colData(simulate_result))

@@ -22,10 +22,15 @@ Imports: simutils (>= 0.0.0.9000),
          crayon,
          glue,
          dplyr,
-         peakRAM
+         peakRAM,
+         SingleCellExperiment,
+         assertthat,
+         SeuratDisk,
+         Seurat
 Suggests:
 Remotes:  
     duohongrui/simutils@master
+    mojaveazure/seurat-disk@master
 URL: https://github.com/duohongrui/simmethods
 BugReports: https://github.com/duohongrui/simmethods/issues
 Encoding: UTF-8
