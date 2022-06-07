@@ -102,7 +102,9 @@ splat_simulation <- function(parameters,
                                                     "batchCells",
                                                     "nGroups",
                                                     "group.prob",
-                                                    "de.prob"))
+                                                    "de.prob",
+                                                    "nCells",
+                                                    "nGenes"))
 
   # check batches
   if(length(params_check[["batchCells"]]) > 1){
@@ -119,7 +121,8 @@ splat_simulation <- function(parameters,
   # DEGs proportion
   de.prob <- params_check[["de.prob"]]
   # Return to users
-  cat(glue::glue("Your simulated datasets will have {params_check[['nBatches']]} batch(es), {params_check[['nGroups']]} group(s) and contain {de.prob} percent of DEGs"), "\n")
+  cat(glue::glue("Your simulated datasets will have {params_check[['nCells']]} cells, {params_check[['nGenes']]} genes, {params_check[['nBatches']]} batch(es),
+    {params_check[['nGroups']]} group(s) and contain {de.prob} percent of DEGs"), "\n")
   ##############################################################################
   ####                            Estimation                                 ###
   ##############################################################################
