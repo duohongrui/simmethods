@@ -130,7 +130,7 @@ splat_simulation <- function(parameters,
     cat("Simulating datasets using splat\n")
   }
   # Seed
-  set.seed(seed)
+  parameters <- splatter::setParam(parameters, name = "seed", value = seed)
   # Estimation
   tryCatch({
     if(!is.null(other_prior[["trajectory"]])){
