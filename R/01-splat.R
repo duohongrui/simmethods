@@ -137,17 +137,17 @@ splat_simulation <- function(parameters,
       cat("Simulating trajectory datasets by splat")
       simulate_detection <- peakRAM::peakRAM(simulate_result <- splatter::splatSimulate(parameters,
                                                                                         method = "paths",
-                                                                                        verbose = verbose))
+                                                                                        verbose = FALSE))
     }else{
       if(params_check[["nGroups"]] == 1){
         # simulate parameters from real data and return parameters and detection results
         simulate_detection <- peakRAM::peakRAM(simulate_result <- splatter::splatSimulate(parameters,
                                                                                           method = "single",
-                                                                                          verbose = verbose))
+                                                                                          verbose = FALSE))
       }else if(params_check[["nGroups"]] != 1){
         simulate_detection <- peakRAM::peakRAM(simulate_result <- splatter::splatSimulate(parameters,
                                                                                           method = "groups",
-                                                                                          verbose = verbose))
+                                                                                          verbose = FALSE))
       }
     }
   }, error = function(e){
