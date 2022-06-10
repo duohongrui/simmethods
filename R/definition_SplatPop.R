@@ -1,17 +1,17 @@
-#' Get Information of Splat
+#' Get Information of SplatPop
 #'
 #' @param ... ...
 #'
 #' @return A list contains the information of method and default parameters
 #' @import simutils
-#' @importFrom splatter newSplatParams
+#' @importFrom splatter newSplatPopParams
 #' @export
 #'
 #' @examples
-#' Splat_method_definition <- Splat_method_definition()
-Splat_method_definition <- function(...){
+#' SplatPop_method_definition <- SplatPop_method_definition()
 
-  Splat_parameters <- parameter_sets(
+SplatPop_method_definition <- function(...){
+  SplatPop_parameters <- parameter_sets(
     param_reference(
       id = "input_refernece",
       type = c("matrix"),
@@ -20,11 +20,180 @@ Splat_method_definition <- function(...){
       description = "The reference data to go through estimation and evaluation process. Usually, no reference data is also OK."
     ),
     param_others(
-      id = "SplatParams",
-      type = "SplatParams",
-      default = "splatter::newSplatParams()",
+      id = "KersplatParams",
+      type = "KersplatParams",
+      default = "splatter::newKersplatParams()",
       process = "estimation",
-      description = "Usually it is default by splatter::newSplatParams function. Users can change the parameters by splatter::setParam function."
+      description = "Usually it is default by splatter::newKersplatParams function. Users can change the parameters by splatter::setParam function."
+    ),
+    param_dataframe(
+      id = "eqtl",
+      description = "data.frame with all or top eQTL pairs from a real eQTL analysis. Must include columns: 'gene_id', 'pval_nominal', and 'slope'."
+    ),
+    param_others(
+      id = "means",
+      type = "matrix",
+      description = "Matrix of real gene means across a population, where each row is a gene and each column is an individual in the population."
+    ),
+    param_numeric(
+      id = "similarity.scale",
+      default = 1,
+      lower = 0,
+      border = FALSE,
+      description = "Scaling factor for pop.cv.param.rate, where values larger than 1 increase the similarity between individuals in the population and values less than one make the individuals less similar."
+    ),
+    param_numeric(
+      id = "pop.mean.shape",
+      default = 0.34,
+      lower = 0,
+      border = FALSE,
+      description = "Shape parameter for the mean (i.e. bulk) expression gamma distribution."
+    ),
+    param_numeric(
+      id = "pop.mean.rate",
+      default = 0.008,
+      lower = 0,
+      border = FALSE,
+      description = "Rate parameter for the mean (i.e. bulk) expression gamma distribution."
+    ),
+    param_Boolean(
+      id = "pop.quant.norm",
+      default = TRUE,
+      description = "Logical to run the quantile normalization function, which fits the distribution of gene means for each individual to the distribution estimated from the single-cell data, the parameter can be set to FALSE."
+    ),
+    param_integer(
+      id = "pop.cv.bins",
+      default = 10L,
+      lower = 0,
+      border = FALSE,
+      description = "The number of bins to include when estimating population scale variance parameters."
+    ),
+    param_dataframe(
+      id = "pop.cv.param",
+      type = "data.frame",
+      description = "A dataframe of bins of start, end, shape, rate."
+    ),
+    param_numeric(
+      id = "eqtl.n",
+      default = 0.5,
+      lower = 0,
+      border = FALSE,
+      description = "The number (>1) or percent (<=1) of genes to assign eQTL effects."
+    ),
+    param_numeric(
+      id = "eqtl.dist",
+      default = 1e+06,
+      lower = 0,
+      border = FALSE,
+      description = "Maximum distance between eSNP and eGene."
+    ),
+    param_numeric(
+      id = "eqtl.maf.min",
+      default = 0.05,
+      lower = 0,
+      upper = 1,
+      description = "Minimum Minor Allele Frequency of eSNPs."
+    ),
+    param_numeric(
+      id = "eqtl.maf.max",
+      default = 1,
+      lower = 0,
+      upper = 1,
+      description = "Maximum Minor Allele Frequency of eSNPs."
+    ),
+    param_numeric(
+      id = "eqtl.coreg",
+      default = 0,
+      lower = 0,
+      upper = 1,
+      description = "Proportion of eGenes to have a shared eSNP (i.e., co-regulated genes)."
+    ),
+    param_numeric(
+      id = "eqtl.ES.shape",
+      default = 3.6,
+      lower = 0,
+      border = FALSE,
+      description = "Shape parameter for the effect size gamma distribution."
+    ),
+    param_numeric(
+      id = "eqtl.ES.rate",
+      default = 12,
+      lower = 0,
+      border = FALSE,
+      description = "Rate parameter for the effect size gamma distribution."
+    ),
+    param_numeric(
+      id = "eqtl.group.specific",
+      default = 0.2,
+      lower = 0,
+      upper = 1,
+      description = "Percent of eQTL effects to simulate as group specific."
+    ),
+    param_numeric(
+      id = "eqtl.condition.specific",
+      default = 0.2,
+      lower = 0,
+      upper = 1,
+      description = "Percent of eQTL effects to simulate as condition specific."
+    ),
+    param_integer(
+      id = "batch.size",
+      default = 10L,
+      lower = 1,
+      description = "The number of donors in each pool/batch."
+    ),
+    param_Boolean(
+      id = "nCells.sample",
+      default = FALSE,
+      description = "True/False if nCells should be set as nCells or sampled from a gamma distribution for each batch/donor."
+    ),
+    param_numeric(
+      id = "eqtl.condition.specific",
+      default = 0.2,
+      lower = 0,
+      upper = 1,
+      description = "Percent of eQTL effects to simulate as condition specific."
+    ),
+    param_numeric(
+      id = "nCells.shape",
+      default = 1.5,
+      description = "Shape parameter for the nCells per batch per donor distribution."
+    ),
+    param_numeric(
+      id = "nCells.rate",
+      default = 0.015,
+      description = "Rate parameter for the nCells per batch per donor distribution."
+    ),
+    param_integer(
+      id = "nConditions",
+      default = 1L,
+      lower = 1,
+      description = "The number of conditions/treatments to divide samples into."
+    ),
+    param_vector(
+      id = "condition.prob",
+      default = 1,
+      description = "Probability that a sample belongs to each condition/treatment group. Can be a vector."
+    ),
+    param_vector(
+      id = "cde.prob",
+      default = 0.1,
+      description = "Probability that a gene is differentially expressed in a condition group. Can be a vector."
+    ),
+    param_vector(
+      id = "cde.downProb",
+      default = 0.5,
+      description = "Probability that a conditionally differentially expressed gene is down-regulated. Can be a vector."
+    ),
+    param_vector(
+      id = "cde.facLoc",
+      default = 0.1,
+      description = "Location (meanlog) parameter for the conditional differential expression factor log-normal distribution. Can be a vector."
+    ),
+    param_vector(
+      id = "cde.facScale",
+      default = 0.4,
+      description = "Scale (sdlog) parameter for the conditional differential expression factor log-normal distribution. Can be a vector."
     ),
     param_integer(
       id = "nBatches",
@@ -123,7 +292,6 @@ Splat_method_definition <- function(...){
       id = "group.prob",
       default = 1,
       lower = 0,
-      border = TRUE,
       upper = 1,
       description = "Probability that a cell comes from a group."
     ),
@@ -131,7 +299,6 @@ Splat_method_definition <- function(...){
       id = "de.prob",
       default = 0.1,
       lower = 0,
-      border = TRUE,
       upper = 1,
       description = "Probability that a gene is differentially expressed in a group. Can be a vector."
     ),
@@ -139,7 +306,6 @@ Splat_method_definition <- function(...){
       id = "de.downProb",
       default = 0.5,
       lower = 0,
-      border = TRUE,
       upper = 1,
       description = "Probability that a differentially expressed gene is down-regulated. Can be a vector."
     ),
@@ -237,8 +403,8 @@ Splat_method_definition <- function(...){
     )
   )
 
-  Splat_method <- method_definition(
-    method = "Splat",
+  SplatPop_method <- method_definition(
+    method = "SplatPop",
     programming = "R",
     url = "https://bioconductor.org/packages/release/bioc/html/splatter.html",
     authors = authors_definition(
@@ -257,6 +423,6 @@ Splat_method_definition <- function(...){
     ),
     description = "Splatter is a package for the simulation of single-cell RNA sequencing count data")
 
-  list(Splat_method = Splat_method,
-       Splat_parameters = Splat_parameters)
+  list(SplatPop_method = SplatPop_method,
+       SplatPop_parameters = SplatPop_parameters)
 }

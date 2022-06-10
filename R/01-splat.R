@@ -14,7 +14,7 @@
 #' detection.
 #' @export
 #'
-splat_estimation <- function(ref_data, verbose = FALSE, seed){
+Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 
   ##############################################################################
   ####                            Environment                                ###
@@ -34,7 +34,7 @@ splat_estimation <- function(ref_data, verbose = FALSE, seed){
   ####                            Estimation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Estimating parameters using splat\n")
+    cat("Estimating parameters using Splat\n")
   }
   # Seed
   set.seed(seed)
@@ -77,7 +77,7 @@ splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #'
 #' @export
 #'
-splat_simulation <- function(parameters,
+Splat_simulation <- function(parameters,
                              other_prior,
                              return_format,
                              verbose = FALSE,
@@ -127,14 +127,14 @@ splat_simulation <- function(parameters,
   ####                            Estimation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Simulating datasets using splat\n")
+    cat("Simulating datasets using Splat\n")
   }
   # Seed
   parameters <- splatter::setParam(parameters, name = "seed", value = seed)
   # Estimation
   tryCatch({
     if(!is.null(other_prior[["trajectory"]])){
-      cat("Simulating trajectory datasets by splat")
+      cat("Simulating trajectory datasets by Splat")
       simulate_detection <- peakRAM::peakRAM(simulate_result <- splatter::splatSimulate(parameters,
                                                                                         method = "paths",
                                                                                         verbose = FALSE))
