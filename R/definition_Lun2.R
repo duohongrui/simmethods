@@ -45,6 +45,11 @@ Lun2_method_definition <- function(...){
       process = "estimation",
       description = "A BiocParallelParam instance giving the parallel back-end to be used. Default is SerialParam which uses a single core."
     ),
+    param_Boolean(
+      id = "zinb",
+      default = FALSE,
+      description = "logical. Whether to use a zero-inflated model."
+    ),
     param_integer(
       id = "nPlates",
       default = 1L,

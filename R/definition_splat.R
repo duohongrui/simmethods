@@ -26,6 +26,12 @@ Splat_method_definition <- function(...){
       process = "estimation",
       description = "Usually it is default by splatter::newSplatParams function. Users can change the parameters by splatter::setParam function."
     ),
+    param_character(
+      id = "method",
+      default = "single",
+      alternatives = c("single", "groups", "paths"),
+      description = "Which simulation method to use. Options are 'single' which produces a single population, 'groups' which produces distinct groups (eg. cell types), 'paths' which selects cells from continuous trajectories (eg. differentiation processes)."
+    ),
     param_integer(
       id = "nBatches",
       default = 1L,

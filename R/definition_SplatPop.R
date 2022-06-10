@@ -26,13 +26,39 @@ SplatPop_method_definition <- function(...){
       process = "estimation",
       description = "Usually it is default by splatter::newKersplatParams function. Users can change the parameters by splatter::setParam function."
     ),
+    param_others(
+      id = "vcf",
+      type = "VariantAnnotation object",
+      default = "mockVCF()",
+      description = "VariantAnnotation object containing genotypes of samples."
+    ),
+    param_others(
+      id = "gff",
+      type = "NULL or data.frame",
+      default = NULL,
+      description = "Either NULL or a data.frame object containing a GFF/GTF file."
+    ),
+    param_others(
+      id = "key",
+      default = NULL,
+      type = "NULL or data.frame",
+      description = "Either NULL or a data.frame object containing a full or partial splatPop key."
+    ),
+    param_character(
+      id = "method",
+      default = "single",
+      alternatives = c("single", "groups", "paths"),
+      description = "Which simulation method to use. Options are 'single' which produces a single population, 'groups' which produces distinct groups (eg. cell types), 'paths' which selects cells from continuous trajectories (eg. differentiation processes)."
+    ),
     param_dataframe(
       id = "eqtl",
+      process = "estimation",
       description = "data.frame with all or top eQTL pairs from a real eQTL analysis. Must include columns: 'gene_id', 'pval_nominal', and 'slope'."
     ),
     param_others(
       id = "means",
       type = "matrix",
+      process = "estimation",
       description = "Matrix of real gene means across a population, where each row is a gene and each column is an individual in the population."
     ),
     param_numeric(
