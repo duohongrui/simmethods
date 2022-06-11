@@ -29,7 +29,8 @@ Lun2_method_definition <- function(...){
     param_vector(
       id = "plates",
       description = "Integer vector giving the plate that each cell originated from.",
-      process = "estimation"
+      process = "estimation",
+      force = TRUE
     ),
     param_integer(
       id = "min.size",
