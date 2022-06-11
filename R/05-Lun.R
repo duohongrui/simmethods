@@ -125,7 +125,7 @@ Lun_simulation <- function(parameters,
   tryCatch({
     simulate_detection <- peakRAM::peakRAM(
       simulate_result <- splatter::lunSimulate(parameters,
-                                               verbose = FALSE)
+                                               verbose = verbose)
     )
   }, error = function(e){
     as.character(e)

@@ -111,7 +111,7 @@ Simple_simulation <- function(parameters,
   tryCatch({
     simulate_detection <- peakRAM::peakRAM(
       simulate_result <- splatter::simpleSimulate(parameters,
-                                                  verbose = FALSE)
+                                                  verbose = verbose)
       )
   }, error = function(e){
     as.character(e)

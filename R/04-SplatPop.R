@@ -164,7 +164,7 @@ SplatPop_simulation <- function(parameters,
                                                     eqtl = other_prior[["eqtl"]],
                                                     means = other_prior[["means"]],
                                                     key = other_prior[["key"]],
-                                                    verbose = FALSE)
+                                                    verbose = verbose)
       )
   }, error = function(e){
     as.character(e)

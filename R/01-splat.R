@@ -148,7 +148,7 @@ Splat_simulation <- function(parameters,
     simulate_detection <- peakRAM::peakRAM(
       simulate_result <- splatter::splatSimulate(parameters,
                                                  method = submethod,
-                                                 verbose = FALSE))
+                                                 verbose = verbose))
   }, error = function(e){
     as.character(e)
   })

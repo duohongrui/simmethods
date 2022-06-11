@@ -29,7 +29,7 @@ Imports: simutils (>= 0.0.0.9000),
          Seurat
 Suggests:
 Remotes: 
-    duohongrui/simutils@master
+    duohongrui/simutils@master,
     mojaveazure/seurat-disk@master
 URL: https://github.com/duohongrui/simmethods
 BugReports: https://github.com/duohongrui/simmethods/issues

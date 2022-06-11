@@ -142,7 +142,7 @@ Lun2_simulation <- function(parameters,
   tryCatch({
     simulate_detection <- peakRAM::peakRAM(
       simulate_result <- splatter::lun2Simulate(parameters,
-                                                verbose = FALSE,
+                                                verbose = verbose,
                                                 zinb = zinb)
     )
   }, error = function(e){

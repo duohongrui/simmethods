@@ -121,7 +121,7 @@ Kersplat_simulation <- function(parameters,
     }
     simulate_detection <- peakRAM::peakRAM(
       simulate_result <- splatter::kersplatSimulate(parameters,
-                                                    verbose = FALSE)
+                                                    verbose = verbose)
       )
   }, error = function(e){
     as.character(e)
