@@ -9,6 +9,7 @@
 #'
 #' @examples
 #' Splat_method_definition <- Splat_method_definition()
+#'
 Splat_method_definition <- function(...){
 
   Splat_parameters <- parameter_sets(

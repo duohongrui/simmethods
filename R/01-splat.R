@@ -14,7 +14,6 @@
 #' detection.
 #' @export
 #'
-#'
 Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 
   ##############################################################################

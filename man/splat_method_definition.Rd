@@ -17,4 +17,5 @@ Get Information of Splat
 }
 \examples{
 Splat_method_definition <- Splat_method_definition()
+
 }
