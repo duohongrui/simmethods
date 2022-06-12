@@ -26,11 +26,14 @@ Imports: simutils (>= 0.0.0.9000),
          SingleCellExperiment,
          assertthat,
          SeuratDisk,
-         Seurat
+         Seurat,
+         SCRIP,
+         devtools
 Suggests:
 Remotes: 
     duohongrui/simutils@master,
-    mojaveazure/seurat-disk@master
+    mojaveazure/seurat-disk@master,
+    thecailab/SCRIP@master
 URL: https://github.com/duohongrui/simmethods
 BugReports: https://github.com/duohongrui/simmethods/issues
 Encoding: UTF-8
