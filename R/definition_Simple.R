@@ -17,50 +17,58 @@ Simple_method_definition <- function(...){
       type = c("matrix"),
       default = NULL,
       process = "estimation",
-      description = "The reference data to go through estimation and evaluation process. Usually, no reference data is also OK."
+      description = "The reference data to go through estimation and evaluation process. Usually, no reference data is also OK.",
+      function_name = "simpleEstimate"
     ),
     param_others(
       id = "SimpleParams",
       type = "SimpleParams",
       default = "splatter::newSimpleParams()",
       process = "estimation",
-      description = "Usually it is default by splatter::newSimpleParams function. Users can change the parameters by splatter::setParam function."
+      description = "Usually it is default by splatter::newSimpleParams function. Users can change the parameters by splatter::setParam function.",
+      function_name = "simpleEstimate"
     ),
     param_integer(
       id = "nGenes",
       default = 10000L,
       lower = 1L,
-      description = "The number of genes to simulate."
+      description = "The number of genes to simulate.",
+      function_name = "simpleSimulate"
     ),
     param_integer(
       id = "nCells",
       default = 100L,
       lower = 1L,
-      description = "The number of cells to simulate."
+      description = "The number of cells to simulate.",
+      function_name = "simpleSimulate"
     ),
     param_integer(
       id = "seed",
       default = 687680L,
-      description = "Seed to use for generating random numbers."
+      description = "Seed to use for generating random numbers.",
+      function_name = "simpleSimulate"
     ),
     param_numeric(
       id = "mean.shape",
       default = 0.6,
       lower = 0,
       border = FALSE,
-      description = "The shape parameter for the mean gamma distribution."
+      description = "The shape parameter for the mean gamma distribution.",
+      function_name = "simpleSimulate"
     ),
     param_numeric(
       id = "mean.rate",
       default = 0.3,
       lower = 0,
       border = FALSE,
-      description = "The rate parameter for the mean gamma distribution."
+      description = "The rate parameter for the mean gamma distribution.",
+      function_name = "simpleSimulate"
     ),
     param_numeric(
       id = "count.disp",
       default = 0.1,
-      description = "The dispersion parameter for the counts negative binomial distribution."
+      description = "The dispersion parameter for the counts negative binomial distribution.",
+      function_name = "simpleSimulate"
     )
   )
 

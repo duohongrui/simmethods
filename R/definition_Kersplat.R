@@ -17,28 +17,32 @@ Kersplat_method_definition <- function(...){
       type = c("matrix"),
       default = NULL,
       process = "estimation",
-      description = "The reference data to go through estimation and evaluation process. Usually, no reference data is also OK."
+      description = "The reference data to go through estimation and evaluation process. Usually, no reference data is also OK.",
+      function_name = "kersplatEstimate"
     ),
     param_others(
       id = "KersplatParams",
       type = "KersplatParams",
       default = "splatter::newKersplatParams()",
       process = "estimation",
-      description = "Usually it is default by splatter::newKersplatParams function. Users can change the parameters by splatter::setParam function."
+      description = "Usually it is default by splatter::newKersplatParams function. Users can change the parameters by splatter::setParam function.",
+      function_name = "kersplatEstimate"
     ),
     param_numeric(
       id = "mean.shape",
       default = 0.6,
       lower = 0,
       border = FALSE,
-      description = "Shape parameter for the mean gamma distribution."
+      description = "Shape parameter for the mean gamma distribution.",
+      function_name = "kersplatSimulate"
     ),
     param_numeric(
       id = "mean.rate",
       default = 0.3,
       lower = 0,
       border = FALSE,
-      description = "Rate parameter for the mean gamma distribution."
+      description = "Rate parameter for the mean gamma distribution.",
+      function_name = "kersplatSimulate"
     ),
     param_numeric(
       id = "mean.outProb",
@@ -46,14 +50,16 @@ Kersplat_method_definition <- function(...){
       lower = 0,
       upper = 1,
       border = FALSE,
-      description = "Probability that a gene is an expression outlier."
+      description = "Probability that a gene is an expression outlier.",
+      function_name = "kersplatSimulate"
     ),
     param_numeric(
       id = "mean.outLoc",
       default = 4L,
       lower = 0,
       border = FALSE,
-      description = "Location (meanlog) parameter for the expression outlier factor log-normal distribution."
+      description = "Location (meanlog) parameter for the expression outlier factor log-normal distribution.",
+      function_name = "kersplatSimulate"
     ),
     param_numeric(
       id = "mean.outScale",
@@ -61,114 +67,135 @@ Kersplat_method_definition <- function(...){
       lower = 0,
       border = FALSE,
       upper = 1,
-      description = "Scale (sdlog) parameter for the expression outlier factor log-normal distribution."
+      description = "Scale (sdlog) parameter for the expression outlier factor log-normal distribution.",
+      function_name = "kersplatSimulate"
     ),
     param_character(
       id = "mean.method",
       alternatives = c("fit", "density"),
       default = "fit",
-      description = "Method to use for simulating gene means. Either 'fit' to sample from a gamma distribution (with expression outliers) or 'density' to sample from the provided density object."
+      description = "Method to use for simulating gene means. Either 'fit' to sample from a gamma distribution (with expression outliers) or 'density' to sample from the provided density object.",
+      function_name = "kersplatSimulate"
     ),
     param_vector(
       id = "mean.values",
       default = NULL,
-      description = "Vector of means for each gene."
+      description = "Vector of means for each gene.",
+      function_name = "kersplatSimulate"
     ),
     param_numeric(
       id = "bcv.common",
       default = 0.1,
       lower = 0,
       border = FALSE,
-      description = "Underlying common dispersion across all genes."
+      description = "Underlying common dispersion across all genes.",
+      function_name = "kersplatSimulate"
     ),
     param_integer(
       id = "bcv.df",
       default = 60L,
       lower = 1L,
-      description = "Degrees of Freedom for the BCV inverse chi-squared distribution."
+      description = "Degrees of Freedom for the BCV inverse chi-squared distribution.",
+      function_name = "kersplatSimulate"
     ),
     param_others(
       id = "network.graph",
       default = NULL,
       type = "list",
-      description = "Graph containing the gene network."
+      description = "Graph containing the gene network.",
+      function_name = "kersplatSimulate"
     ),
     param_numeric(
       id = "network.nRegs",
       default = 100,
-      description = "Number of regulators in the network."
+      description = "Number of regulators in the network.",
+      function_name = "kersplatSimulate"
     ),
     param_Boolean(
       id = "network.regsSet",
-      default = FALSE
+      default = FALSE,
+      function_name = "kersplatSimulate"
     ),
     param_numeric(
       id = "paths.nPrograms",
       default = 10,
-      description = "Number of expression programs."
+      description = "Number of expression programs.",
+      function_name = "kersplatSimulate"
     ),
     param_dataframe(
       id = "paths.design",
       type = "data.frame",
-      description = "data.frame describing path structure. See kersplatSimPaths for details."
+      description = "data.frame describing path structure. See kersplatSimPaths for details.",
+      function_name = "kersplatSimulate"
     ),
     param_others(
       id = "paths.means",
       type = "list",
-      default = "list()"
+      default = "list()",
+      function_name = "kersplatSimulate"
     ),
     param_integer(
       id = "lib.loc",
       default = 11L,
       lower = 1L,
-      description = "Location (meanlog) parameter for the library size log-normal distribution, or mean parameter if a normal distribution is used."
+      description = "Location (meanlog) parameter for the library size log-normal distribution, or mean parameter if a normal distribution is used.",
+      function_name = "kersplatSimulate"
     ),
     param_numeric(
       id = "lib.scale",
       default = 0.2,
       lower = 0,
       border = FALSE,
-      description = "Scale (sdlog) parameter for the library size log-normal distribution, or sd parameter if a normal distribution is used."
+      description = "Scale (sdlog) parameter for the library size log-normal distribution, or sd parameter if a normal distribution is used.",
+      function_name = "kersplatSimulate"
     ),
     param_character(
       id = "lib.method",
       default = "fit",
       description = "Method to use for simulating library sizes. Either 'fit' to sample from a log-normal distribution or 'density' to sample from the provided density object.",
-      alternatives = c("fit", "density")
+      alternatives = c("fit", "density"),
+      function_name = "kersplatSimulate"
     ),
     param_dataframe(
       id = "cells.design",
       type = "data.frame",
-      description = "data.frame describing cell structure. See kersplatSimCellMeans for details."
+      description = "data.frame describing cell structure. See kersplatSimCellMeans for details.",
+      function_name = "kersplatSimulate"
     ),
     param_numeric(
       id = "doublet.prop",
       default = 0,
-      description = "Proportion of cells that are doublets."
+      description = "Proportion of cells that are doublets.",
+      function_name = "kersplatSimulate"
     ),
     param_numeric(
       id = "ambient.scale",
       default = 0.05,
-      description = "Scaling factor for the library size log-normal distribution when generating ambient library sizes."
+      description = "Scaling factor for the library size log-normal distribution when generating ambient library sizes.",
+      function_name = "kersplatSimulate"
     ),
     param_numeric(
       id = "ambient.nEmpty",
       default = 0,
-      description = "Number of empty cells to simulate."
+      description = "Number of empty cells to simulate.",
+      function_name = "kersplatSimulate"
     ),
     param_integer(
       id = "nGenes",
       default = 10000L,
-      lower = 1L
+      lower = 1L,
+      function_name = "kersplatSimulate"
     ),
     param_integer(
       id = "nCells",
       default = 100L,
-      lower = 1L
+      lower = 1L,
+      function_name = "kersplatSimulate"
     ),
     param_integer(
       id = "seed",
-      default = 633483L
+      default = 633483L,
+      function_name = "kersplatSimulate"
     )
   )
 
