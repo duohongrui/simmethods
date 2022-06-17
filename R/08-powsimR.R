@@ -236,7 +236,7 @@ powsimR_simulation <- function(parameters,
     other_prior[["bLFC"]] <- other_prior[["fc.batch"]]
   }
 
-  cat(glue::glue("nCells: {other_prior[['n1']]+other_prior[['n2']]}"), "\n")
+  cat(glue::glue("nCells: {other_prior[['nCells']]}"), "\n")
   cat(glue::glue("nGenes: {other_prior[['ngenes']]}"), "\n")
   cat(glue::glue("nGroups: 2"), "\n")
   cat(glue::glue("prob.group: {other_prior[['p.DE']]}"), "\n")
