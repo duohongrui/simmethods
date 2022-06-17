@@ -97,7 +97,7 @@ powsimR_estimation <- function(ref_data, verbose = FALSE, other_prior, seed){
     estSpikeRes <- NULL
     if(other_prior[["subfunction"]] == "estimateSpike"){
       cat("Estimating parameters using estimateSpike function\n")
-      estSpikeRes <- do.call(powsimR::estimateSpike, method_formals)
+      estSpikeRes <- do.call(powsimR::estimateSpike, sub_method_formals)
     }
   }, error = function(e){
     as.character(e)

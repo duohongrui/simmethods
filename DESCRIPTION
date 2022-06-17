@@ -16,6 +16,7 @@ License: GPL-3
 Depends: R (>= 4.0)
 Imports: simutils (>= 0.0.0.9000),
          BiocManager,
+         powsimR,
          splatter (>= 1.14.1),
          purrr,
          stringr,
@@ -28,8 +29,7 @@ Imports: simutils (>= 0.0.0.9000),
          SeuratDisk,
          Seurat,
          SCRIP,
-         devtools,
-         powsimR
+         devtools
 Suggests:
 Remotes: 
     duohongrui/simutils@master,
