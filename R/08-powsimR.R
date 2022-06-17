@@ -51,6 +51,9 @@ powsimR_estimation <- function(ref_data, verbose = FALSE, other_prior, seed){
   if(is.null(other_prior[["Normalisation"]])){
     stop("Please input the parameter of Normalisation: one of 'TMM', 'MR', 'PosCounts', 'UQ', 'scran', 'Linnorm', 'sctransform', 'SCnorm', 'Census', 'depth' and 'none'")
   }
+  if(is.null(other_prior[["subfunction"]])){
+    other_prior[["subfunction"]] <- "estimateParam"
+  }
   method_formals <- as.list(formals(powsimR::estimateParam))
   for(param in names(method_formals)){
     names_wait_check <- names(other_prior)
