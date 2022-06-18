@@ -30,7 +30,9 @@ Imports: simutils (>= 0.0.0.9000),
          Seurat,
          SCRIP,
          devtools,
-         POWSC
+         POWSC,
+         scDD,
+         scDesign
 Suggests:
 Remotes: 
     duohongrui/simutils@master,
