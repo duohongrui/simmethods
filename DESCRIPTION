@@ -31,7 +31,6 @@ Imports: simutils (>= 0.0.0.9000),
          SCRIP,
          devtools,
          POWSC,
-         scDD,
          scDesign
 Suggests:
 Remotes: 
