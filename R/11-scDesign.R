@@ -110,41 +110,50 @@ scDesign_simulation <- function(ref_data,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
-  counts_tmp <- simulate_result[["count"]]
+  if(simulate_formals[["ngroup"]] == 1){
+    counts <- simulate_result
+    rownames(counts) <- paste0("Gene", 1:nrow(counts))
+    colnames(counts) <- paste0("Cell", 1:ncol(counts))
+    col_data <- data.frame("cell_name" = colnames(counts))
+    row_data <- data.frame("gene_name" = rownames(counts))
+  }else{
+    counts_tmp <- simulate_result[["count"]]
 
-  # col_data
-  col_data <- data.frame("cell_name" = paste0("Cell", 1:sum(simulate_formals[["ncell"]])),
-                         "group" = paste0("Group", unlist(purrr::map(seq_len(length(simulate_formals[["ncell"]])),
-                                                                     function(x){
-                                                                       rep(as.character(x), ncol(counts_tmp[[x]]))
-                                                                     }))))
-  # Get count data together
-  counts <- c()
-  for(i in 1:length(counts_tmp)){
-    counts <- cbind(counts, counts_tmp[[i]])
+    # col_data
+    col_data <- data.frame("cell_name" = paste0("Cell", 1:sum(simulate_formals[["ncell"]])),
+                           "group" = paste0("Group", unlist(purrr::map(seq_len(length(simulate_formals[["ncell"]])),
+                                                                       function(x){
+                                                                         rep(as.character(x), ncol(counts_tmp[[x]]))
+                                                                       }))))
+    # Get count data together
+    counts <- c()
+    for(i in 1:length(counts_tmp)){
+      counts <- cbind(counts, counts_tmp[[i]])
+    }
+    # Rename
+    rownames(counts) <- paste0("Gene", 1:nrow(counts))
+    colnames(counts) <- paste0("Cell", 1:ncol(counts))
+    # Up and down regulated genes
+    up_gene <- simulate_result[["genesUp"]][[2]] %>%
+      stringr::str_extract(pattern = "[0-9]+") %>%
+      as.numeric()
+    down_gene <- simulate_result[["genesDown"]][[2]] %>%
+      stringr::str_extract(pattern = "[0-9]+") %>%
+      as.numeric()
+
+    row_data <- data.frame("gene_name" = rownames(counts),
+                           "de_genes" = FALSE,
+                           "up_down" = "no")
+    # Row data
+    row_data[up_gene, 3] <- "up"
+    row_data[down_gene, 3] <- "down"
+    row_data <- row_data %>%
+      dplyr::mutate("de_genes" = dplyr::case_when(
+        up_down == "no" ~ FALSE,
+        TRUE ~ TRUE
+      ))
   }
-  # Rename
-  rownames(counts) <- paste0("Gene", 1:nrow(counts))
-  colnames(counts) <- paste0("Cell", 1:ncol(counts))
-  # Up and down regulated genes
-  up_gene <- simulate_result[["genesUp"]][[2]] %>%
-    stringr::str_extract(pattern = "[0-9]+") %>%
-    as.numeric()
-  down_gene <- simulate_result[["genesDown"]][[2]] %>%
-    stringr::str_extract(pattern = "[0-9]+") %>%
-    as.numeric()
 
-  row_data <- data.frame("gene_name" = rownames(counts),
-                         "de_genes" = FALSE,
-                         "up_down" = "no")
-  # Row data
-  row_data[up_gene, 3] <- "up"
-  row_data[down_gene, 3] <- "down"
-  row_data <- row_data %>%
-    dplyr::mutate("de_genes" = dplyr::case_when(
-      up_down == "no" ~ FALSE,
-      TRUE ~ TRUE
-    ))
   # Establish SingleCellExperiment
   simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
                                                                 colData = col_data,
