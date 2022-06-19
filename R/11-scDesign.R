@@ -41,7 +41,7 @@ scDesign_simulation <- function(ref_data,
   }
 
   other_prior[["realcount"]] <- ref_data
-  other_prior[["ncell"]] <- other_prior[["nCells"]]
+  other_prior[["ncell"]] <- ncol(ref_data)
 
   if(!is.null(other_prior[["prob.group"]])){
     if(length(other_prior[["prob.group"]]) == 1){
@@ -70,6 +70,10 @@ scDesign_simulation <- function(ref_data,
     if(param %in% names_wait_check){
       simulate_formals[[param]] <- other_prior[[param]]
     }
+  }
+
+  if(is.null(other_prior[["nGroups"]])){
+    other_prior[["nGroups"]] <- 1
   }
 
   if(other_prior[["nGroups"]] > 1){
