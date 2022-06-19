@@ -149,7 +149,7 @@ scDesign2_simulation <- function(parameters,
   ####                               Check                                   ###
   ##############################################################################
   # Return to users
-  cat(glue::glue("Your simulated datasets will have {parameters[[1]][['n_cell']]} cells, {parameters[[1]][['marginal_param1']]+parameters[[1]][['marginal_param2']]} genes"), "\n")
+  cat(glue::glue("Your simulated datasets will have {parameters[[1]][['n_cell']]} cells, {nrow(parameters[[1]][['marginal_param1']])+nrow(parameters[[1]][['marginal_param2']])} genes"), "\n")
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
