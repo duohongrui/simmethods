@@ -23,6 +23,7 @@
 #'
 #' @export
 #'
+#'
 scDesign_simulation <- function(ref_data,
                                 other_prior,
                                 return_format,

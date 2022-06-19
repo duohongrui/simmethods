@@ -31,13 +31,16 @@ Imports: simutils (>= 0.0.0.9000),
          SCRIP,
          devtools,
          POWSC,
-         scDesign
+         scDesign,
+         scDesign2
 Suggests:
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,
     thecailab/SCRIP@master,
-    bvieth/powsimR@master
+    bvieth/powsimR@master,
+    Vivianstats/scDesign@master,
+    JSB-UCLA/scDesign2@master
 URL: https://github.com/duohongrui/simmethods
 BugReports: https://github.com/duohongrui/simmethods/issues
 Encoding: UTF-8
