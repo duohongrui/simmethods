@@ -109,7 +109,7 @@ POWSC_simulation <- function(parameters,
   ##############################################################################
   cat("When you are using POWSC, you can not set the number of genes. This number depends on the genes of real data.")
   if(is.null(other_prior[["nCells"]])){
-    n <- 100
+    n <- ncol(other_prior[["exprs"]])
   }else{
     n <- other_prior[["nCells"]]
   }
