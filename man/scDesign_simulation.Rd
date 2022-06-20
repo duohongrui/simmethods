@@ -14,7 +14,8 @@ scDesign_simulation(
 }
 \arguments{
 \item{ref_data}{A matrix for one dataset or a list of datasets with their own
-names. This is usually unused except for some methods, e.g. SCRIP, scDesign.}
+names. This is usually unused except for some methods, e.g. SCRIP, scDesign,
+zingeR.}
 
 \item{other_prior}{A list with names of certain parameters. Some methods need
 extra parameters to execute the estimation step, so you must input them. In

@@ -1,7 +1,8 @@
 #' Simulate Datasets by scDesign
 #'
 #' @param ref_data A matrix for one dataset or a list of datasets with their own
-#' names. This is usually unused except for some methods, e.g. SCRIP, scDesign.
+#' names. This is usually unused except for some methods, e.g. SCRIP, scDesign,
+#' zingeR.
 #' @param other_prior A list with names of certain parameters. Some methods need
 #' extra parameters to execute the estimation step, so you must input them. In
 #' simulation step, the number of cells, genes, groups, batches, the percent of
@@ -158,42 +159,8 @@ scDesign_simulation <- function(ref_data,
   simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
                                                                 colData = col_data,
                                                                 rowData = row_data)
-  if(return_format == "SingleCellExperiment"){
-    simulate_result <- simulate_result
-  }
-  if(return_format == "list"){
-    count_data <- SingleCellExperiment::counts(simulate_result)
-    col_meta <- as.data.frame(SingleCellExperiment::colData(simulate_result))
-    row_meta <- as.data.frame(SingleCellExperiment::rowData(simulate_result))
-    simulate_result <- dplyr::lst(count_data,
-                                  col_meta,
-                                  row_meta)
-  }
-  if(return_format == "Seurat"){
-    simulate_result <- Seurat::as.Seurat(simulate_result,
-                                         counts = "counts",
-                                         data = NULL)
-  }
-  if(return_format == "h5ad"){
-    # Convert to Seurat object
-    simulate_result <- Seurat::as.Seurat(simulate_result,
-                                         counts = "counts",
-                                         data = NULL)
-    # Tmp file
-    tmp_path <- tempdir()
-    data_save_name <- file.path(tmp_path, paste0(time_string(), ".h5Seurat")) %>%
-      simutils::fix_path()
-    SeuratDisk::SaveH5Seurat(simulate_result, filename = data_save_name)
-    SeuratDisk::Convert(data_save_name, dest = "h5ad")
-
-    # data path
-    data_path <- stringr::str_replace(data_save_name,
-                                      pattern = "h5Seurat",
-                                      replacement = "h5ad")
-    cat(glue::glue("Your data has been save to {data_path}", "\n"))
-    simulate_result <- list(file_type = "h5ad",
-                            save_path = data_path)
-  }
+  simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
+                                               return_format = return_format)
 
   ##############################################################################
   ####                           Ouput                                       ###
