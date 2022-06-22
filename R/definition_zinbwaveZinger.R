@@ -79,7 +79,7 @@ zinbwaveZinger_method_definition <- function(...){
       lower = 0,
       upper = 1,
       description = "Numeric value between $0$ and $1$ ($0.5$ by default) specifying the proportion of differentially expressed genes that show an upregulation in the second condition.",
-      function_name = "NBsimSingleCell_zinbwaveZingerc"
+      function_name = "NBsimSingleCell_zinbwaveZinger"
     ),
     param_numeric(
       id = "foldDiff",
