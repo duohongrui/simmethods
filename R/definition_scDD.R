@@ -41,8 +41,7 @@ scDD_method_definition <- function(...){
       type = "BiocParallelParam",
       default = "SerialParam()",
       process = "estimation",
-      description = "
-A BiocParallelParam instance giving the parallel back-end to be used. Default is SerialParam which uses a single core.",
+      description = "A BiocParallelParam instance giving the parallel back-end to be used. Default is SerialParam which uses a single core.",
       function_name = c("scDDEstimate", "scDDSimulate")
     ),
     param_vector(

@@ -30,6 +30,7 @@ BASiCS_method_definition <- function(...){
     param_vector(
       id = "batch",
       process = "estimation",
+      force = TRUE,
       description = "Vector giving the batch that each cell belongs to.",
       function_name = "BASiCSEstimate"
     ),
@@ -108,7 +109,7 @@ BASiCS_method_definition <- function(...){
       date = "2015",
       peer_review = TRUE
     ),
-    description = "This package implements a method to analyze single-cell RNA- seq Data utilizing flexible Dirichlet Process mixture models. Genes with differential distributions of expression are classified into several interesting patterns of differences between two conditions. The package also includes functions for simulating data with these patterns from negative binomial distributions.")
+    description = "BASiCS (Bayesian Analysis of Single-Cell Sequencing data) is an integrated Bayesian hierarchical model to perform statistical analyses of single-cell RNA sequencing datasets in the context of supervised experiments (where the groups of cells of interest are known a priori.")
 
   list(BASiCS_method = BASiCS_method,
        BASiCS_parameters = BASiCS_parameters)
