@@ -14,6 +14,7 @@
 #' @param seed An integer of a random seed.
 #' @importFrom peakRAM peakRAM
 #' @importFrom zingeR getDatasetZTNB
+#' @importFrom stats model.matrix
 #'
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
@@ -33,10 +34,6 @@ zingeR_estimation <- function(ref_data,
     cat("Installing zingeR...\n")
     devtools::install_github("statOmics/zingeR")
   }
-  suppressPackageStartupMessages({
-    require(gamlss.dist)
-    require(gamlss.tr)
-  })
   ##############################################################################
   ####                               Check                                   ###
   ##############################################################################
@@ -52,7 +49,7 @@ zingeR_estimation <- function(ref_data,
   if(is.null(other_prior[["condition"]])){
     stop("Please input condition information that each cell belongs to.")
   }
-  other_prior[["design"]] <- model.matrix(~as.factor(other_prior[["condition"]]))
+  other_prior[["design"]] <- stats::model.matrix(~as.factor(other_prior[["condition"]]))
 
   estimate_formals <- simutils::change_parameters(function_expr = "zingeR::getDatasetZTNB",
                                                   other_prior = other_prior,

@@ -33,8 +33,14 @@ Imports: simutils (>= 0.0.0.9000),
          devtools,
          POWSC,
          scDesign,
-         scDesign2
-Suggests:
+         scDesign2,
+         BEARscc,
+         zinbwaveZingercollected,
+         zingeR
+Suggests: gamlss.dist,
+          gamlss.tr,
+          edgeR,
+          mgcv
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,

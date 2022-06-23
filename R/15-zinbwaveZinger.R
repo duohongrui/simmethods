@@ -55,10 +55,6 @@ zinbwaveZinger_estimation <- function(ref_data,
   if(verbose){
     cat("Estimating parameters using zinbwaveZinger\n")
   }
-  suppressPackageStartupMessages({
-    require(edgeR)
-    library(mgcv)
-  })
   # Seed
   set.seed(seed)
   # Estimation
@@ -107,7 +103,7 @@ zinbwaveZinger_simulation <- function(ref_data,
   ##############################################################################
   ####                            Environment                                ###
   ##############################################################################
-  if(!requireNamespace("zinbwaveZinger", quietly = TRUE)){
+  if(!requireNamespace("zinbwaveZingercollected", quietly = TRUE)){
     cat("zinbwaveZinger is not installed on your device\n")
     cat("Installing zinbwaveZinger...\n")
     devtools::install_github("duohongrui/zinbwaveZingercollected")
@@ -179,7 +175,7 @@ zinbwaveZinger_simulation <- function(ref_data,
   # Estimation
   tryCatch({
     simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call(zinbwaveZingercollected::NBsimSingleCell, simulate_formals))
+      simulate_result <- do.call(zinbwaveZingercollected::NBsimSingleCell_zinbwaveZinger, simulate_formals))
   }, error = function(e){
     as.character(e)
   })
