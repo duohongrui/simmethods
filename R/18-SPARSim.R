@@ -98,6 +98,7 @@ SPARSim_estimation <- function(ref_data,
 #' @importFrom assertthat assert_that
 #' @importFrom glue glue
 #' @importFrom SingleCellExperiment counts colData rowData
+#' @importFrom stats runif
 #'
 #' @export
 #'
@@ -123,8 +124,8 @@ SPARSim_simulation <- function(parameters,
     if(is.null(other_prior[["distribution"]])){
       stop("You must input the distribution formal of batch effect factors.")
     }else{
-      assertthat::assert_that(length(unique(is.null(other_prior[["batch.condition"]])) == length(other_prior[["distribution"]]),
-                                     msg = "The length of batch.condition must equal to the vector of distributions"))
+      assertthat::assert_that(length(unique(is.null(other_prior[["batch.condition"]]))) == length(other_prior[["distribution"]]),
+                              msg = "The length of batch.condition must equal to the vector of distributions")
     }
     ## Default param A
     if(is.null(other_prior[["param_A"]])){
@@ -191,17 +192,17 @@ SPARSim_simulation <- function(parameters,
     }
     n_genes <- length(parameters[[1]][['intensity']])
     set.seed(seed)
-    not_DE_multiplier <- runif(n = n_genes*(1-other_prior[["prob.group"]]),
-                               min = 1/other_prior[["fc.group"]]+0.001,
-                               max = other_prior[["fc.group"]]-0.001)
+    not_DE_multiplier <- stats::runif(n = n_genes*(1-other_prior[["prob.group"]]),
+                                      min = 1/other_prior[["fc.group"]]+0.001,
+                                      max = other_prior[["fc.group"]]-0.001)
 
     set.seed(seed)
-    DE_multiplier <- c(runif(n = ceiling(n_genes*other_prior[["prob.group"]]/2),
-                             min = 1/other_prior[["fc.group"]],
-                             max = 1/other_prior[["fc.group"]]),
-                       runif(n = floor(n_genes*other_prior[["prob.group"]]/2),
-                             min = other_prior[["fc.group"]],
-                             max = other_prior[["fc.group"]]))
+    DE_multiplier <- c(stats::runif(n = ceiling(n_genes*other_prior[["prob.group"]]/2),
+                                    min = 1/other_prior[["fc.group"]],
+                                    max = 1/other_prior[["fc.group"]]),
+                       stats::runif(n = floor(n_genes*other_prior[["prob.group"]]/2),
+                                    min = other_prior[["fc.group"]],
+                                    max = other_prior[["fc.group"]]))
 
     # In this example, the first 1000 genes will be the DE ones, while the last 16128 will be the not DE ones
     fold_change_multiplier <- c(DE_multiplier, not_DE_multiplier)
