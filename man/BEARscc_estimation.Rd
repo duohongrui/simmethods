@@ -13,10 +13,9 @@ represents a cell.}
 \item{verbose}{Logical.}
 
 \item{other_prior}{A list with names of certain parameters. Some methods need
-extra parameters to execute the estimation step, so you must input them. In
-simulation step, the number of cells, genes, groups, batches, the percent of
-DEGs and other variables are usually customed, so before simulating a dataset
-you must point it out.}
+extra parameters to execute the estimation step, so you must input them. When
+you use BEARscc, you must input the \code{dilution.factor} and the \code{volume}
+information to calculate the number of molecules of spike-ins.}
 
 \item{seed}{An integer of a random seed.}
 }
