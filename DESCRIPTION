@@ -39,7 +39,8 @@ Imports: simutils (>= 0.0.0.9000),
          scDesign2,
          BEARscc,
          zinbwaveZingercollected,
-         zingeR
+         zingeR,
+         SPARSim
 Suggests: gamlss.dist,
           gamlss.tr,
           edgeR,
@@ -50,7 +51,8 @@ Remotes:
     thecailab/SCRIP@master,
     bvieth/powsimR@master,
     Vivianstats/scDesign@master,
-    JSB-UCLA/scDesign2@master
+    JSB-UCLA/scDesign2@master,
+    sysbiobig/sparsim@master
 URL: https://github.com/duohongrui/simmethods
 BugReports: https://github.com/duohongrui/simmethods/issues
 Encoding: UTF-8
