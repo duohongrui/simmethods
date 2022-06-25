@@ -273,7 +273,7 @@ Splat_method_definition <- function(...){
     ),
     param_integer(
       id = "seed",
-      default = 687680L,
+      default = 230355L,
       description = "Seed to use for generating random numbers.",
       function_name = "splatSimulate"
     )
