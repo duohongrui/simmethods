@@ -54,7 +54,8 @@ Remotes:
     bvieth/powsimR@master,
     Vivianstats/scDesign@master,
     JSB-UCLA/scDesign2@master,
-    JINJINT/ESCO@master
+    JINJINT/ESCO@master,
+    duohongrui/zinbwaveZingercollected@master
 URL: https://github.com/duohongrui/simmethods
 BugReports: https://github.com/duohongrui/simmethods/issues
 Encoding: UTF-8
