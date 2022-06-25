@@ -96,7 +96,7 @@ scDesign_simulation <- function(ref_data,
   ####                            Simulation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Simulating datasets using scDD\n")
+    cat("Simulating datasets using scDesign\n")
   }
   # Seed
   set.seed(seed)
