@@ -182,7 +182,7 @@ SPARSim_simulation <- function(parameters,
     other_prior[["batch_parameter"]] <- SPARSim_batch_parameter
   }
   ## DEGs
-  if(!is.null(other_prior[["fc.group"]] | !is.null(other_prior[["prob.group"]]))){
+  if(!is.null(other_prior[["fc.group"]]) | !is.null(other_prior[["prob.group"]])){
     if(length(parameters) != 2){
       stop("We only now support 2 groups when you want to simulate DEGs")
     }

@@ -2,7 +2,12 @@
 #'
 #' @param ref_data A matrix for one dataset or a list of datasets with their own
 #' names. This is usually unused except for some methods, e.g. SCRIP, scDesign,
-#' zingeR, SPsimSeq
+#' zingeR, SPsimSeq.
+#' @param other_prior A list with names of certain parameters. Some methods need
+#' extra parameters to execute the estimation step, so you must input them. In
+#' simulation step, the number of cells, genes, groups, batches, the percent of
+#' DEGs and other variables are usually customed, so before simulating a dataset
+#' you must point it out.
 #' @param return_format A character. Alternatives choices: list, SingleCellExperiment,
 #' Seurat, h5ad
 #' @param verbose Logical. Whether to return messages or not.
@@ -16,6 +21,7 @@
 #' @export
 #'
 SPsimSeq_simulation <- function(ref_data,
+                                other_prior,
                                 return_format,
                                 verbose = FALSE,
                                 seed
@@ -108,7 +114,7 @@ SPsimSeq_simulation <- function(ref_data,
   simulate_result[[1]]$Batch <- paste0("Batch", simulate_result[[1]]$Batch)
   simulate_result[[1]]$Group <- paste0("Group", simulate_result[[1]]$Group)
   ## Data format conversion
-  simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
+  simulate_result <- simutils::data_conversion(SCE_object = simulate_result[[1]],
                                                return_format = return_format)
 
   ##############################################################################

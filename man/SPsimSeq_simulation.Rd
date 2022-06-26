@@ -4,12 +4,24 @@
 \alias{SPsimSeq_simulation}
 \title{Simulate Datasets by SPsimSeq}
 \usage{
-SPsimSeq_simulation(ref_data, return_format, verbose = FALSE, seed)
+SPsimSeq_simulation(
+  ref_data,
+  other_prior,
+  return_format,
+  verbose = FALSE,
+  seed
+)
 }
 \arguments{
 \item{ref_data}{A matrix for one dataset or a list of datasets with their own
 names. This is usually unused except for some methods, e.g. SCRIP, scDesign,
-zingeR, SPsimSeq}
+zingeR, SPsimSeq.}
+
+\item{other_prior}{A list with names of certain parameters. Some methods need
+extra parameters to execute the estimation step, so you must input them. In
+simulation step, the number of cells, genes, groups, batches, the percent of
+DEGs and other variables are usually customed, so before simulating a dataset
+you must point it out.}
 
 \item{return_format}{A character. Alternatives choices: list, SingleCellExperiment,
 Seurat, h5ad}
