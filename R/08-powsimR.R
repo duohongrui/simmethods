@@ -39,21 +39,30 @@ powsimR_estimation <- function(ref_data, verbose = FALSE, other_prior, seed){
   other_prior[["countData"]] <- ref_data
   # Check
   if(is.null(other_prior[["RNAseq"]])){
-    stop("Please input the parameter of RNAseq: one of 'bulk' and 'singlecell'")
+    other_prior[["RNAseq"]] <- "singlecell"
+    # stop("Please input the parameter of RNAseq: one of 'bulk' and 'singlecell'")
   }
   if(is.null(other_prior[["Protocol"]])){
-    stop("Please input the parameter of Protocol: one of 'UMI' and 'Read'")
+    other_prior[["Protocol"]] <- "UMI"
+    # stop("Please input the parameter of Protocol: one of 'UMI' and 'Read'")
   }
   # Sub function
   if(is.null(other_prior[["Distribution"]])){
-    stop("Please input the parameter of Distribution: one of 'NB' and 'ZINB'")
+    other_prior[["Distribution"]] <- "NB"
+    # stop("Please input the parameter of Distribution: one of 'NB' and 'ZINB'")
   }
   if(is.null(other_prior[["Normalisation"]])){
-    stop("Please input the parameter of Normalisation: one of 'TMM', 'MR', 'PosCounts', 'UQ', 'scran', 'Linnorm', 'sctransform', 'SCnorm', 'Census', 'depth' and 'none'")
+    other_prior[["Normalisation"]] <- "TMM"
+    # stop("Please input the parameter of Normalisation: one of 'TMM', 'MR', 'PosCounts', 'UQ', 'scran', 'Linnorm', 'sctransform', 'SCnorm', 'Census', 'depth' and 'none'")
   }
+
+
   if(is.null(other_prior[["subfunction"]])){
     other_prior[["subfunction"]] <- "estimateParam"
   }
+
+
+
   method_formals <- as.list(formals(powsimR::estimateParam))
   for(param in names(method_formals)){
     names_wait_check <- names(other_prior)
@@ -174,60 +183,47 @@ powsimR_simulation <- function(parameters,
 
   ## genes
   if(is.null(other_prior[["nGenes"]])){
-    other_prior[["ngenes"]] <- 10000
+    other_prior[["ngenes"]] <- parameters[["totalG"]]
   }else{
     other_prior[["ngenes"]] <- other_prior[["nGenes"]]
   }
   ## cells
   if(!is.null(other_prior[["prob.batch"]]) | !is.null(other_prior[["fc.batch"]])){
     if(is.null(other_prior[["nCells"]])){
-      other_prior[["n1"]] <- c(500, 500)
-      other_prior[["n2"]] <- c(500, 500)
+      other_prior[["nCells"]] <- parameters[["totalS"]]
+    }
+    if(length(other_prior[["nCells"]]) == 2){
+      other_prior[["n1"]] <- c(ceiling(other_prior[["nCells"]][1]/2), floor(other_prior[["nCells"]][1]/2))
+      other_prior[["n2"]] <- c(ceiling(other_prior[["nCells"]][2]/2), floor(other_prior[["nCells"]][2]/2))
     }else{
-      if(length(other_prior[["nCells"]]) == 2){
-        other_prior[["n1"]] <- c(ceiling(other_prior[["nCells"]][1]/2), floor(other_prior[["nCells"]][1]/2))
-        other_prior[["n2"]] <- c(ceiling(other_prior[["nCells"]][2]/2), floor(other_prior[["nCells"]][2]/2))
-      }else{
-        other_prior[["n1"]] <- c(ceiling(ceiling(other_prior[["nCells"]]/2)/2),
-                                 floor(ceiling(other_prior[["nCells"]]/2)/2))
-        other_prior[["n2"]] <- c(ceiling(floor(other_prior[["nCells"]]/2)/2),
-                                 floor(floor(other_prior[["nCells"]]/2)/2))
-      }
+      other_prior[["n1"]] <- c(ceiling(ceiling(other_prior[["nCells"]]/2)/2),
+                               floor(ceiling(other_prior[["nCells"]]/2)/2))
+      other_prior[["n2"]] <- c(ceiling(floor(other_prior[["nCells"]]/2)/2),
+                               floor(floor(other_prior[["nCells"]]/2)/2))
     }
   }else{
     if(is.null(other_prior[["nCells"]])){
-      other_prior[["n1"]] <- 1000
-      other_prior[["n2"]] <- 1000
+      other_prior[["nCells"]] <- parameters[["totalS"]]
+    }
+    if(length(other_prior[["nCells"]]) != 1){
+      other_prior[["n1"]] <- other_prior[["nCells"]][1]
+      other_prior[["n2"]] <- other_prior[["nCells"]][2]
     }else{
-      if(length(other_prior[["nCells"]]) != 1){
-        other_prior[["n1"]] <- other_prior[["nCells"]][1]
-        other_prior[["n2"]] <- other_prior[["nCells"]][2]
-      }else{
-        other_prior[["n1"]] <- ceiling(other_prior[["nCells"]]/2)
-        other_prior[["n2"]] <- floor(other_prior[["nCells"]]/2)
-      }
+      other_prior[["n1"]] <- ceiling(other_prior[["nCells"]]/2)
+      other_prior[["n2"]] <- floor(other_prior[["nCells"]]/2)
     }
   }
   ## proportion of genes in groups
-  if(is.null(other_prior[["prob.group"]])){
-    cat("prob.group: 0.1 \n")
+  if(is.null(other_prior[["de.prob"]])){
     other_prior[["p.DE"]] <- 0.1
   }else{
-    other_prior[["p.DE"]] <- other_prior[["prob.group"]]
+    other_prior[["p.DE"]] <- other_prior[["de.prob"]]
   }
   ## fold change of genes in groups
   if(is.null(other_prior[["fc.group"]])){
-    cat("fc.group: 1 \n")
     other_prior[["pLFC"]] <- 1
   }else{
     other_prior[["pLFC"]] <- other_prior[["fc.group"]]
-  }
-  ## proportion of genes in batches
-  if(is.null(other_prior[["prob.batch"]])){
-    cat("prob.batch: NULL \n")
-    other_prior[["p.B"]] <- NULL
-  }else{
-    other_prior[["p.B"]] <- other_prior[["prob.batch"]]
   }
   ## fold change of genes in batches
   if(is.null(other_prior[["fc.batch"]])){
@@ -235,14 +231,20 @@ powsimR_simulation <- function(parameters,
   }else{
     other_prior[["bLFC"]] <- other_prior[["fc.batch"]]
   }
+  ## proportion of genes in batches
+  if(is.null(other_prior[["bLFC"]])){
+    other_prior[["p.B"]] <- NULL
+  }else{
+    other_prior[["p.B"]] <- 0.1
+  }
+
 
   cat(glue::glue("nCells: {other_prior[['nCells']]}"), "\n")
   cat(glue::glue("nGenes: {other_prior[['ngenes']]}"), "\n")
   cat(glue::glue("nGroups: 2"), "\n")
-  cat(glue::glue("prob.group: {other_prior[['p.DE']]}"), "\n")
+  cat(glue::glue("de.prob: {other_prior[['p.DE']]}"), "\n")
   cat(glue::glue("fc.group: {other_prior[['pLFC']]}"), "\n")
   cat(glue::glue("nBatches: 2 \n"), "\n")
-  cat(glue::glue("prob.batch: {other_prior[['p.B']]}"), "\n")
   cat(glue::glue("fc.batch: {other_prior[['bLFC']]}"), "\n")
 
 
@@ -263,10 +265,12 @@ powsimR_simulation <- function(parameters,
   other_prior[["Counts"]] <- TRUE
 
   if(is.null(other_prior[["Normalisation"]])){
-    stop("Please input the parameter of Normalisation: one of 'TMM', 'MR', 'PosCounts', 'UQ', 'scran', 'Linnorm', 'sctransform', 'SCnorm', 'Census', and 'depth'")
+    other_prior[["Normalisation"]] <- "TMM"
+    # stop("Please input the parameter of Normalisation: one of 'TMM', 'MR', 'PosCounts', 'UQ', 'scran', 'Linnorm', 'sctransform', 'SCnorm', 'Census', and 'depth'")
   }
   if(is.null(other_prior[['DEmethod']])){
-    stop("Please input the parameter of DEmethod: one of 'T-Test', 'edgeR-LRT', 'edgeR-QL', 'edgeR-zingeR', 'edgeR-ZINB-WaVE', 'limma-voom', 'limma-trend', 'DESeq2', 'DESeq2-zingeR', 'DESeq2-ZINB-WaVE', 'ROTS', 'baySeq', 'NOISeq', 'EBSeq', 'MAST', 'BPSC', 'scDD', 'DECENT'")
+    other_prior[['DEmethod']] <- "limma-trend"
+    # stop("Please input the parameter of DEmethod: one of 'T-Test', 'edgeR-LRT', 'edgeR-QL', 'edgeR-zingeR', 'edgeR-ZINB-WaVE', 'limma-voom', 'limma-trend', 'DESeq2', 'DESeq2-zingeR', 'DESeq2-ZINB-WaVE', 'ROTS', 'baySeq', 'NOISeq', 'EBSeq', 'MAST', 'BPSC', 'scDD', 'DECENT'")
   }
 
   simulate_formals <- as.list(formals(powsimR::simulateDE))
@@ -308,11 +312,17 @@ powsimR_simulation <- function(parameters,
   colnames(counts) <- paste0("Cell", c(1:ncol(counts)))
   rownames(counts) <- paste0("Gene", c(1:nrow(counts)))
   # Extract infomation
-  row_data <- data.frame("gene_name" = rownames(counts),
-                         "de_genes" = ifelse(simulate_result[["DESetup"]][["pLFC"]][[1]] == 0, FALSE, TRUE),
-                         "de_fc" = simulate_result[["DESetup"]][["pLFC"]][[1]],
-                         "batch_genes" = ifelse(simulate_result[["DESetup"]][["bLFC"]][[1]] == 0, FALSE, TRUE),
-                         "batch_fc" = simulate_result[["DESetup"]][["bLFC"]][[1]])
+  if(!is.null(SetupRes[["DESetup"]][["bLFC"]])){
+    row_data <- data.frame("gene_name" = rownames(counts),
+                           "de_genes" = ifelse(simulate_result[["DESetup"]][["pLFC"]][[1]] == 0, FALSE, TRUE),
+                           "de_fc" = simulate_result[["DESetup"]][["pLFC"]][[1]],
+                           "batch_genes" = ifelse(simulate_result[["DESetup"]][["bLFC"]][[1]] == 0, FALSE, TRUE),
+                           "batch_fc" = simulate_result[["DESetup"]][["bLFC"]][[1]])
+  }else{
+    row_data <- data.frame("gene_name" = rownames(counts),
+                           "de_genes" = ifelse(simulate_result[["DESetup"]][["pLFC"]][[1]] == 0, FALSE, TRUE),
+                           "de_fc" = simulate_result[["DESetup"]][["pLFC"]][[1]])
+  }
   if(length(simulate_result[["Counts"]]) == 2){
     col_data <- data.frame("cell_name" = colnames(counts),
                            "group" = paste0("Group",
