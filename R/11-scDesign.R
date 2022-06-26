@@ -40,19 +40,26 @@ scDesign_simulation <- function(ref_data,
     cat("Installing scDesign\n")
     devtools::install_github("Vivianstats/scDesign")
   }
-
   other_prior[["realcount"]] <- ref_data
-  other_prior[["ncell"]] <- ncol(ref_data)
+  ## nCells
+  if(!is.null(other_prior[["nCells"]])){
+    other_prior[["ncell"]] <- ncol(ref_data)
+  }else{
+    other_prior[["ncell"]] <- other_prior[["nCells"]]
+  }
 
-  if(!is.null(other_prior[["prob.group"]])){
-    if(length(other_prior[["prob.group"]]) == 1){
-      other_prior[["pUp"]] <- ceiling(other_prior[["prob.group"]]/2)
-      other_prior[["pDown"]] <- floor(other_prior[["prob.group"]]/2)
+  if(!is.null(other_prior[["de.prob"]])){
+    if(length(other_prior[["de.prob"]]) == 1){
+      other_prior[["pUp"]] <- ceiling(other_prior[["de.prob"]]/2)
+      other_prior[["pDown"]] <- floor(other_prior[["de.prob"]]/2)
     }
-    if(length(other_prior[["prob.group"]]) == 2){
-      other_prior[["pUp"]] <- other_prior[["prob.group"]][1]
-      other_prior[["pDown"]] <- other_prior[["prob.group"]][2]
+    if(length(other_prior[["de.prob"]]) == 2){
+      other_prior[["pUp"]] <- other_prior[["de.prob"]][1]
+      other_prior[["pDown"]] <- other_prior[["de.prob"]][2]
     }
+  }else{
+    other_prior[["pUp"]] <- 0.05
+    other_prior[["pDown"]] <- 0.05
   }
 
   if(!is.null(other_prior[["fc.group"]])){
@@ -63,6 +70,9 @@ scDesign_simulation <- function(ref_data,
       other_prior[["fU"]] <- other_prior[["fc.group"]][1]
       other_prior[["fL"]] <- other_prior[["fc.group"]][2]
     }
+  }else{
+    other_prior[["fU"]] <- 5
+    other_prior[["fL"]] <- 1.5
   }
 
   simulate_formals <- as.list(formals(scDesign::design_data))
@@ -79,10 +89,24 @@ scDesign_simulation <- function(ref_data,
 
   if(other_prior[["nGroups"]] > 1){
     simulate_formals[["ngroup"]] <- other_prior[["nGroups"]]
-    assertthat::assert_that(length(other_prior[["nCells"]]) == other_prior[["nGroups"]],
-                            msg = "The length of nCells must equal to nGroups")
+    if(length(simulate_formals[["ncell"]]) != simulate_formals[["ngroup"]]){
+      remainder <- simulate_formals[["ncell"]] %% simulate_formals[["ngroup"]]
+      if(remainder == 0){
+        simulate_formals[["ncell"]] <- rep(simulate_formals[["ncell"]]/simulate_formals[["ngroup"]],
+                                           simulate_formals[["ngroup"]])
+      }else{
+        simulate_formals[["ncell"]] <- c(rep(simulate_formals[["ncell"]]%/%simulate_formals[["ngroup"]],
+                                             simulate_formals[["ngroup"]]-1),
+                                         simulate_formals[["ncell"]]%/%simulate_formals[["ngroup"]] + remainder)
+      }
+    }
+    # assertthat::assert_that(length(other_prior[["nCells"]]) == other_prior[["nGroups"]],
+    #                         msg = "The length of nCells must equal to nGroups")
     if(length(simulate_formals[["S"]]) != simulate_formals[["ngroup"]]){
-      assertthat::assert_that(length(other_prior[["nCells"]] == other_prior[["nGroups"]]),
+      if(is.null(other_prior[["S"]])){
+        simulate_formals[["S"]] <- rep(simulate_formals[["S"]], simulate_formals[["ngroup"]])
+      }
+      assertthat::assert_that(length(simulate_formals[["S"]]) == simulate_formals[["ngroup"]],
                               msg = "The length of S must equal to nGroups")
     }
   }
@@ -91,7 +115,12 @@ scDesign_simulation <- function(ref_data,
   ####                               Check                                   ###
   ##############################################################################
   # Return to users
-  cat(glue::glue("Your simulated datasets will have {simulate_formals[['ncell']]} cells, {dim(ref_data)[1]} genes, simulate_formals[['ngroup']] group(s) and contain {other_prior[['pUp']]+other_prior[['pDown']]} percent of DEGs"), "\n")
+  cat(glue::glue("nCells: {sum(simulate_formals[['ncell']])}"), "\n")
+  cat(glue::glue("nGenes: {nrow(simulate_formals[['realcount']])}"), "\n")
+  cat(glue::glue("nGroups: {simulate_formals[['ngroup']]}"), "\n")
+  cat(glue::glue("de.prob: {simulate_formals[['pUp']] + simulate_formals[['pDown']]}"), "\n")
+  cat(glue::glue("fc.group: up--{simulate_formals[['fU']]}"), "\n")
+  cat(glue::glue("fc.group: down--{simulate_formals[['fL']]}"), "\n")
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################

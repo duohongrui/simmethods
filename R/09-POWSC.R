@@ -109,20 +109,20 @@ POWSC_simulation <- function(parameters,
   ##############################################################################
   cat("When you are using POWSC, you can not set the number of genes. This number depends on the genes of real data.")
   if(is.null(other_prior[["nCells"]])){
-    n <- ncol(other_prior[["exprs"]])
+    n <- ncol(parameters[["exprs"]])
   }else{
     n <- other_prior[["nCells"]]
   }
-  if(is.null(other_prior[["prob.group"]])){
+  if(is.null(other_prior[["de.prob"]])){
     perDE <- 0.05
   }else{
-    perDE <- other_prior[["prob.group"]]
+    perDE <- other_prior[["de.prob"]]
   }
 
   cat(glue::glue("nCells: {n}"), "\n")
   cat(glue::glue("nGenes: {dim(parameters[['exprs']])[1]}"), "\n")
   cat(glue::glue("nGroups: 2"), "\n")
-  cat(glue::glue("prob.group: {perDE}"), "\n")
+  cat(glue::glue("de.prob: {perDE}"), "\n")
 
   ##############################################################################
   ####                            Simulation                                 ###

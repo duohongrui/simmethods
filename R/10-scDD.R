@@ -35,6 +35,9 @@ scDD_estimation <- function(ref_data, verbose = FALSE, other_prior, seed){
   if(!is.matrix(ref_data)){
     ref_data <- as.matrix(ref_data)
   }
+  if(is.null(other_prior[["condition"]])){
+    stop("Please input the conditions that each cell belongs to")
+  }
   ##############################################################################
   ####                            Estimation                                 ###
   ##############################################################################
@@ -101,12 +104,9 @@ scDD_simulation <- function(parameters,
     cat("Installing splatter...\n")
     BiocManager::install("splatter")
   }
-  simulate_formals <- as.list(formals(splatter::scDDSimulate))
-  for(param in names(simulate_formals)){
-    names_wait_check <- names(other_prior)
-    if(param %in% names_wait_check){
-      simulate_formals[[param]] <- other_prior[[param]]
-    }
+  ## nCells
+  if(!is.null(other_prior[["nCells"]])){
+    parameters <- splatter::setParam(parameters, "nCells", other_prior[["nCells"]])
   }
   ##############################################################################
   ####                               Check                                   ###
@@ -124,7 +124,10 @@ scDD_simulation <- function(parameters,
   nEP <- splatter::getParams(parameters, "nEP") %>% unlist()
   de.prob <- sum(nDE, nDP, nDM, nDB)/sum(nDE, nDP, nDM, nDB, nEE, nEP)
   # Return to users
-  cat(glue::glue("Your simulated datasets will have {params_check[['nCells']]} cells, {params_check[['nGenes']]} genes, 1 group(s) and contain {de.prob} percent of DEGs"), "\n")
+  cat(glue::glue("nCells: {params_check[['nCells']]}"), "\n")
+  cat(glue::glue("nGenes: {params_check[['nGenes']]}"), "\n")
+  cat(glue::glue("nGroups: 2"), "\n")
+  cat(glue::glue("de.prob: {de.prob}"), "\n")
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
