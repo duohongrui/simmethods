@@ -13,7 +13,7 @@ Maintainer: Hongrui Duo <duohongrui@cqnu.edu.cn>
 Description: A package contains the information and core execution functions of
     simulation methods for singlce-cell RNA seqencing data.
 License: GPL-3
-Depends: R (>= 4.0), SummarizedExperiment, SingleCellExperiment
+Depends: R (>= 4.0), SummarizedExperiment, SingleCellExperiment, gamlss.dist, gamlss.tr
 Imports: simutils (>= 0.0.0.9000),
          BiocManager,
          methods,
@@ -43,9 +43,7 @@ Imports: simutils (>= 0.0.0.9000),
          SPARSim,
          SPsimSeq,
          ESCO
-Suggests: gamlss.dist,
-          gamlss.tr,
-          edgeR,
+Suggests: edgeR,
           mgcv
 Remotes: 
     duohongrui/simutils@master,
