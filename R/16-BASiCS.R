@@ -40,7 +40,7 @@ BASiCS_estimation <- function(ref_data,
   }
   other_prior[["counts"]] <- ref_data
   other_prior[["params"]] <- splatter::newBASiCSParams()
-  if(is.null(other_prior[["spike.info"]] & is.null(other_prior[["batch.condition"]]))){
+  if(is.null(other_prior[["spike.info"]]) & is.null(other_prior[["batch.condition"]])){
     stop("At least one of spike.info and batch must be provided.")
   }
   if(!is.null(other_prior[["batch.condition"]])){
