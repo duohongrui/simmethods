@@ -50,10 +50,10 @@ SPsimSeq_simulation <- function(ref_data,
     other_prior[["group"]] <- other_prior[["group.condition"]]
     other_prior[["group.config"]] <- table(other_prior[["group"]])/length(other_prior[["group"]])
   }
-  if(is.null(other_prior[["prob.group"]])){
+  if(is.null(other_prior[["de.prob"]])){
     other_prior[["pDE"]] <- 0.1
   }else{
-    other_prior[["pDE"]] <- other_prior[["prob.group"]]
+    other_prior[["pDE"]] <- other_prior[["de.prob"]]
   }
   ## gene number
   if(is.null(other_prior[["nGenes"]])){
@@ -86,7 +86,7 @@ SPsimSeq_simulation <- function(ref_data,
   cat(glue::glue("nCells: {simulate_formals[['tot.samples']]}"), "\n")
   cat(glue::glue("nGenes: {simulate_formals[['n.genes']]}"), "\n")
   cat(glue::glue("nGroups: {length(unique(simulate_formals[['group']]))}"), "\n")
-  cat(glue::glue("prob.group: {simulate_formals[['pDE']]}"), "\n")
+  cat(glue::glue("de.prob: {simulate_formals[['pDE']]}"), "\n")
   cat(glue::glue("nBatches: {length(unique(simulate_formals[['batch']]))}"), "\n")
 
   ##############################################################################

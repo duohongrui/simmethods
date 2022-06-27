@@ -15,6 +15,7 @@
 #' @importFrom peakRAM peakRAM
 #' @importFrom zingeR getDatasetZTNB
 #' @importFrom stats model.matrix
+#' @import gamlss.dist gamlss.tr
 #'
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.

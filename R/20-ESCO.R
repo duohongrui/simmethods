@@ -44,9 +44,10 @@ ESCO_estimation <- function(ref_data,
     other_prior[["cellinf"]] <- NULL
   }else{
     other_prior[["group"]] <- TRUE
-    other_prior[["cellinf"]] <- other_prior[["group.condition"]]
+    other_prior[["cellinfo"]] <- other_prior[["group.condition"]]
   }
   other_prior[["params"]] <- ESCO::newescoParams()
+  other_prior[["dirname"]] <- "./"
   estimate_formals <- simutils::change_parameters(function_expr = "ESCO::escoEstimate",
                                                   other_prior = other_prior,
                                                   step = "estimation")
@@ -114,7 +115,14 @@ ESCO_simulation <- function(parameters,
   ####                               Check                                   ###
   ##############################################################################
   assertthat::assert_that(class(parameters) == "escoParams")
-
+  # nCells
+  if(!is.null(other_prior[["nCells"]])){
+    parameters <- splatter::setParam(parameters, name = "nCells", value = other_prior[["nCells"]])
+  }
+  # nGenes
+  if(!is.null(other_prior[["nGenes"]])){
+    parameters <- splatter::setParam(parameters, name = "nGenes", value = other_prior[["nGenes"]])
+  }
   # Get params to check
   params_check <- splatter::getParams(parameters, c("nCells",
                                                     "nGenes",
