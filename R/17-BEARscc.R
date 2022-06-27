@@ -69,7 +69,7 @@ BEARscc_estimation <- function(ref_data,
   rownames(ERCC_meta) <- rownames(ERCC_count)
   colnames(ERCC_meta) <- "Transcripts"
   ref_data <- ref_data[-grep(pattern = '^ERCC-', rownames(ref_data)), ]
-
+  ## Gene name transformation
   ensembl <- biomaRt::useEnsembl(biomart = "genes", dataset = "mmusculus_gene_ensembl")
 
   id_convert <- biomaRt::getBM(attributes = c("ensembl_gene_id",
@@ -82,8 +82,7 @@ BEARscc_estimation <- function(ref_data,
   rownames(ref_data) <- id_convert$ensembl_gene_id[stats::na.omit(match(rownames(ref_data),
                                                                   id_convert$external_gene_name))]
   ref_data <- rbind(ref_data, ERCC_count)
-
-
+  ## Data format
   ref_data <- SummarizedExperiment::SummarizedExperiment(assays = list(counts = as.matrix(ref_data)))
   ref_data <- methods::as(ref_data, "SingleCellExperiment")
   S4Vectors::metadata(ref_data) <- list(spikeConcentrations = ERCC_meta)

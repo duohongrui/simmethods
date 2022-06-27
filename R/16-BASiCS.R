@@ -123,13 +123,26 @@ BASiCS_simulation <- function(parameters,
   ####                               Check                                   ###
   ##############################################################################
   assertthat::assert_that(class(parameters) == "BASiCSParams")
+  # nCells
+  if(!is.null(other_prior[["nCells"]])){
+    n_cell <- c(ceiling(other_prior[["nCells"]]/2), floor(other_prior[["nCells"]]/2))
+    parameters <- splatter::setParam(parameters, name = "batchCells", value = n_cell)
+  }
+  # nGenes
+  if(!is.null(other_prior[["nGenes"]])){
+    parameters <- splatter::setParam(parameters, name = "nGenes", value = other_prior[["nGenes"]])
+  }
 
+  # nGenes
+  parameters <- splatter::setParam(parameters, name = "seed", value = seed)
   # Get params to check
   params_check <- splatter::getParams(parameters, c("nCells",
                                                     "nGenes",
                                                     "nBatches"))
   # Return to users
-  cat(glue::glue("Your simulated datasets will have {params_check[['nCells']]} cells, {params_check[['nGenes']]} genes, {params_check[['nBatches']]} batches(s)"), "\n")
+  cat(glue::glue("nCells: {params_check[['nCells']]}"), "\n")
+  cat(glue::glue("nGenes: {params_check[['nGenes']]}"), "\n")
+  cat(glue::glue("nBatches: {params_check[['nBatches']]}"), "\n")
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
