@@ -15,6 +15,7 @@
 #' @importFrom peakRAM peakRAM
 #' @importFrom SPARSim SPARSim_estimate_parameter_from_data scran_normalization
 #' @importFrom stats model.matrix
+#' @importFrom scater normalizeCounts
 #'
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
@@ -40,17 +41,18 @@ SPARSim_estimation <- function(ref_data,
   if(!is.matrix(ref_data)){
     ref_data <- as.matrix(ref_data)
   }
+  colnames(ref_data) <- paste0("Cell", 1:ncol(ref_data))
   other_prior[["raw_data"]] <- ref_data
-  other_prior[["norm_data"]] <- SPARSim::scran_normalization(ref_data)
+  other_prior[["norm_data"]] <- scater::normalizeCounts(ref_data)
 
-  if(is.null(other_prior[["condition"]])){
+  if(is.null(other_prior[["group.condition"]])){
     count_matrix_conditions <- list(conditionA = 1:ncol(ref_data))
     other_prior[["conditions"]] <- count_matrix_conditions
   }else{
     count_matrix_conditions <- list()
-    condition_length <- length(unique(other_prior[["condition"]]))
+    condition_length <- length(unique(other_prior[["group.condition"]]))
     for(i in 1:condition_length){
-      index <- which(other_prior[["condition"]] == i)
+      index <- which(other_prior[["group.condition"]] == i)
       count_matrix_conditions[[paste0("cond_", LETTERS[i])]] <- index
     }
     other_prior[["conditions"]] <- count_matrix_conditions
@@ -128,22 +130,25 @@ SPARSim_simulation <- function(parameters,
   if(!is.null(other_prior[["batch.condition"]])){
     other_prior[["output_batch_matrix"]] <- TRUE
     if(is.null(other_prior[["distribution"]])){
-      stop("You must input the distribution formal of batch effect factors.")
-    }else{
-      assertthat::assert_that(length(unique(is.null(other_prior[["batch.condition"]]))) == length(other_prior[["distribution"]]),
-                              msg = "The length of batch.condition must equal to the vector of distributions")
+      other_prior[["distribution"]] <- "normal"
     }
+    if(!length(unique(other_prior[["batch.condition"]])) == length(other_prior[["distribution"]])){
+      other_prior[["distribution"]] <- rep(other_prior[["distribution"]][1],
+                                           length(unique(other_prior[["batch.condition"]])))
+    }
+    assertthat::assert_that(length(unique(other_prior[["batch.condition"]])) == length(other_prior[["distribution"]]),
+                            msg = "The length of batch.condition must equal to the vector of distributions")
     ## Default param A
     if(is.null(other_prior[["param_A"]])){
       for(w in 1:length(other_prior[["distribution"]])){
         dis <- other_prior[["distribution"]][w]
         if(dis == "normal"){
-          cat("You do not set the statsitical parameters to describe the normal distribution and it will be set as 'mean = 0' by default. \n")
-          other_prior[["param_A"]] <- BiocGenerics::append(other_prior[["param_A"]], 0)
+          cat(glue::glue("You do not set the statsitical parameters to describe the normal distribution and it will be set as mean = {w-1} by default for batch {w}."), "\n")
+          other_prior[["param_A"]] <- BiocGenerics::append(other_prior[["param_A"]], w-1)
         }
         if(dis == "gamma"){
-          cat("You do not set the statsitical parameters to describe the gamma distribution and it will be set as 'scale = 1', 'shape = 1' by default. \n")
-          other_prior[["param_A"]] <- BiocGenerics::append(other_prior[["param_A"]], 1)
+          cat(glue::glue("You do not set the statsitical parameters to describe the gamma distribution and it will be set as scale = {w} by default for batch {w}."), "\n")
+          other_prior[["param_A"]] <- BiocGenerics::append(other_prior[["param_A"]], w)
         }
       }
     }
@@ -152,12 +157,12 @@ SPARSim_simulation <- function(parameters,
       for(w in 1:length(other_prior[["distribution"]])){
         dis <- other_prior[["distribution"]][w]
         if(dis == "normal"){
-          cat("You do not set the statsitical parameters to describe the normal distribution and it will be set as 'sd = 1' by default. \n")
-          other_prior[["param_B"]] <- BiocGenerics::append(other_prior[["param_B"]], 1)
+          cat(glue::glue("You do not set the statsitical parameters to describe the normal distribution and it will be set as sd = {w} by default for batch {w}."), "\n")
+          other_prior[["param_B"]] <- BiocGenerics::append(other_prior[["param_B"]], w)
         }
         if(dis == "gamma"){
-          cat("You do not set the statsitical parameters to describe the gamma distribution and it will be set as 'shape = 1' by default. \n")
-          other_prior[["param_B"]] <- BiocGenerics::append(other_prior[["param_B"]], 1)
+          cat(glue::glue("You do not set the statsitical parameters to describe the normal distribution and it will be set as shape = {w} by default for batch {w}."), "\n")
+          other_prior[["param_B"]] <- BiocGenerics::append(other_prior[["param_B"]], w)
         }
       }
     }
@@ -182,9 +187,9 @@ SPARSim_simulation <- function(parameters,
     other_prior[["batch_parameter"]] <- SPARSim_batch_parameter
   }
   ## DEGs
-  if(!is.null(other_prior[["fc.group"]]) | !is.null(other_prior[["prob.group"]])){
+  if(!is.null(other_prior[["fc.group"]]) | !is.null(other_prior[["de.prob"]])){
     if(length(parameters) != 2){
-      stop("We only now support 2 groups when you want to simulate DEGs")
+      stop("We only now support 2 groups when you want to simulate DEGs, please set group.condition before the data is estimated")
     }
     cond_A_param <- parameters[[1]]
 
@@ -192,23 +197,23 @@ SPARSim_simulation <- function(parameters,
       cat("You do not point the fold change of DEGs between two groups, we will set it as 2 \n")
       other_prior[["fc.group"]] <- 2
     }
-    if(is.null(other_prior[["prob.group"]])){
+    if(is.null(other_prior[["de.prob"]])){
       cat("You do not point the percent of DEGs, we will set it as 0.1 \n")
-      other_prior[["prob.group"]] <- 0.1
+      other_prior[["de.prob"]] <- 0.1
     }
     n_genes <- length(parameters[[1]][['intensity']])
-    set.seed(seed)
-    not_DE_multiplier <- stats::runif(n = n_genes*(1-other_prior[["prob.group"]]),
-                                      min = 1/other_prior[["fc.group"]]+0.001,
-                                      max = other_prior[["fc.group"]]-0.001)
 
     set.seed(seed)
-    DE_multiplier <- c(stats::runif(n = ceiling(n_genes*other_prior[["prob.group"]]/2),
-                                    min = 1/other_prior[["fc.group"]],
+    DE_multiplier <- c(stats::runif(n = ceiling(n_genes*other_prior[["de.prob"]]/2),
+                                    min = 1/other_prior[["fc.group"]]-0.1,
                                     max = 1/other_prior[["fc.group"]]),
-                       stats::runif(n = floor(n_genes*other_prior[["prob.group"]]/2),
+                       stats::runif(n = floor(n_genes*other_prior[["de.prob"]]/2),
                                     min = other_prior[["fc.group"]],
-                                    max = other_prior[["fc.group"]]))
+                                    max = other_prior[["fc.group"]]+0.1))
+    set.seed(seed)
+    not_DE_multiplier <- stats::runif(n = n_genes-length(DE_multiplier),
+                                      min = 1/other_prior[["fc.group"]]+0.1,
+                                      max = other_prior[["fc.group"]]-0.1)
 
     # In this example, the first 1000 genes will be the DE ones, while the last 16128 will be the not DE ones
     fold_change_multiplier <- c(DE_multiplier, not_DE_multiplier)
@@ -255,10 +260,10 @@ SPARSim_simulation <- function(parameters,
   }else{
     fc.group <- 0
   }
-  if(!is.null(other_prior[["prob.group"]])){
-    prob.group <- other_prior[["prob.group"]]
+  if(!is.null(other_prior[["de.prob"]])){
+    de.prob <- other_prior[["de.prob"]]
   }else{
-    prob.group <- 0
+    de.prob <- 0
   }
   groups <- length(simulate_formals[["dataset_parameter"]])
   # Return to users
@@ -266,7 +271,7 @@ SPARSim_simulation <- function(parameters,
   cat(glue::glue("nGenes: {length(parameters[[1]][['intensity']])}"), "\n")
   cat(glue::glue("nGroups: {groups}"), "\n")
   cat(glue::glue("fc.group: {fc.group}"), "\n")
-  cat(glue::glue("prob.group: {prob.group}"), "\n")
+  cat(glue::glue("de.prob: {de.prob}"), "\n")
   cat(glue::glue("nBatches: {nBatches}"), "\n")
 
 
@@ -290,18 +295,14 @@ SPARSim_simulation <- function(parameters,
   ##############################################################################
   ## counts
   counts <- simulate_result[["count_matrix"]]
-  group_index <- which(as.numeric(stringr::str_extract_all(colnames(counts), pattern = "[0-9]+", simplify = T)) == 1)
-  group <- c()
-  for(i in 1:length(group_index)){
-    group_num <- group_index[i]
-    if(i < length(group_index)){
-      group_tmp <- rep(paste0("Group", i), (group_index[i+1]-1))
-      group <- BiocGenerics::append(group, group_tmp)
-    }else{
-      group_tmp <- rep(paste0("Group", i), (ncol(counts)-group_index[i]+1))
-      group <- BiocGenerics::append(group, group_tmp)
-    }
+  group_index <- which(stringr::str_extract_all(colnames(counts), pattern = "^cond_B", simplify = T) == "cond_B")
+  if(S4Vectors::isEmpty(group_index)){
+    group <- rep("Group1", ncol(counts))
+  }else{
+    group <- c(rep("Group1", min(group_index)-1),
+               rep("Group2", ncol(counts)-min(group_index)+1))
   }
+
   colnames(counts) <- paste0("Cell", 1:ncol(counts))
   rownames(counts) <- paste0("Gene", 1:nrow(counts))
   ## col_data
@@ -318,8 +319,8 @@ SPARSim_simulation <- function(parameters,
 
   ## row_data
   if(!is.null(other_prior[["fc.group"]])){
-    de_genes <- c(rep(TRUE, n_genes*other_prior[["prob.group"]]),
-                  rep(FALSE, n_genes-n_genes*other_prior[["prob.group"]]))
+    de_genes <- c(rep(TRUE, length(DE_multiplier)),
+                  rep(FALSE, length(not_DE_multiplier)))
     fc <- c(DE_multiplier, not_DE_multiplier)
     row_data <- data.frame("gene_name" = rownames(counts),
                            "de_genes" = de_genes,

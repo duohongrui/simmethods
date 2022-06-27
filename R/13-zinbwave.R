@@ -121,9 +121,9 @@ zinbwave_simulation <- function(parameters,
   params_check <- splatter::getParams(parameters, c("nCells",
                                                     "nGenes"))
 
-
   # Return to users
-  cat(glue::glue("Your simulated datasets will have {params_check[['nCells']]} cells, {params_check[['nGenes']]} genes"), "\n")
+  cat(glue::glue("nCells: {params_check[['nCells']]}"), "\n")
+  cat(glue::glue("nGenes: {params_check[['nGenes']]}"), "\n")
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################

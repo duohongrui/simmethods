@@ -17,6 +17,7 @@ Depends: R (>= 4.0), SummarizedExperiment, SingleCellExperiment, gamlss.dist, ga
 Imports: simutils (>= 0.0.0.9000),
          BiocManager,
          methods,
+         scater,
          BiocGenerics,
          biomaRt,
          powsimR,

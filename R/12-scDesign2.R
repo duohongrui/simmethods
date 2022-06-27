@@ -38,10 +38,9 @@ scDesign2_estimation <- function(ref_data,
   if(!is.matrix(ref_data)){
     ref_data <- as.matrix(ref_data)
   }
-
   if(is.null(other_prior[["cell_type_sel"]])){
-    colnames(ref_data) <- rep("A", ncol(ref_data))
-    other_prior[["cell_type_sel"]] <- "A"
+    colnames(ref_data) <- rep("Acell", ncol(ref_data))
+    other_prior[["cell_type_sel"]] <- "Acell"
   }else{
     colnames(ref_data) <- rep(other_prior[["cell_type_sel"]], ncol(ref_data))
   }
@@ -128,7 +127,13 @@ scDesign2_simulation <- function(parameters,
   }
 
   other_prior[["model_params"]] <- parameters
-  other_prior[["n_cell_new"]] <- parameters[[1]][["n_cell"]]
+
+  ## nCells
+  if(!is.null(other_prior[["nCells"]])){
+    other_prior[["n_cell_new"]] <- other_prior[["nCells"]]
+  }else{
+    other_prior[["n_cell_new"]] <- parameters[[1]][["n_cell"]]
+  }
 
   if(is.null(other_prior[["sim_method"]])){
     other_prior[["sim_method"]] <- "copula"
@@ -149,7 +154,8 @@ scDesign2_simulation <- function(parameters,
   ####                               Check                                   ###
   ##############################################################################
   # Return to users
-  cat(glue::glue("Your simulated datasets will have {parameters[[1]][['n_cell']]} cells, {nrow(parameters[[1]][['marginal_param1']])+nrow(parameters[[1]][['marginal_param2']])} genes"), "\n")
+  cat(glue::glue("nCells: {parameters[[1]][['n_cell']]}"), "\n")
+  cat(glue::glue("nGenes: {nrow(parameters[[1]][['marginal_param1']])+nrow(parameters[[1]][['marginal_param2']])}"), "\n")
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################

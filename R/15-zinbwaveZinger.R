@@ -39,12 +39,8 @@ zinbwaveZinger_estimation <- function(ref_data,
   if(!is.matrix(ref_data)){
     ref_data <- as.matrix(ref_data)
   }
-
   ## Filter
-  ref_data <- ref_data[apply(ref_data, 1, function(x) length(x[x>0])) > 1, ]
-
-  other_prior[["counts"]] <- ref_data
-
+  other_prior[["counts"]] <- ref_data[apply(ref_data, 1, function(x) length(x[x>0])) > 1, ]
   estimate_formals <- simutils::change_parameters(function_expr = "zinbwaveZingercollected::getDatasetMoMPositive",
                                                   other_prior = other_prior,
                                                   step = "estimation")
@@ -125,16 +121,23 @@ zinbwaveZinger_simulation <- function(ref_data,
   ## gene number
   if(is.null(other_prior[["nGenes"]])){
     other_prior[["nTags"]] <- nrow(ref_data)
+  }else{
+    other_prior[["nTags"]] <- other_prior[["nGenes"]]
+  }
+  ## nCells
+  if(is.null(other_prior[["nCells"]])){
+    other_prior[["nlibs"]] <- ncol(ref_data)
+  }else{
+    other_prior[["nlibs"]] <- other_prior[["nCells"]]
   }
   ## ind
   if(is.null(other_prior[["ind"]])){
-    if(!is.null(other_prior[["prob.group"]])){
-    }else{
-      other_prior[["prob.group"]] <- 0.1
+    if(is.null(other_prior[["de.prob"]])){
+      other_prior[["de.prob"]] <- 0.1
     }
     set.seed(seed)
     ind <- sample(1:nrow(ref_data),
-                  floor(other_prior[["nTags"]]*other_prior[["prob.group"]]),
+                  floor(other_prior[["nTags"]]*other_prior[["de.prob"]]),
                   replace = FALSE)
     other_prior[["ind"]] <- ind
   }
@@ -142,21 +145,13 @@ zinbwaveZinger_simulation <- function(ref_data,
   if(is.null(other_prior[["fc.group"]])){
     if(!is.null(other_prior[["ind"]])){
       other_prior[["foldDiff"]] <- rep(3, length(other_prior[["ind"]]))
-    }else{
-      other_prior[["foldDiff"]] <- 3
     }
   }else{
     other_prior[["foldDiff"]] <- other_prior[["fc.group"]]
   }
   ## lib.size
   if(is.null(other_prior[["lib.size"]])){
-    set.seed(seed)
-    lib.size <- sample(colSums(ref_data), ncol(ref_data), replace=TRUE)
-    other_prior[["lib.size"]] <- lib.size
-  }
-  ## nlibs
-  if(is.null(other_prior[["nlibs"]])){
-    other_prior[["nlibs"]] <- length(other_prior[["group"]])
+    other_prior[["lib.size"]] <- NULL
   }
   ##############################################################################
   ####                               Check                                   ###
@@ -166,9 +161,9 @@ zinbwaveZinger_simulation <- function(ref_data,
                                                   other_prior = other_prior,
                                                   step = "simulation")
   # Return to users
-  cat(glue::glue("nCells: {ncol(simulate_formals[['dataset']])}"), "\n")
-  cat(glue::glue("nGenes: {nrow(simulate_formals[['dataset']])}"), "\n")
-  cat(glue::glue("prob.group: {other_prior[['prob.group']]}"), "\n")
+  cat(glue::glue("nCells: {simulate_formals[['nlibs']]}"), "\n")
+  cat(glue::glue("nGenes: {simulate_formals[['nTags']]}"), "\n")
+  cat(glue::glue("prob.group: {other_prior[['de.prob']]}"), "\n")
   cat(glue::glue("fc.group: {unique(simulate_formals[['foldDiff']])}"), "\n")
   ##############################################################################
   ####                            Simulation                                 ###
