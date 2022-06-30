@@ -25,8 +25,8 @@ hierarchicell_method_definition <- function(...){
       id = "type",
       default = "Raw",
       process = "estimation",
-      alternative = c("Raw", "PerMillion", "Norm"),
-      description = "an identifier for the type of data being submitted. If it is raw counts put 'Raw', if it is TPM or some other normalized counts per million then type 'PerMillion' or 'Norm'. The program assumes data is in one of these two formats. Other normalizations (i.e., logs) that have negative values will cause the program to malfunction.",
+      alternatives = c("Raw", "PerMillion", "Norm"),
+      description = "An identifier for the type of data being submitted. If it is raw counts put 'Raw', if it is TPM or some other normalized counts per million then type 'PerMillion' or 'Norm'. The program assumes data is in one of these two formats. Other normalizations (i.e., logs) that have negative values will cause the program to malfunction.",
       function_name = "compute_data_summaries"
     ),
     param_others(
@@ -77,7 +77,7 @@ hierarchicell_method_definition <- function(...){
     param_character(
       id = "ncells_variation_type",
       default = "Poisson",
-      alternative = c("Poisson", "NB", "Fixed"),
+      alternatives = c("Poisson", "NB", "Fixed"),
       description = "Either 'Poisson', 'NB', or 'Fixed'. Allows the number of cells per individual to be fixed at exactly the specified number of cells per individual, vary slightly with a poisson distribution with a lambda equal to the specified number of cells per individual, or a negative binomial with a mean equal to the specified number of cells and dispersion size equal to one.Defaults to 'Poisson'.",
       function_name = "simulate_hierarchicell"
     ),

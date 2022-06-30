@@ -209,13 +209,13 @@ muscat_simulation <- function(parameters,
   colnames(simulate_result) <- paste0("Cell", 1:ncol(simulate_result))
   rownames(simulate_result) <- paste0("Gene", 1:nrow(simulate_result))
   gene_info <- metadata(simulate_result)$gene_info
-  rowData(simulate_result) <- gene_info %>%
-    transmute("gene_name" = rownames(simulate_result),
-              "de_genes" = case_when(
-                gene_info$"category" == "ee" ~ FALSE,
-                gene_info$"category" == "de" ~ TRUE
-              ),
-              "fc" = gene_info$"logFC")
+  SingleCellExperiment::rowData(simulate_result) <- gene_info %>%
+    dplyr::transmute("gene_name" = rownames(simulate_result),
+                     "de_genes" = case_when(
+                       gene_info$"category" == "ee" ~ FALSE,
+                       gene_info$"category" == "de" ~ TRUE
+                     ),
+                     "fc" = gene_info$"logFC")
   simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
                                                return_format = return_format)
 
