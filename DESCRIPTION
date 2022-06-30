@@ -44,7 +44,8 @@ Imports: simutils (>= 0.0.0.9000),
          SPARSim,
          SPsimSeq,
          ESCO,
-         muscat
+         muscat,
+         hierarchicell
 Suggests: edgeR,
           mgcv
 Remotes: 
@@ -56,7 +57,8 @@ Remotes:
     JSB-UCLA/scDesign2@master,
     JINJINT/ESCO@master,
     duohongrui/zinbwaveZingercollected@master,
-    HelenaLC/muscat@master
+    HelenaLC/muscat@master,
+    kdzimm/hierarchicell@master
 URL: https://github.com/duohongrui/simmethods
 BugReports: https://github.com/duohongrui/simmethods/issues
 Encoding: UTF-8

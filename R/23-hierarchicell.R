@@ -1,7 +1,7 @@
-#' Estimate Parameters From Real Datasets by muscat
+#' Estimate Parameters From Real Datasets by hierarchicell
 #'
 #' This function is used to estimate useful parameters from a real dataset by
-#' using \code{prepSim} function in muscat package.
+#' using \code{compute_data_summaries} function in hierarchicell package.
 #'
 #' @param ref_data A count matrix. Each row represents a gene and each column
 #' represents a cell.
@@ -13,24 +13,24 @@
 #' DEGs and other variables are usually customed, so before simulating a dataset
 #' you must point it out.
 #' @importFrom peakRAM peakRAM
-#' @importFrom muscat prepSim prepSCE
+#' @importFrom hierarchicell filter_counts compute_data_summaries
 #'
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
 #'
-muscat_estimation <- function(ref_data,
-                              verbose = FALSE,
-                              other_prior,
-                              seed){
+hierarchicell_estimation <- function(ref_data,
+                                     verbose = FALSE,
+                                     other_prior,
+                                     seed){
 
   ##############################################################################
   ####                            Environment                                ###
   ##############################################################################
-  if(!requireNamespace("muscat", quietly = TRUE)){
-    cat("muscat is not installed on your device\n")
-    cat("Installing muscat...\n")
-    devtools::install_github("HelenaLC/muscat")
+  if(!requireNamespace("hierarchicell", quietly = TRUE)){
+    cat("hierarchicell is not installed on your device\n")
+    cat("Installing hierarchicell...\n")
+    devtools::install_github("kdzimm/hierarchicell")
   }
   ##############################################################################
   ####                               Check                                   ###
@@ -38,37 +38,13 @@ muscat_estimation <- function(ref_data,
   if(!is.matrix(ref_data)){
     ref_data <- as.matrix(ref_data)
   }
-  ## group
-  if(is.null(other_prior[["group.condition"]])){
-    other_prior[["group_id"]] <- rep("A", ncol(ref_data))
+  ref_data <- hierarchicell::filter_counts(ref_data,
+                                           gene_thresh = 0,
+                                           cell_thresh = 0)
+  if(is.null(other_prior[["type"]])){
+    cat("You do not set the type of the data (Raw or Norm), we will set 'Raw' by default")
+    other_prior[["type"]] <- "Raw"
   }
-  ## cluster
-  if(is.null(other_prior[["cluster_id"]])){
-    other_prior[["cluster_id"]] <- rep("A", ncol(ref_data))
-  }
-
-  col_data <- data.frame("sample_id" = other_prior[["cluster_id"]],
-                         "group_id" = other_prior[["group_id"]],
-                         "cluster_id" = other_prior[["cluster_id"]])
-
-  ref_data <- SingleCellExperiment::SingleCellExperiment(list(counts = ref_data),
-                                                         colData = col_data)
-
-  ref_data <- muscat::prepSCE(x = ref_data)
-
-  other_prior[["x"]] <- ref_data
-  if(is.null(other_prior[["min_count"]])){
-    other_prior[["min_count"]] <- 1
-  }
-  if(is.null(other_prior[["min_cells"]])){
-    other_prior[["min_cells"]] <- 10
-  }
-  if(is.null(other_prior[["min_genes"]])){
-    other_prior[["min_genes"]] <- 100
-  }
-  estimate_formals <- simutils::change_parameters(function_expr = "muscat::prepSim",
-                                                  other_prior = other_prior,
-                                                  step = "estimation")
   ##############################################################################
   ####                            Estimation                                 ###
   ##############################################################################
@@ -81,17 +57,13 @@ muscat_estimation <- function(ref_data,
   tryCatch({
     # Estimate parameters from real data and return parameters and detection results
     estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- muscat::prepSim(x = estimate_formals[["x"]],
-                                         min_count = estimate_formals[["min_count"]],
-                                         min_cells = estimate_formals[["min_cells"]],
-                                         min_genes = estimate_formals[["min_genes"]],
-                                         min_size = NULL,
-                                         group_keep = estimate_formals[["group_keep"]],
-                                         verbose = estimate_formals[["verbose"]])
+      estimate_result <- compute_data_summaries(expr = ref_data,
+                                                type = other_prior[["type"]])
     )
   }, error = function(e){
     as.character(e)
   })
+  estimate_result[["hierarchicell_data_dim"]] <- dim(ref_data)
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -101,9 +73,9 @@ muscat_estimation <- function(ref_data,
 }
 
 
-#' Simulate Datasets by muscat
+#' Simulate Datasets by hierarchicell
 #'
-#' @param parameters A object generated by \code{\link[muscat]{prepSim}}
+#' @param parameters A object generated by \code{\link[hierarchicell]{simulate_hierarchicell}}
 #' @param other_prior A list with names of certain parameters. Some methods need
 #' extra parameters to execute the estimation step, so you must input them. In
 #' simulation step, the number of cells, genes, groups, batches, the percent of
@@ -114,91 +86,87 @@ muscat_estimation <- function(ref_data,
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
 #'
-#' @importFrom muscat simData
+#' @importFrom hierarchicell simulate_hierarchicell
 #'
 #' @export
 #'
-muscat_simulation <- function(parameters,
-                              other_prior,
-                              return_format,
-                              verbose = FALSE,
-                              seed
+hierarchicell_simulation <- function(parameters,
+                                     other_prior,
+                                     return_format,
+                                     verbose = FALSE,
+                                     seed
 ){
 
   ##############################################################################
   ####                            Environment                                ###
   ##############################################################################
-  if(!requireNamespace("muscat", quietly = TRUE)){
-    cat("muscat is not installed on your device\n")
-    cat("Installing muscat...\n")
-    devtools::install_github("HelenaLC/muscat")
+  if(!requireNamespace("hierarchicell", quietly = TRUE)){
+    cat("hierarchicell is not installed on your device\n")
+    cat("Installing hierarchicell...\n")
+    devtools::install_github("kdzimm/hierarchicell")
   }
-  other_prior[["x"]] <- parameters
+  other_prior[["data_summaries"]] <- parameters
   ## nCells
   if(!is.null(other_prior[["nCells"]])){
-    other_prior[["nc"]] <- other_prior[["nCells"]]
+    if(length(other_prior[["nCells"]]) == 1){
+      other_prior[["cells_per_control"]] <- ceiling(other_prior[["nCells"]]/2)
+      other_prior[["cells_per_case"]] <- floor(other_prior[["nCells"]]/2)
+    }
+    if(length(other_prior[["nCells"]]) == 2){
+      other_prior[["cells_per_control"]] <- other_prior[["nCells"]][1]
+      other_prior[["cells_per_case"]] <- other_prior[["nCells"]][2]
+    }
   }else{
-    other_prior[["nc"]] <- ncol(parameters)
+    other_prior[["nCells"]] <- parameters[["hierarchicell_data_dim"]][2]
+    other_prior[["cells_per_control"]] <- ceiling(other_prior[["nCells"]]/2)
+    other_prior[["cells_per_case"]] <- floor(other_prior[["nCells"]]/2)
   }
   ## nGenes
   if(!is.null(other_prior[["nGenes"]])){
-    other_prior[["ng"]] <- other_prior[["nGenes"]]
+    other_prior[["n_genes"]] <- other_prior[["nGenes"]]
   }else{
-    other_prior[["ng"]] <- nrow(parameters)
+    other_prior[["n_genes"]] <- parameters[["hierarchicell_data_dim"]][1]
   }
   ## fc.group
   if(!is.null(other_prior[["fc.group"]])){
-    other_prior[["lfc"]] <- other_prior[["fc.group"]]
+    other_prior[["foldchange"]] <- other_prior[["fc.group"]]
   }else{
-    other_prior[["lfc"]] <- 2
+    other_prior[["foldchange"]] <- 2
   }
-  ## de.group
-  if(!is.null(other_prior[["de.group"]])){
-    other_prior[["p_dd"]] <- c(1-other_prior[["de.group"]],
-                               0, other_prior[["de.group"]], 0, 0, 0)
-  }else{
-    other_prior[["p_dd"]] <- c(1,0,0,0,0,0)
+  ## case and control
+  if(is.null(other_prior[["n_cases"]])){
+    other_prior[["n_cases"]] <- 1
   }
-  ## nGroups
-  if(is.null(other_prior[["nGroups"]])){
-    other_prior[["nGroups"]] <- 1
+  if(is.null(other_prior[["n_controls"]])){
+    other_prior[["n_controls"]] <- 1
   }
-  if(other_prior[["nGroups"]] == 1){
-    other_prior[["dd"]] <- FALSE
-  }else{
-    other_prior[["ns"]] <- 2
-    other_prior[["dd"]] <- TRUE
-    other_prior[["paired"]] <- TRUE
+  ## n_per_group
+  if(is.null(other_prior[["n_per_group"]])){
+    other_prior[["n_per_group"]] <- 1
   }
-  ## phylo_pars
-  other_prior[["phylo_pars"]] <- c(0, 3)
-  other_prior[["force"]] <- TRUE
   ##############################################################################
   ####                               Check                                   ###
   ##############################################################################
-  simulate_formals <- simutils::change_parameters(function_expr = "muscat::simData",
+  simulate_formals <- simutils::change_parameters(function_expr = "hierarchicell::simulate_hierarchicell",
                                                   other_prior = other_prior,
                                                   step = "simulation")
-  nGroups <- ifelse(simulate_formals[["dd"]], 2, 1)
-  de.group <- simulate_formals[["p_dd"]][3]/sum(simulate_formals[["p_dd"]])
   # Return to users
-  cat(glue::glue("nCells: {simulate_formals[['nc']]}"), "\n")
-  cat(glue::glue("nGenes: {simulate_formals[['ng']]}"), "\n")
-  cat(glue::glue("nGroups: {nGroups}"), "\n")
-  cat(glue::glue("de.group: {de.group}"), "\n")
-  cat(glue::glue("fc.group: {simulate_formals[['lfc']]}"), "\n")
+  cat(glue::glue("nCells: {simulate_formals[['cells_per_control']] + simulate_formals[['cells_per_case']]}"), "\n")
+  cat(glue::glue("nGenes: {simulate_formals[['n_genes']]}"), "\n")
+  cat(glue::glue("nGroups: 2"), "\n")
+  cat(glue::glue("fc.group: {simulate_formals[['foldchange']]}"), "\n")
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Simulating datasets using muscat\n")
+    cat("Simulating datasets using hierarchicell\n")
   }
   # Seed
   set.seed(seed)
   # Estimation
   tryCatch({
     simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call(muscat::simData, simulate_formals)
+      simulate_result <- do.call(hierarchicell::simulate_hierarchicell, simulate_formals)
     )
   }, error = function(e){
     as.character(e)
@@ -206,16 +174,28 @@ muscat_simulation <- function(parameters,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
+  group <- paste0("Group", ifelse(simulate_result$Status=="Case", 2, 1))
+  if(length(group) != other_prior[["nCells"]]){
+    group <- group[1:other_prior[["nCells"]]]
+    simulate_result <- simulate_result[1:other_prior[["nCells"]], ]
+  }
+  simulate_result <- t(simulate_result[, -c(1:3)])
+  ## colnames rownames
   colnames(simulate_result) <- paste0("Cell", 1:ncol(simulate_result))
   rownames(simulate_result) <- paste0("Gene", 1:nrow(simulate_result))
-  gene_info <- metadata(simulate_result)$gene_info
-  rowData(simulate_result) <- gene_info %>%
-    transmute("gene_name" = rownames(simulate_result),
-              "de_genes" = case_when(
-                gene_info$"category" == "ee" ~ FALSE,
-                gene_info$"category" == "de" ~ TRUE
-              ),
-              "fc" = gene_info$"logFC")
+  counts <- simulate_result
+  ## col_data
+  col_data <- data.frame("cell_name" = colnames(counts),
+                         "group" = group)
+  ## row data
+  row_data <- data.frame("gene_name" = rownames(counts),
+                         "de_genes" = rep("not known", nrow(counts)),
+                         "fc" = rep("not known", nrow(counts)))
+  # Establish SingleCellExperiment
+  simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
+                                                                colData = col_data,
+                                                                rowData = row_data)
+
   simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
                                                return_format = return_format)
 
