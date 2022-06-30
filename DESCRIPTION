@@ -43,7 +43,8 @@ Imports: simutils (>= 0.0.0.9000),
          zingeR,
          SPARSim,
          SPsimSeq,
-         ESCO
+         ESCO,
+         muscat
 Suggests: edgeR,
           mgcv
 Remotes: 
@@ -54,7 +55,8 @@ Remotes:
     Vivianstats/scDesign@master,
     JSB-UCLA/scDesign2@master,
     JINJINT/ESCO@master,
-    duohongrui/zinbwaveZingercollected@master
+    duohongrui/zinbwaveZingercollected@master,
+    HelenaLC/muscat@master
 URL: https://github.com/duohongrui/simmethods
 BugReports: https://github.com/duohongrui/simmethods/issues
 Encoding: UTF-8
