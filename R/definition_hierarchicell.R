@@ -32,6 +32,7 @@ hierarchicell_method_definition <- function(...){
     param_others(
       id = "data_summaries",
       type = "SingleCellExperimrnt",
+      force = TRUE,
       description = "An R object that has been output by the package's compute_data_summaries function. No default.",
       function_name = "simulate_hierarchicell "
     ),
