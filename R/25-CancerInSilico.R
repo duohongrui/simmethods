@@ -16,6 +16,7 @@
 #' @importFrom CancerInSilico calibratePathway getCellType
 #' @importFrom methods new
 #' @importFrom BiocGenerics get
+#' @importFrom NbClust NbClust
 #'
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
@@ -144,13 +145,13 @@ CancerInSilico_simulation <- function(parameters,
                  cycleLength = function() 16 + rexp(1, 1/4))
   }) %>% setNames(stringr::str_sub(names(parameters), start = 1, end = 1))
 
-  mod <- suppressMessages(inSilicoCellModel(initialNum = 1,
-                                            runTime = 1,
-                                            density = 0.1,
-                                            cellTypes = c(cell_type[[1]], cell_type[[2]]),
-                                            cellTypeInitFreq = rep(1/length(cell_type), length(cell_type)),
-                                            outputIncrement = 24,
-                                            randSeed = seed))
+  mod <- suppressMessages(CancerInSilico::inSilicoCellModel(initialNum = 1,
+                                                            runTime = 1,
+                                                            density = 0.1,
+                                                            cellTypes = c(cell_type[[1]], cell_type[[2]]),
+                                                            cellTypeInitFreq = rep(1/length(cell_type), length(cell_type)),
+                                                            outputIncrement = 24,
+                                                            randSeed = seed))
 
   other_prior[["model"]] <- mod
   other_prior[["pathways"]] <- parameters
