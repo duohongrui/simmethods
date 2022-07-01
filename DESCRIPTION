@@ -45,7 +45,9 @@ Imports: simutils (>= 0.0.0.9000),
          SPsimSeq,
          ESCO,
          muscat,
-         hierarchicell
+         hierarchicell,
+         dropsim,
+         CancerInSilico
 Suggests: edgeR,
           mgcv
 Remotes: 
@@ -58,7 +60,8 @@ Remotes:
     JINJINT/ESCO@master,
     duohongrui/zinbwaveZingercollected@master,
     HelenaLC/muscat@master,
-    kdzimm/hierarchicell@master
+    kdzimm/hierarchicell@master,
+    marchinilab/dropsim@master
 URL: https://github.com/duohongrui/simmethods
 BugReports: https://github.com/duohongrui/simmethods/issues
 Encoding: UTF-8
