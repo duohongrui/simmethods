@@ -115,6 +115,7 @@ muscat_estimation <- function(ref_data,
 #' @param seed A random seed.
 #'
 #' @importFrom muscat simData
+#' @importFrom SummarizedExperiment rowData<-
 #'
 #' @export
 #'
@@ -209,7 +210,7 @@ muscat_simulation <- function(parameters,
   colnames(simulate_result) <- paste0("Cell", 1:ncol(simulate_result))
   rownames(simulate_result) <- paste0("Gene", 1:nrow(simulate_result))
   gene_info <- metadata(simulate_result)$gene_info
-  SingleCellExperiment::rowData(simulate_result) <- gene_info %>%
+  SummarizedExperiment::rowData(simulate_result) <- gene_info %>%
     dplyr::transmute("gene_name" = rownames(simulate_result),
                      "de_genes" = case_when(
                        gene_info$"category" == "ee" ~ FALSE,

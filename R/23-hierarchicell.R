@@ -49,7 +49,7 @@ hierarchicell_estimation <- function(ref_data,
   ####                            Estimation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Estimating parameters using SparseDC\n")
+    cat("Estimating parameters using hierarchicell\n")
   }
   # Seed
   set.seed(seed)
