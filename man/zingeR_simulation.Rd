@@ -5,7 +5,7 @@
 \title{Simulate Datasets by zingeR}
 \usage{
 zingeR_simulation(
-  ref_data,
+  ref_data = NULL,
   parameters,
   other_prior,
   return_format,

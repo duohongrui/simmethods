@@ -35,8 +35,10 @@ Lun2_estimation <- function(ref_data, verbose = FALSE, other_prior, seed){
   if(!is.matrix(ref_data)){
     ref_data <- as.matrix(ref_data)
   }
-  if(is.null(other_prior[["plates"]])){
-    stop("Please input the information of plates")
+  if(is.null(other_prior[["group.condition"]])){
+    stop("Please input the information of group condition")
+  }else{
+    other_prior[["plates"]] <- other_prior[["group.condition"]]
   }
   if(is.null(other_prior[["min.size"]])){
     min.size <- 200

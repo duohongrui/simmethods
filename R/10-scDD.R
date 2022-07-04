@@ -35,7 +35,7 @@ scDD_estimation <- function(ref_data, verbose = FALSE, other_prior, seed){
   if(!is.matrix(ref_data)){
     ref_data <- as.matrix(ref_data)
   }
-  if(is.null(other_prior[["condition"]])){
+  if(is.null(other_prior[["group.condition"]])){
     stop("Please input the conditions that each cell belongs to")
   }
   ##############################################################################
@@ -51,7 +51,7 @@ scDD_estimation <- function(ref_data, verbose = FALSE, other_prior, seed){
     # Estimate parameters from real data and return parameters and detection results
     estimate_detection <- peakRAM::peakRAM(
       estimate_result <- splatter::scDDEstimate(ref_data,
-                                                condition = other_prior[["condition"]],
+                                                condition = other_prior[["group.condition"]],
                                                 verbose = verbose)
     )
   }, error = function(e){

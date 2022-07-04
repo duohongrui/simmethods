@@ -43,10 +43,10 @@ zingeR_estimation <- function(ref_data,
   }
   ## Filter
   other_prior[["counts"]] <- ref_data[apply(ref_data, 1, function(x) length(x[x>0])) > 1, ]
-  if(is.null(other_prior[["condition"]])){
+  if(is.null(other_prior[["group.condition"]])){
     stop("Please input condition information that each cell belongs to.")
   }
-  other_prior[["design"]] <- stats::model.matrix(~as.factor(other_prior[["condition"]]))
+  other_prior[["design"]] <- stats::model.matrix(~as.factor(other_prior[["group.condition"]]))
 
   estimate_formals <- simutils::change_parameters(function_expr = "zingeR::getDatasetZTNB",
                                                   other_prior = other_prior,
@@ -109,7 +109,7 @@ zingeR_estimation <- function(ref_data,
 #'
 #' @export
 #'
-zingeR_simulation <- function(ref_data,
+zingeR_simulation <- function(ref_data = NULL,
                               parameters,
                               other_prior,
                               return_format,
@@ -125,13 +125,16 @@ zingeR_simulation <- function(ref_data,
     cat("Installing zingeR...\n")
     devtools::install_github("statOmics/zingeR")
   }
+  if(is.null(ref_data)){
+    stop("Please input ref_data when using zingeR to simulate datasets")
+  }
   other_prior[["dataset"]] <- ref_data[apply(ref_data, 1, function(x) length(x[x>0])) > 1, ]
   other_prior[["params"]] <- parameters
-  ## condition
-  if(is.null(other_prior[["condition"]])){
+  ## group.condition
+  if(is.null(other_prior[["group.condition"]])){
     stop("Please input condition information that each cell belongs to.")
   }else{
-    other_prior[["group"]] <- other_prior[["condition"]]-1
+    other_prior[["group"]] <- other_prior[["group.condition"]]-1
   }
   ## gene number
   other_prior[["nTags"]] <- nrow(ref_data)

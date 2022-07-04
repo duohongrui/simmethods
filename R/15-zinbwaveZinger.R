@@ -113,10 +113,10 @@ zinbwaveZinger_simulation <- function(ref_data,
   other_prior[["dataset"]] <- ref_data[apply(ref_data, 1, function(x) length(x[x>0])) > 1, ]
   other_prior[["params"]] <- parameters
   ## condition
-  if(is.null(other_prior[["condition"]])){
+  if(is.null(other_prior[["group.condition"]])){
     stop("Please input condition information that each cell belongs to.")
   }else{
-    other_prior[["group"]] <- other_prior[["condition"]]-1
+    other_prior[["group"]] <- other_prior[["group.condition"]]-1
   }
   ## gene number
   if(is.null(other_prior[["nGenes"]])){
