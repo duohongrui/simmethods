@@ -152,13 +152,7 @@ POWSC_simulation <- function(parameters,
   col_data <- data.frame("cell_name" = colnames(counts),
                          "group" = ifelse(colData(simulate_result[["sce"]])[,1] == "celltype1", "Group1", "Group2"))
 
-  row_data_tmp <- data.frame("gene_name" = stringr::str_replace_all(names(simulate_result[["pi.df"]]), "_", ""),
-                             "de_fc" = simulate_result[["lfc"]],
-                             "number" = as.numeric(stringr::str_replace_all(names(simulate_result[["pi.df"]]), "Gene_", "")))
-
-  row_data <- data.frame("gene_name" = rownames(counts),
-                         "de_genes" = ifelse(simulate_result[["DESetup"]][["pLFC"]][[1]] == 0, FALSE, TRUE),
-                         "de_fc" = simulate_result[["DESetup"]][["pLFC"]][[1]])
+  row_data <- data.frame("gene_name" = rownames(counts))
 
   simulate_result <- simulate_result[["sce"]]
 
