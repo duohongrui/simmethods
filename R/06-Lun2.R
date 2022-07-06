@@ -121,7 +121,10 @@ Lun2_simulation <- function(parameters,
                                                     "de.nGenes"))
 
   # Return to users
-  cat(glue::glue("Your simulated datasets will have {params_check[['nCells']]} cells, {params_check[['nGenes']]} genes, {params_check[['nPlates']]} plate(s) and contain {params_check[['de.nGenes']]/params_check[['nGenes']]} percent of DEGs"), "\n")
+  cat(glue::glue("nCells: {params_check[['nCells']]}"), "\n")
+  cat(glue::glue("nGenes: {params_check[['nGenes']]}"), "\n")
+  cat(glue::glue("nGroups: {params_check[['nPlates']]}"), "\n")
+  cat(glue::glue("de.prob: {params_check[['de.nGenes']]/params_check[['nGenes']]}"), "\n")
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
