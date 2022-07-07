@@ -13,7 +13,7 @@ Maintainer: Hongrui Duo <duohongrui@cqnu.edu.cn>
 Description: A package contains the information and core execution functions of
     simulation methods for singlce-cell RNA seqencing data.
 License: GPL-3
-Depends: R (>= 4.0), SummarizedExperiment, SingleCellExperiment, gamlss.dist, gamlss.tr
+Depends: R (>= 4.0), SummarizedExperiment, SingleCellExperiment, gamlss.dist, gamlss.tr, TedSim
 Imports: simutils (>= 0.0.0.9000),
          BiocManager,
          methods,
@@ -62,7 +62,8 @@ Remotes:
     duohongrui/zinbwaveZingercollected@master,
     HelenaLC/muscat@master,
     kdzimm/hierarchicell@master,
-    marchinilab/dropsim@master
+    marchinilab/dropsim@master,
+    Galaxeee/TedSim@main
 URL: https://github.com/duohongrui/simmethods
 BugReports: https://github.com/duohongrui/simmethods/issues
 Encoding: UTF-8
