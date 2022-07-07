@@ -48,7 +48,9 @@ Imports: simutils (>= 0.0.0.9000),
          muscat,
          hierarchicell,
          dropsim,
-         CancerInSilico
+         CancerInSilico,
+         dynwrap,
+         dyntoy
 Suggests: edgeR,
           mgcv
 Remotes: 
@@ -64,6 +66,7 @@ Remotes:
     kdzimm/hierarchicell@master,
     marchinilab/dropsim@master,
     Galaxeee/TedSim@main
+    dynverse/dyntoy@master
 URL: https://github.com/duohongrui/simmethods
 BugReports: https://github.com/duohongrui/simmethods/issues
 Encoding: UTF-8

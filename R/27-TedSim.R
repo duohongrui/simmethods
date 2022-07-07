@@ -228,6 +228,9 @@ PROSSTT_simulation <- function(parameters,
   simulate_formals <- simutils::change_parameters(function_expr = "TedSim::CIF2Truecounts",
                                                   other_prior = other_prior,
                                                   step = "simulation")
+  # Return to users
+  cat(glue::glue("nCells: {other_prior[['ncells']]}"), "\n")
+  cat(glue::glue("nGenes: {other_prior[['ngenes']]}"), "\n")
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
