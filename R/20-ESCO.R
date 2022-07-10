@@ -41,13 +41,25 @@ ESCO_estimation <- function(ref_data,
   other_prior[["counts"]] <- ref_data
   if(is.null(other_prior[["group.condition"]])){
     other_prior[["group"]] <- FALSE
-    other_prior[["cellinf"]] <- NULL
+    other_prior[["cellinfo"]] <- NULL
   }else{
     other_prior[["group"]] <- TRUE
     other_prior[["cellinfo"]] <- other_prior[["group.condition"]]
   }
   other_prior[["params"]] <- ESCO::newescoParams()
   other_prior[["dirname"]] <- "./"
+  ## tree
+  if(other_prior[["tree"]] | other_prior[["traj"]]){
+    tree <- simutils::make_trees(ref_data = ref_data,
+                                 group = other_prior[["cellinfo"]],
+                                 is_Newick = FALSE,
+                                 is_parenthetic = TRUE,
+                                 return_group = TRUE)
+    group <- tree[["group"]]
+    tree <- tree[["phyla"]]
+  }else{
+    tree <- NULL
+  }
   estimate_formals <- simutils::change_parameters(function_expr = "ESCO::escoEstimate",
                                                   other_prior = other_prior,
                                                   step = "estimation")
@@ -68,6 +80,11 @@ ESCO_estimation <- function(ref_data,
   }, error = function(e){
     as.character(e)
   })
+  if(!is.null(tree)){
+    estimate_result <- list(estimate_result = estimate_result,
+                            tree = tree,
+                            group = group)
+  }
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -114,6 +131,11 @@ ESCO_simulation <- function(parameters,
   ##############################################################################
   ####                               Check                                   ###
   ##############################################################################
+  if(length(parameters) == 3){
+    tree <- parameters[["tree"]]
+    group <- parameters[["group"]]
+    parameters <- parameters[["estimate_result"]]
+  }
   assertthat::assert_that(class(parameters) == "escoParams")
   # nCells
   if(!is.null(other_prior[["nCells"]])){
@@ -123,17 +145,36 @@ ESCO_simulation <- function(parameters,
   if(!is.null(other_prior[["nGenes"]])){
     parameters <- splatter::setParam(parameters, name = "nGenes", value = other_prior[["nGenes"]])
   }
+  # nGroup
+  if(!is.null(group)){
+    parameters <- splatter::setParam(parameters, name = "nGroups", value = length(unique(group)))
+  }
+  if(!is.null(other_prior[["prob.group"]])){
+    parameters <- splatter::setParam(parameters,
+                                     name = "group.prob",
+                                     value = other_prior[["prob.group"]])
+
+  }else{
+    nGroups <- splatter::getParam(parameters, name = "nGroups")
+    prob.group <- c(rep(1/nGroups, nGroups-1),
+                    1 - c(1/nGroups * c(nGroups-1)))
+    parameters <- splatter::setParam(parameters,
+                                     name = "group.prob",
+                                     value = prob.group)
+  }
   # Get params to check
   params_check <- splatter::getParams(parameters, c("nCells",
                                                     "nGenes",
                                                     "nGroups",
-                                                    "group.prob"))
+                                                    "group.prob",
+                                                    "de.prob"))
 
   # Return to users
   cat(glue::glue("nCells: {params_check[['nCells']]}"), "\n")
   cat(glue::glue("nGenes: {params_check[['nGenes']]}"), "\n")
   cat(glue::glue("nGroups: {params_check[['nGroups']]}"), "\n")
   cat(glue::glue("prob.group: {params_check[['group.prob']]}"), "\n")
+  cat(glue::glue("de.group: {params_check[['de.prob']]}"), "\n")
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -144,9 +185,14 @@ ESCO_simulation <- function(parameters,
   parameters <- splatter::setParam(parameters, name = "seed", value = seed)
   # Estimation
   tryCatch({
-    if(!is.null(other_prior[["trajectory"]])){
+    if(!is.null(other_prior[["tree"]])){
+      cat("Simulating trajectory of trees datasets by ESCO \n")
+      submethod <- "tree"
+      parameters <- splatter::setParam(parameters, name = "tree", value = tree)
+    }else if(!is.null(other_prior[["traj"]])){
       cat("Simulating trajectory datasets by ESCO")
       submethod <- "traj"
+      parameters <- splatter::setParam(parameters, name = "tree", value = tree)
     }else{
       if(params_check[["nGroups"]] == 1){
         submethod <- "single"
