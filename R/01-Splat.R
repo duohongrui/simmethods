@@ -98,6 +98,44 @@ Splat_simulation <- function(parameters,
   ####                               Check                                   ###
   ##############################################################################
   assertthat::assert_that(class(parameters) == "SplatParams")
+  # nCells
+  if(!is.null(other_prior[["nCells"]])){
+    parameters <- splatter::setParam(parameters, name = "nCells", value = other_prior[["nCells"]])
+  }
+  # nGenes
+  if(!is.null(other_prior[["nGenes"]])){
+    parameters <- splatter::setParam(parameters, name = "nGenes", value = other_prior[["nGenes"]])
+  }
+  # nGroup
+  if(!is.null(other_prior[["group.condition"]])){
+    parameters <- splatter::setParam(parameters,
+                                     name = "nGroups",
+                                     value = length(unique(other_prior[["group.condition"]])))
+  }else{
+    if(!is.null(other_prior[["paths"]])){
+      if(other_prior[["paths"]]){
+        tree <- simutils::make_trees(ref_data = ref_data,
+                                     group = NULL,
+                                     is_Newick = FALSE,
+                                     is_parenthetic = TRUE,
+                                     return_group = TRUE)
+        group <- tree[["group"]]
+      }
+    }
+  }
+  if(!is.null(other_prior[["prob.group"]])){
+    parameters <- splatter::setParam(parameters,
+                                     name = "group.prob",
+                                     value = other_prior[["prob.group"]])
+
+  }else{
+    nGroups <- length(unique(group))
+    prob.group <- c(rep(1/nGroups, nGroups-1),
+                    1 - c(1/nGroups * c(nGroups-1)))
+    parameters <- splatter::setParam(parameters,
+                                     name = "group.prob",
+                                     value = prob.group)
+  }
 
   # Get params to check
   params_check <- splatter::getParams(parameters, c("nBatches",
@@ -120,6 +158,7 @@ Splat_simulation <- function(parameters,
   }else{
     assertthat::assert_that(params_check[["nGroups"]] == 1)
   }
+
   # DEGs proportion
   de.prob <- params_check[["de.prob"]]
   # Return to users
@@ -138,9 +177,12 @@ Splat_simulation <- function(parameters,
   parameters <- splatter::setParam(parameters, name = "seed", value = seed)
   # Estimation
   tryCatch({
-    if(!is.null(other_prior[["trajectory"]])){
+    if(!is.null(other_prior[["paths"]])){
       cat("Simulating trajectory datasets by Splat")
       submethod <- "paths"
+      parameters <- splatter::setParam(parameters,
+                                       name = "path.from",
+                                       value = seq(1:nGroups)-1)
     }else{
       if(params_check[["nGroups"]] == 1){
         submethod <- "single"
