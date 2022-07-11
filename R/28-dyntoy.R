@@ -15,6 +15,7 @@
 #' @importFrom peakRAM peakRAM
 #' @importFrom dynwrap infer_trajectory wrap_expression add_grouping
 #' @importFrom NbClust NbClust
+#' @importFrom tislingshot ti_slingshot
 #'
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
@@ -58,7 +59,12 @@ dyntoy_estimation <- function(ref_data,
   tryCatch({
     # Estimate parameters from real data and return parameters and detection results
     estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- dynwrap::infer_trajectory(ref_data, "slingshot", seed = seed)
+      estimate_result <- dynwrap::infer_trajectory(dataset = ref_data,
+                                                   method = tislingshot::ti_slingshot(),
+                                                   parameters = NULL,
+                                                   give_priors = NULL,
+                                                   seed = seed,
+                                                   verbose = verbose)
     )
   }, error = function(e){
     as.character(e)

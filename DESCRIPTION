@@ -50,7 +50,8 @@ Imports: simutils (>= 0.0.0.9000),
          dropsim,
          CancerInSilico,
          dynwrap,
-         dyntoy
+         dyntoy,
+         dyngen
 Suggests: edgeR,
           mgcv
 Remotes: 
@@ -68,7 +69,8 @@ Remotes:
     Galaxeee/TedSim@main
     dynverse/dyntoy@master,
     YosefLab/SymSim@master,
-    PeterZZQ/VeloSim@master
+    PeterZZQ/VeloSim@master,
+    dynverse/dyngen@master
 URL: https://github.com/duohongrui/simmethods
 BugReports: https://github.com/duohongrui/simmethods/issues
 Encoding: UTF-8
