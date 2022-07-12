@@ -149,7 +149,7 @@ SplatPop_simulation <- function(parameters,
   }else vcf <- other_prior[["vcf"]]
   # Estimation
   tryCatch({
-    if(!is.null(other_prior[["trajectory"]])){
+    if(!is.null(other_prior[["paths"]])){
       cat("Simulating trajectory datasets by SplatPop")
       submethod <- "paths"
     }else{
