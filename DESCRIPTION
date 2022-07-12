@@ -53,7 +53,8 @@ Imports: simutils (>= 0.0.0.9000),
          CancerInSilico,
          dynwrap,
          dyntoy,
-         dyngen
+         dyngen,
+         phenopath
 Suggests: edgeR,
           mgcv
 Remotes: 
