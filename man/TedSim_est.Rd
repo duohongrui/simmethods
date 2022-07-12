@@ -8,6 +8,10 @@ TedSim_est(ref_data, phyla, seed)
 }
 \arguments{
 \item{ref_data}{Reference dataset}
+
+\item{phyla}{Tree format data}
+
+\item{seed}{Random seed}
 }
 \value{
 A list

@@ -165,7 +165,12 @@ PROSSTT_simulation <- function(parameters,
 
   reticulate::source_python(exec_text)
 
-
+  simulation_params <- list(newick_string = newick_tree,
+                            modules = modules,
+                            gene_num = gene_num,
+                            seed = as.integer(seed),
+                            alpha = alpha,
+                            beta = beta)
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -175,10 +180,7 @@ PROSSTT_simulation <- function(parameters,
   # Estimation
   tryCatch({
     simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- PROSSTT_sim_Python(newick_string = newick_tree,
-                                            modules = modules,
-                                            gene_num = gene_num,
-                                            seed = as.integer(seed)))
+      simulate_result <- do.call("PROSSTT_sim_Python", simulation_params))
   }, error = function(e){
     as.character(e)
   })
