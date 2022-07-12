@@ -28,6 +28,12 @@ SplatPop_method_definition <- function(...){
       description = "Usually it is default by splatter::newKersplatParams function. Users can change the parameters by splatter::setParam function.",
       function_name = "splatPopEstimate"
     ),
+    param_Boolean(
+      id = "paths",
+      default = FALSE,
+      description = "Whether to simulation trajectory datasets",
+      function_name = "splatPopEstimate"
+    ),
     param_others(
       id = "vcf",
       type = "VariantAnnotation object",

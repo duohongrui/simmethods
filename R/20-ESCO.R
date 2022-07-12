@@ -49,7 +49,7 @@ ESCO_estimation <- function(ref_data,
   other_prior[["params"]] <- ESCO::newescoParams()
   other_prior[["dirname"]] <- "./"
   ## tree
-  if(other_prior[["tree"]] | other_prior[["traj"]]){
+  if(other_prior[["tree"]] | other_prior[["paths"]]){
     tree <- simutils::make_trees(ref_data = ref_data,
                                  group = other_prior[["cellinfo"]],
                                  is_Newick = FALSE,
@@ -189,7 +189,7 @@ ESCO_simulation <- function(parameters,
       cat("Simulating trajectory of trees datasets by ESCO \n")
       submethod <- "tree"
       parameters <- splatter::setParam(parameters, name = "tree", value = tree)
-    }else if(!is.null(other_prior[["traj"]])){
+    }else if(!is.null(other_prior[["paths"]])){
       cat("Simulating trajectory datasets by ESCO")
       submethod <- "traj"
       parameters <- splatter::setParam(parameters, name = "tree", value = tree)

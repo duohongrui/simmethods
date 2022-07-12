@@ -36,6 +36,12 @@ Splat_method_definition <- function(...){
       description = "Which simulation method to use. Options are 'single' which produces a single population, 'groups' which produces distinct groups (eg. cell types), 'paths' which selects cells from continuous trajectories (eg. differentiation processes).",
       function_name = "splatSimulate"
     ),
+    param_Boolean(
+      id = "paths",
+      default = FALSE,
+      description = "Whether to simulation trajectory datasets",
+      function_name = "splatSimulate"
+    ),
     param_integer(
       id = "nBatches",
       default = 1L,

@@ -59,6 +59,18 @@ ESCO_method_definition <- function(...){
       function_name = "escoSimulate"
     ),
     param_Boolean(
+      id = "paths",
+      default = FALSE,
+      description = "Whether to simulation trajectory datasets",
+      function_name = "escoSimulate"
+    ),
+    param_Boolean(
+      id = "tree",
+      default = FALSE,
+      description = "Whether to simulation datasets from tree format files",
+      function_name = "escoSimulate"
+    ),
+    param_Boolean(
       id = "verbose",
       default = TRUE,
       process = "simulation",
