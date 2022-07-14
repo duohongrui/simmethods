@@ -100,44 +100,43 @@ Splat_simulation <- function(ref_data = NULL,
   ####                               Check                                   ###
   ##############################################################################
   assertthat::assert_that(class(parameters) == "SplatParams")
-  # nCells
-  if(!is.null(other_prior[["nCells"]])){
-    parameters <- splatter::setParam(parameters, name = "nCells", value = other_prior[["nCells"]])
-  }
-  # nGenes
-  if(!is.null(other_prior[["nGenes"]])){
-    parameters <- splatter::setParam(parameters, name = "nGenes", value = other_prior[["nGenes"]])
-  }
   # nGroup
-  if(!is.null(other_prior[["group.condition"]])){
-    parameters <- splatter::setParam(parameters,
-                                     name = "nGroups",
-                                     value = length(unique(other_prior[["group.condition"]])))
-  }else{
-    if(!is.null(other_prior[["paths"]])){
-      if(other_prior[["paths"]]){
-        tree <- simutils::make_trees(ref_data = ref_data,
-                                     group = NULL,
-                                     is_Newick = FALSE,
-                                     is_parenthetic = TRUE,
-                                     return_group = TRUE)
-        group <- tree[["group"]]
-      }
-    }
-  }
+  # if(!is.null(other_prior[["group.condition"]])){
+  #   parameters <- splatter::setParam(parameters,
+  #                                    name = "nGroups",
+  #                                    value = length(unique(other_prior[["group.condition"]])))
+  # }else{
+  #   if(!is.null(other_prior[["paths"]])){
+  #     if(other_prior[["paths"]]){
+  #       if(is.null(other_prior[["group.condition"]])){
+  #         tree <- simutils::make_trees(ref_data = ref_data,
+  #                                      group = NULL,
+  #                                      is_Newick = FALSE,
+  #                                      is_parenthetic = TRUE,
+  #                                      return_group = TRUE)
+  #         other_prior[["group.condition"]] <- tree[["group"]]
+  #       }
+  #     }
+  #   }
+  # }
   if(!is.null(other_prior[["prob.group"]])){
     parameters <- splatter::setParam(parameters,
                                      name = "group.prob",
                                      value = other_prior[["prob.group"]])
 
-  }else{
-    nGroups <- length(unique(group))
-    prob.group <- c(rep(1/nGroups, nGroups-1),
-                    1 - c(1/nGroups * c(nGroups-1)))
-    parameters <- splatter::setParam(parameters,
-                                     name = "group.prob",
-                                     value = prob.group)
   }
+  # else{
+  #   if(is.null(other_prior[["prob.group"]])){
+  #     nGroups <- 1
+  #   }else{
+  #     nGroups <- length(unique(other_prior[["prob.group"]]))
+  #   }
+  #   prob.group <- c(rep(1/nGroups, nGroups-1),
+  #                   1 - c(1/nGroups * c(nGroups-1)))
+  #   parameters <- splatter::setParam(parameters,
+  #                                    name = "group.prob",
+  #                                    value = prob.group)
+  # }
 
   # Get params to check
   params_check <- splatter::getParams(parameters, c("nBatches",
@@ -184,7 +183,7 @@ Splat_simulation <- function(ref_data = NULL,
       submethod <- "paths"
       parameters <- splatter::setParam(parameters,
                                        name = "path.from",
-                                       value = seq(1:nGroups)-1)
+                                       value = seq(1:params_check[['nGroups']])-1)
     }else{
       if(params_check[["nGroups"]] == 1){
         submethod <- "single"
@@ -202,6 +201,25 @@ Splat_simulation <- function(ref_data = NULL,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
+  # col_data
+  if(params_check[['nGroups']] == 1){
+    SummarizedExperiment::colData(simulate_result)[, 3] <- rep("Group1", ncol(simulate_result))
+  }else{
+    SummarizedExperiment::colData(simulate_result) <- SummarizedExperiment::colData(simulate_result)[, -4]
+  }
+  colnames(SummarizedExperiment::colData(simulate_result)) <- c("cell_name", "batch", "group")
+  # row_data
+  if(params_check[['nGroups']] == 1){
+    SummarizedExperiment::rowData(simulate_result) <- SummarizedExperiment::rowData(simulate_result)[, -c(2:4)]
+  }else{
+    tmp <- as.data.frame(SummarizedExperiment::rowData(simulate_result)[, 5:(5+params_check[['nGroups']]-1)])
+    total_sum <- rowSums(tmp)
+    de_gene <- ifelse(total_sum == params_check[['nGroups']], "no", "yes")
+    SummarizedExperiment::rowData(simulate_result)[, 2] <- de_gene
+    SummarizedExperiment::rowData(simulate_result) <- SummarizedExperiment::rowData(simulate_result)[, -c(3:4)]
+    SummarizedExperiment::colnames(rowData(simulate_result)) <- c("gene_name", "de_gene", colnames(tmp))
+  }
+
   simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
                                                return_format = return_format)
 
