@@ -6,7 +6,7 @@ methods for single-cell transcriptomics data. To satisfy user’s
 requirements in different scenarios, we bundled the simulators
 comprehensively and users can simulate many kinds of single-cell RNA-seq
 data (different number of groups, batches, differential expressed genes
-and even data with differential trajectory) using certain methods. If
+and even data with differentiation trajectory) using certain methods. If
 you want to learn how to use a certain simulation method, please check
 the following chart and commit an issue or send an Email to us when you
 have any question.
