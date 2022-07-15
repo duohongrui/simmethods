@@ -603,7 +603,7 @@ body {
 <h1 id="splat">Splat</h1>
 <p>DUO Hongrui</p>
 <!-- github markdown built using 
-rmarkdown::render("vignettes/getting_started.Rmd", output_format = rmarkdown::github_document())
+rmarkdown::render("vignettes/Splat.Rmd", output_format = rmarkdown::github_document())
 -->
 
 <p>Here Splat method will be demonstrated clearly and hope that this
@@ -696,7 +696,90 @@ dataset with 500 cells and 1000 genes:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;count_data&quot;</span>]]</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(result)</span></code></pre></div>
 <pre><code>## [1] 1000  500</code></pre>
-<h3 id="simulate-two-or-more-groups">Simulate two or more groups</h3>
+<h3 id="3-simulate-two-or-more-groups">3. Simulate two or more
+groups</h3>
+<p>In Splat, we can not set <code>nGroups</code> directly and should set
+<code>prob.group</code> instead. For example, if we want to simulate 2
+groups, we can type
+<code>other_prior = list(prob.group = c(0.5, 0.5))</code>. Note that the
+sum of <code>prob.group</code> numeric vector must equal to 1, so we can
+also set <code>prob.group = c(0.3, 0.7)</code>. In addtion, if we want
+to simulate three or more groups, we should obey the rules: * The length
+of <code>prob.group</code> vector must always equal to the number of
+groups. * The sum of <code>prob.group</code> numeric vector must equal
+to 1.</p>
+<p>For demonstration, we will simulate three groups using the learned
+parameters.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>simulate_result <span class="ot">&lt;-</span> simmethods<span class="sc">::</span><span class="fu">Splat_simulation</span>(<span class="at">parameters =</span> estimate_result[[<span class="st">&quot;estimate_result&quot;</span>]],</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">return_format =</span> <span class="st">&quot;list&quot;</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">other_prior =</span> <span class="fu">list</span>(<span class="at">batchCells =</span> <span class="dv">500</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">nGenes =</span> <span class="dv">1000</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">prob.group =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.6</span>)),</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">seed =</span> <span class="dv">111</span>)</span></code></pre></div>
+<pre><code>## nCells: 500 
+## nGenes: 1000 
+## nGroups: 3 
+## de.prob: 0.1 
+## nBatches: 1</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;count_data&quot;</span>]]</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(result)</span></code></pre></div>
+<pre><code>## [1] 1000  500</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="do">## cell information</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>cell_info <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;col_meta&quot;</span>]]</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(cell_info<span class="sc">$</span>group)</span></code></pre></div>
+<pre><code>## 
+## Group1 Group2 Group3 
+##     46    156    298</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="do">## gene information</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>gene_info <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;row_meta&quot;</span>]]</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="do">### the proportion of DEGs</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(gene_info<span class="sc">$</span>de_gene)[<span class="dv">2</span>]<span class="sc">/</span><span class="fu">nrow</span>(result) <span class="do">## de.prob = 0.1</span></span></code></pre></div>
+<pre><code>## yes 
+## 0.1</code></pre>
+<p>We can see that the proportion of differential expressed genes is 0.1
+(equals to the default). Next, if we want to know the fold change
+between two groups, we will do division with the groups that we are
+interested in.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="do">## fc between group2 and group1</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>fc_group1_to_group2 <span class="ot">&lt;-</span> gene_info<span class="sc">$</span>DEFacGroup2<span class="sc">/</span>gene_info<span class="sc">$</span>DEFacGroup1</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="do">## fc between group3 and group1</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>fc_group1_to_group3 <span class="ot">&lt;-</span> gene_info<span class="sc">$</span>DEFacGroup3<span class="sc">/</span>gene_info<span class="sc">$</span>DEFacGroup1</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="do">## fc between group3 and group2</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>fc_group2_to_group3 <span class="ot">&lt;-</span> gene_info<span class="sc">$</span>DEFacGroup3<span class="sc">/</span>gene_info<span class="sc">$</span>DEFacGroup2</span></code></pre></div>
+<h3 id="4-simulate-two-or-more-batches">4. Simulate two or more
+batches</h3>
+<p>In Splat, we can not set <code>nBatches</code> directly and should
+set <code>batchCells</code> instead. For example, if we want to simulate
+2 batches, we can type
+<code>other_prior = list(batchCells = c(250, 250))</code>. Note that the
+sum of <code>batchCells</code> numeric vector represents the total
+number of cells and the length of the vector equals to the number of
+batches. In addtion, if we want to simulate three or more batches, we
+should obey the rules: * The length of <code>prob.group</code> vector
+always equals to the number of batches. * The sum of
+<code>prob.group</code> numeric vector represents the total number of
+cells.</p>
+<p>For demonstration, we will simulate three batches using the learned
+parameters.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>simulate_result <span class="ot">&lt;-</span> simmethods<span class="sc">::</span><span class="fu">Splat_simulation</span>(<span class="at">parameters =</span> estimate_result[[<span class="st">&quot;estimate_result&quot;</span>]],</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">return_format =</span> <span class="st">&quot;list&quot;</span>,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">other_prior =</span> <span class="fu">list</span>(<span class="at">batchCells =</span> <span class="fu">c</span>(<span class="dv">200</span>, <span class="dv">300</span>),</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">nGenes =</span> <span class="dv">1000</span>),</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">seed =</span> <span class="dv">111</span>)</span></code></pre></div>
+<pre><code>## nCells: 500 
+## nGenes: 1000 
+## nGroups: 1 
+## de.prob: 0.1 
+## nBatches: 2</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;count_data&quot;</span>]]</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(result)</span></code></pre></div>
+<pre><code>## [1] 1000  500</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="do">## cell information</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>cell_info <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;col_meta&quot;</span>]]</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(cell_info<span class="sc">$</span>batch)</span></code></pre></div>
+<pre><code>## 
+## Batch1 Batch2 
+##    200    300</code></pre>
 
 </body>
 </html>
