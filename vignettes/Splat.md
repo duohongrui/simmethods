@@ -138,10 +138,14 @@ In Splat, we can not set `nGroups` directly and should set `prob.group`
 instead. For example, if we want to simulate 2 groups, we can type
 `other_prior = list(prob.group = c(0.5, 0.5))`. Note that the sum of
 `prob.group` numeric vector must equal to 1, so we can also set
-`prob.group = c(0.3, 0.7)`. In addtion, if we want to simulate three or
-more groups, we should obey the rules: \* The length of `prob.group`
-vector must always equal to the number of groups. \* The sum of
-`prob.group` numeric vector must equal to 1.
+`prob.group = c(0.3, 0.7)`.
+
+In addtion, if we want to simulate three or more groups, we should obey
+the rules:
+
+-   The length of `prob.group` vector must always equal to the number of
+    groups.
+-   The sum of `prob.group` numeric vector must equal to 1.
 
 For demonstration, we will simulate three groups using the learned
 parameters.
@@ -208,11 +212,15 @@ In Splat, we can not set `nBatches` directly and should set `batchCells`
 instead. For example, if we want to simulate 2 batches, we can type
 `other_prior = list(batchCells = c(250, 250))`. Note that the sum of
 `batchCells` numeric vector represents the total number of cells and the
-length of the vector equals to the number of batches. In addtion, if we
-want to simulate three or more batches, we should obey the rules: \* The
-length of `prob.group` vector always equals to the number of batches. \*
-The sum of `prob.group` numeric vector represents the total number of
-cells.
+length of the vector equals to the number of batches.
+
+In addtion, if we want to simulate three or more batches, we should obey
+the rules:
+
+-   The length of `batchCells` vector always equals to the number of
+    batches.
+-   The sum of `batchCells` numeric vector represents the total number
+    of cells.
 
 For demonstration, we will simulate three batches using the learned
 parameters.
@@ -247,3 +255,128 @@ table(cell_info$batch)
     ## 
     ## Batch1 Batch2 
     ##    200    300
+
+### 5. Simulate more groups and batches simutaniously
+
+As mentioned before, we can set `prob.group` and `batchCells` to
+determine the number of groups and batches and we can also set `de.prob`
+to specify the proportion of DEGs. Here, we simulate a dataset with
+following settings:
+
+-   1000 cells
+-   5000 genes
+-   three groups with 0.2 proportion of DEGs
+-   two batches
+
+``` r
+simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
+                                                return_format = "list",
+                                                other_prior = list(batchCells = c(500, 500),
+                                                                   nGenes = 5000,
+                                                                   de.prob = 0.2,
+                                                                   prob.group = c(0.2, 0.3, 0.5)),
+                                                seed = 111)
+## nCells: 1000 
+## nGenes: 5000 
+## nGroups: 3 
+## de.prob: 0.2 
+## nBatches: 2
+result <- simulate_result[["simulate_result"]][["count_data"]]
+dim(result)
+## [1] 5000 1000
+## cell information
+cell_info <- simulate_result[["simulate_result"]][["col_meta"]]
+table(cell_info$batch)
+## 
+## Batch1 Batch2 
+##    500    500
+table(cell_info$group)
+## 
+## Group1 Group2 Group3 
+##    186    321    493
+## gene information
+gene_info <- simulate_result[["simulate_result"]][["row_meta"]]
+### proportion of DEGs
+table(gene_info$de_gene)[2]/nrow(result)
+##    yes 
+## 0.1888
+### fc
+fc_group2_to_group3 <- gene_info$DEFacGroup3/gene_info$DEFacGroup2
+```
+
+### 6. Return results with different format
+
+In simmethods package, we provide four formats of results to users
+without data format conversion, including `list`,
+`SingleCellExperiment`, `Seurat` and `h5ad`. The previous three formats
+are compatible with R environment and the last `h5ad` format is suitable
+for **Python** environment and can be imported by `scanpy.read_h5ad`
+function.
+
+#### list
+
+``` r
+simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
+                                                return_format = "list",
+                                                other_prior = list(batchCells = c(100, 100),
+                                                                   nGenes = 1000,
+                                                                   de.prob = 0.1,
+                                                                   prob.group = c(0.2, 0.3, 0.5)),
+                                                seed = 111)
+## nCells: 200 
+## nGenes: 1000 
+## nGroups: 3 
+## de.prob: 0.1 
+## nBatches: 2
+str(simulate_result)
+## List of 2
+##  $ simulate_result   :List of 3
+##   ..$ count_data: int [1:1000, 1:200] 14 19 21 42 0 16 17 708 20 17 ...
+##   .. ..- attr(*, "dimnames")=List of 2
+##   .. .. ..$ : chr [1:1000] "Gene1" "Gene2" "Gene3" "Gene4" ...
+##   .. .. ..$ : chr [1:200] "Cell1" "Cell2" "Cell3" "Cell4" ...
+##   ..$ col_meta  :'data.frame':   200 obs. of  3 variables:
+##   .. ..$ cell_name: chr [1:200] "Cell1" "Cell2" "Cell3" "Cell4" ...
+##   .. ..$ batch    : chr [1:200] "Batch1" "Batch1" "Batch1" "Batch1" ...
+##   .. ..$ group    : Factor w/ 3 levels "Group1","Group2",..: 2 2 3 2 3 3 3 2 3 3 ...
+##   ..$ row_meta  :'data.frame':   1000 obs. of  7 variables:
+##   .. ..$ gene_name     : chr [1:1000] "Gene1" "Gene2" "Gene3" "Gene4" ...
+##   .. ..$ de_gene       : chr [1:1000] "no" "no" "no" "no" ...
+##   .. ..$ BatchFacBatch1: num [1:1000] 0.91 0.977 1.054 1.171 1.002 ...
+##   .. ..$ BatchFacBatch2: num [1:1000] 1.105 0.95 0.76 0.776 0.996 ...
+##   .. ..$ DEFacGroup1   : num [1:1000] 1 1 1 1 1 1 1 1 1 1 ...
+##   .. ..$ DEFacGroup2   : num [1:1000] 1 1 1 1 1 1 1 1 1 1 ...
+##   .. ..$ DEFacGroup3   : num [1:1000] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ simulate_detection:'data.frame':  1 obs. of  4 variables:
+##   ..$ Function_Call     : chr "simulate_result<-splatter::splatSimulate(parameters,method=submethod,verbose=verbose)"
+##   ..$ Elapsed_Time_sec  : num 0.55
+##   ..$ Total_RAM_Used_MiB: num 6.9
+##   ..$ Peak_RAM_Used_MiB : num 36.7
+counts <- simulate_result[["simulate_result"]][["count_data"]]
+## cell information
+cell_info <- simulate_result[["simulate_result"]][["col_meta"]]
+## gene information
+gene_info <- simulate_result[["simulate_result"]][["row_meta"]]
+```
+
+#### SingleCellExperiment
+
+``` r
+simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
+                                                return_format = "SingleCellExperiment",
+                                                other_prior = list(batchCells = c(100, 100),
+                                                                   nGenes = 1000,
+                                                                   de.prob = 0.1,
+                                                                   prob.group = c(0.2, 0.3, 0.5)),
+                                                seed = 111)
+## nCells: 200 
+## nGenes: 1000 
+## nGroups: 3 
+## de.prob: 0.1 
+## nBatches: 2
+counts <- counts(simulate_result[["simulate_result"]])
+## cell information
+cell_info <- as.data.frame(colData(simulate_result[["simulate_result"]]))
+## gene information
+gene_info <- as.data.frame(rowData(simulate_result[["simulate_result"]]))
+```

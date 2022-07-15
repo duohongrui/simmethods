@@ -703,11 +703,15 @@ groups</h3>
 groups, we can type
 <code>other_prior = list(prob.group = c(0.5, 0.5))</code>. Note that the
 sum of <code>prob.group</code> numeric vector must equal to 1, so we can
-also set <code>prob.group = c(0.3, 0.7)</code>. In addtion, if we want
-to simulate three or more groups, we should obey the rules: * The length
-of <code>prob.group</code> vector must always equal to the number of
-groups. * The sum of <code>prob.group</code> numeric vector must equal
-to 1.</p>
+also set <code>prob.group = c(0.3, 0.7)</code>.</p>
+<p>In addtion, if we want to simulate three or more groups, we should
+obey the rules:</p>
+<ul>
+<li>The length of <code>prob.group</code> vector must always equal to
+the number of groups.</li>
+<li>The sum of <code>prob.group</code> numeric vector must equal to
+1.</li>
+</ul>
 <p>For demonstration, we will simulate three groups using the learned
 parameters.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>simulate_result <span class="ot">&lt;-</span> simmethods<span class="sc">::</span><span class="fu">Splat_simulation</span>(<span class="at">parameters =</span> estimate_result[[<span class="st">&quot;estimate_result&quot;</span>]],</span>
@@ -754,11 +758,15 @@ set <code>batchCells</code> instead. For example, if we want to simulate
 <code>other_prior = list(batchCells = c(250, 250))</code>. Note that the
 sum of <code>batchCells</code> numeric vector represents the total
 number of cells and the length of the vector equals to the number of
-batches. In addtion, if we want to simulate three or more batches, we
-should obey the rules: * The length of <code>prob.group</code> vector
-always equals to the number of batches. * The sum of
-<code>prob.group</code> numeric vector represents the total number of
-cells.</p>
+batches.</p>
+<p>In addtion, if we want to simulate three or more batches, we should
+obey the rules:</p>
+<ul>
+<li>The length of <code>batchCells</code> vector always equals to the
+number of batches.</li>
+<li>The sum of <code>batchCells</code> numeric vector represents the
+total number of cells.</li>
+</ul>
 <p>For demonstration, we will simulate three batches using the learned
 parameters.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>simulate_result <span class="ot">&lt;-</span> simmethods<span class="sc">::</span><span class="fu">Splat_simulation</span>(<span class="at">parameters =</span> estimate_result[[<span class="st">&quot;estimate_result&quot;</span>]],</span>
@@ -780,6 +788,120 @@ parameters.</p>
 <pre><code>## 
 ## Batch1 Batch2 
 ##    200    300</code></pre>
+<h3 id="5-simulate-more-groups-and-batches-simutaniously">5. Simulate
+more groups and batches simutaniously</h3>
+<p>As mentioned before, we can set <code>prob.group</code> and
+<code>batchCells</code> to determine the number of groups and batches
+and we can also set <code>de.prob</code> to specify the proportion of
+DEGs. Here, we simulate a dataset with following settings:</p>
+<ul>
+<li>1000 cells</li>
+<li>5000 genes</li>
+<li>three groups with 0.2 proportion of DEGs</li>
+<li>two batches</li>
+</ul>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>simulate_result <span class="ot">&lt;-</span> simmethods<span class="sc">::</span><span class="fu">Splat_simulation</span>(<span class="at">parameters =</span> estimate_result[[<span class="st">&quot;estimate_result&quot;</span>]],</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">return_format =</span> <span class="st">&quot;list&quot;</span>,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">other_prior =</span> <span class="fu">list</span>(<span class="at">batchCells =</span> <span class="fu">c</span>(<span class="dv">500</span>, <span class="dv">500</span>),</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">nGenes =</span> <span class="dv">5000</span>,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">de.prob =</span> <span class="fl">0.2</span>,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">prob.group =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>)),</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">seed =</span> <span class="dv">111</span>)</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="do">## nCells: 1000 </span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="do">## nGenes: 5000 </span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="do">## nGroups: 3 </span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="do">## de.prob: 0.2 </span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="do">## nBatches: 2</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;count_data&quot;</span>]]</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(result)</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 5000 1000</span></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a><span class="do">## cell information</span></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>cell_info <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;col_meta&quot;</span>]]</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(cell_info<span class="sc">$</span>batch)</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Batch1 Batch2 </span></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a><span class="do">##    500    500</span></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(cell_info<span class="sc">$</span>group)</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a><span class="do">## Group1 Group2 Group3 </span></span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a><span class="do">##    186    321    493</span></span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a><span class="do">## gene information</span></span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>gene_info <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;row_meta&quot;</span>]]</span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a><span class="do">### proportion of DEGs</span></span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(gene_info<span class="sc">$</span>de_gene)[<span class="dv">2</span>]<span class="sc">/</span><span class="fu">nrow</span>(result)</span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a><span class="do">##    yes </span></span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a><span class="do">## 0.1888</span></span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a><span class="do">### fc</span></span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>fc_group2_to_group3 <span class="ot">&lt;-</span> gene_info<span class="sc">$</span>DEFacGroup3<span class="sc">/</span>gene_info<span class="sc">$</span>DEFacGroup2</span></code></pre></div>
+<h3 id="6-return-results-with-different-format">6. Return results with
+different format</h3>
+<p>In simmethods package, we provide four formats of results to users
+without data format conversion, including <code>list</code>,
+<code>SingleCellExperiment</code>, <code>Seurat</code> and
+<code>h5ad</code>. The previous three formats are compatible with R
+environment and the last <code>h5ad</code> format is suitable for
+<strong>Python</strong> environment and can be imported by
+<code>scanpy.read_h5ad</code> function.</p>
+<h4 id="list">list</h4>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>simulate_result <span class="ot">&lt;-</span> simmethods<span class="sc">::</span><span class="fu">Splat_simulation</span>(<span class="at">parameters =</span> estimate_result[[<span class="st">&quot;estimate_result&quot;</span>]],</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">return_format =</span> <span class="st">&quot;list&quot;</span>,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">other_prior =</span> <span class="fu">list</span>(<span class="at">batchCells =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">100</span>),</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">nGenes =</span> <span class="dv">1000</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">de.prob =</span> <span class="fl">0.1</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">prob.group =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>)),</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">seed =</span> <span class="dv">111</span>)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="do">## nCells: 200 </span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="do">## nGenes: 1000 </span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="do">## nGroups: 3 </span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="do">## de.prob: 0.1 </span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="do">## nBatches: 2</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(simulate_result)</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="do">## List of 2</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a><span class="do">##  $ simulate_result   :List of 3</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="do">##   ..$ count_data: int [1:1000, 1:200] 14 19 21 42 0 16 17 708 20 17 ...</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="do">##   .. ..- attr(*, &quot;dimnames&quot;)=List of 2</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a><span class="do">##   .. .. ..$ : chr [1:1000] &quot;Gene1&quot; &quot;Gene2&quot; &quot;Gene3&quot; &quot;Gene4&quot; ...</span></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a><span class="do">##   .. .. ..$ : chr [1:200] &quot;Cell1&quot; &quot;Cell2&quot; &quot;Cell3&quot; &quot;Cell4&quot; ...</span></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a><span class="do">##   ..$ col_meta  :&#39;data.frame&#39;:   200 obs. of  3 variables:</span></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a><span class="do">##   .. ..$ cell_name: chr [1:200] &quot;Cell1&quot; &quot;Cell2&quot; &quot;Cell3&quot; &quot;Cell4&quot; ...</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a><span class="do">##   .. ..$ batch    : chr [1:200] &quot;Batch1&quot; &quot;Batch1&quot; &quot;Batch1&quot; &quot;Batch1&quot; ...</span></span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a><span class="do">##   .. ..$ group    : Factor w/ 3 levels &quot;Group1&quot;,&quot;Group2&quot;,..: 2 2 3 2 3 3 3 2 3 3 ...</span></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a><span class="do">##   ..$ row_meta  :&#39;data.frame&#39;:   1000 obs. of  7 variables:</span></span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a><span class="do">##   .. ..$ gene_name     : chr [1:1000] &quot;Gene1&quot; &quot;Gene2&quot; &quot;Gene3&quot; &quot;Gene4&quot; ...</span></span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a><span class="do">##   .. ..$ de_gene       : chr [1:1000] &quot;no&quot; &quot;no&quot; &quot;no&quot; &quot;no&quot; ...</span></span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a><span class="do">##   .. ..$ BatchFacBatch1: num [1:1000] 0.91 0.977 1.054 1.171 1.002 ...</span></span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a><span class="do">##   .. ..$ BatchFacBatch2: num [1:1000] 1.105 0.95 0.76 0.776 0.996 ...</span></span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a><span class="do">##   .. ..$ DEFacGroup1   : num [1:1000] 1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a><span class="do">##   .. ..$ DEFacGroup2   : num [1:1000] 1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a><span class="do">##   .. ..$ DEFacGroup3   : num [1:1000] 1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a><span class="do">##  $ simulate_detection:&#39;data.frame&#39;:  1 obs. of  4 variables:</span></span>
+<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a><span class="do">##   ..$ Function_Call     : chr &quot;simulate_result&lt;-splatter::splatSimulate(parameters,method=submethod,verbose=verbose)&quot;</span></span>
+<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a><span class="do">##   ..$ Elapsed_Time_sec  : num 0.55</span></span>
+<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a><span class="do">##   ..$ Total_RAM_Used_MiB: num 6.9</span></span>
+<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a><span class="do">##   ..$ Peak_RAM_Used_MiB : num 36.7</span></span>
+<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;count_data&quot;</span>]]</span>
+<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a><span class="do">## cell information</span></span>
+<span id="cb33-39"><a href="#cb33-39" aria-hidden="true" tabindex="-1"></a>cell_info <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;col_meta&quot;</span>]]</span>
+<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a><span class="do">## gene information</span></span>
+<span id="cb33-41"><a href="#cb33-41" aria-hidden="true" tabindex="-1"></a>gene_info <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;row_meta&quot;</span>]]</span></code></pre></div>
+<h4 id="singlecellexperiment">SingleCellExperiment</h4>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>simulate_result <span class="ot">&lt;-</span> simmethods<span class="sc">::</span><span class="fu">Splat_simulation</span>(<span class="at">parameters =</span> estimate_result[[<span class="st">&quot;estimate_result&quot;</span>]],</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">return_format =</span> <span class="st">&quot;SingleCellExperiment&quot;</span>,</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">other_prior =</span> <span class="fu">list</span>(<span class="at">batchCells =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">100</span>),</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">nGenes =</span> <span class="dv">1000</span>,</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">de.prob =</span> <span class="fl">0.1</span>,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">prob.group =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>)),</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">seed =</span> <span class="dv">111</span>)</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="do">## nCells: 200 </span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="do">## nGenes: 1000 </span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="do">## nGroups: 3 </span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="do">## de.prob: 0.1 </span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="do">## nBatches: 2</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">counts</span>(simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]])</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="do">## cell information</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>cell_info <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]]))</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a><span class="do">## gene information</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>gene_info <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">rowData</span>(simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]]))</span></code></pre></div>
 
 </body>
 </html>
