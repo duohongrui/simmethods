@@ -81,7 +81,7 @@ Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #'
 #' @export
 #' @references
-#' Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biol 18, 174 (2017)
+#' Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biology 18, 174 (2017). https://doi.org/10.1186/s13059-017-1305-0
 #' @examples
 #' # Load data
 #' ref_data <- simmethods::data

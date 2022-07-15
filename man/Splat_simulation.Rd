@@ -132,5 +132,5 @@ fc_group2_to_group3 <- row_data$DEFacGroup3/row_data$DEFacGroup2
 table(fc_group2_to_group3 > 1)[2]/4000
 }
 \references{
-Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biol 18, 174 (2017)
+Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biology 18, 174 (2017). https://doi.org/10.1186/s13059-017-1305-0
 }
