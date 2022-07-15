@@ -615,9 +615,11 @@ essential parameters from a real dataset in order to make the simulated
 data more real. If you do not have a single-cell transcriptomics count
 matrix now, you can use the data collected in simmethods package by
 <code>simmethods:data</code> command.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>ref_data <span class="ot">&lt;-</span> simmethods<span class="sc">::</span>data</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(ref_data)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(simmethods)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SingleCellExperiment)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>ref_data <span class="ot">&lt;-</span> simmethods<span class="sc">::</span>data</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(ref_data)</span></code></pre></div>
 <pre><code>## [1] 4000  160</code></pre>
 <p>Using <code>simmethods::Splat_estimation</code> command to execute
 the estimation step.</p>
@@ -637,6 +639,64 @@ dataset based on the learned parameters with different scenarios.</p>
 <li>Simulate more groups and batches simutaniously</li>
 <li>Return results with different format</li>
 </ol>
+<h3 id="1-datasets-with-default-parameters">1. Datasets with default
+parameters</h3>
+<p>The reference data contains 160 cells and 4000 genes, if we simulate
+datasets with default parameters and then we will obtain a new data
+which has the same size as the reference data. In addtion, the simulated
+dataset will have one group and one batch of cells.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>simulate_result <span class="ot">&lt;-</span> simmethods<span class="sc">::</span><span class="fu">Splat_simulation</span>(<span class="at">parameters =</span> estimate_result[[<span class="st">&quot;estimate_result&quot;</span>]],</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">return_format =</span> <span class="st">&quot;SCE&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">seed =</span> <span class="dv">111</span>)</span></code></pre></div>
+<pre><code>## nCells: 160 
+## nGenes: 4000 
+## nGroups: 1 
+## de.prob: 0.1 
+## nBatches: 1</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>SCE_result <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(SCE_result)</span></code></pre></div>
+<pre><code>## [1] 4000  160</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">colData</span>(SCE_result))</span></code></pre></div>
+<pre><code>## DataFrame with 6 rows and 3 columns
+##         cell_name       batch       group
+##       &lt;character&gt; &lt;character&gt; &lt;character&gt;
+## Cell1       Cell1      Batch1      Group1
+## Cell2       Cell2      Batch1      Group1
+## Cell3       Cell3      Batch1      Group1
+## Cell4       Cell4      Batch1      Group1
+## Cell5       Cell5      Batch1      Group1
+## Cell6       Cell6      Batch1      Group1</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rowData</span>(SCE_result))</span></code></pre></div>
+<pre><code>## DataFrame with 6 rows and 1 column
+##             value
+##       &lt;character&gt;
+## Gene1       Gene1
+## Gene2       Gene2
+## Gene3       Gene3
+## Gene4       Gene4
+## Gene5       Gene5
+## Gene6       Gene6</code></pre>
+<h3 id="2-determin-the-number-of-cells-and-genes">2. Determin the number
+of cells and genes</h3>
+<p>In Splat, we can not set <code>nCells</code> directly and should set
+<code>batchCells</code> instead. For example, if we want to simulate 500
+cells, we can type <code>other_prior = list(batchCells = 500)</code>.
+For genes, we can just set <code>nGenes</code>. Here, we simulate a new
+dataset with 500 cells and 1000 genes:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>simulate_result <span class="ot">&lt;-</span> simmethods<span class="sc">::</span><span class="fu">Splat_simulation</span>(<span class="at">parameters =</span> estimate_result[[<span class="st">&quot;estimate_result&quot;</span>]],</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">return_format =</span> <span class="st">&quot;list&quot;</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">other_prior =</span> <span class="fu">list</span>(<span class="at">batchCells =</span> <span class="dv">500</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">nGenes =</span> <span class="dv">1000</span>),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">seed =</span> <span class="dv">111</span>)</span></code></pre></div>
+<pre><code>## nCells: 500 
+## nGenes: 1000 
+## nGroups: 1 
+## de.prob: 0.1 
+## nBatches: 1</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;count_data&quot;</span>]]</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(result)</span></code></pre></div>
+<pre><code>## [1] 1000  500</code></pre>
+<h3 id="simulate-two-or-more-groups">Simulate two or more groups</h3>
 
 </body>
 </html>
