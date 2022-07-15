@@ -31,3 +31,95 @@ Seurat, h5ad}
 \description{
 Simulate Datasets by Splat
 }
+\examples{
+# Load data
+ref_data <- simmethods::data
+# Estimate parameters
+estimate_result <- simmethods::Splat_estimation(ref_data = data,
+                                                verbose = T,
+                                                seed = 10)
+
+# (1) Simulate 500 cells (Since we can not set nBatches directly, so we can set
+# batchCells (a numeric vector)) and 2000 genes
+simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
+                                                other_prior = list(batchCells = 500,
+                                                                   nGenes = 2000),
+                                                return_format = "list",
+                                                verbose = T,
+                                                seed = 111)
+count_data <- simulate_result[["simulate_result"]][["count_data"]]
+dim(count_data)
+
+
+# (2) Simulate one group and one batch
+simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
+                                                other_prior = NULL,
+                                                return_format = "list",
+                                                verbose = T,
+                                                seed = 111)
+count_data <- simulate_result[["simulate_result"]][["count_data"]]
+dim(count_data)
+
+
+# (3) Simulate two groups (de.prob = 0.1) and one batch
+simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
+                                                other_prior = list(prob.group = c(0.4, 0.6)),
+                                                return_format = "list",
+                                                verbose = T,
+                                                seed = 111)
+count_data <- simulate_result[["simulate_result"]][["count_data"]]
+dim(count_data)
+## cell information
+col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+table(col_data$group)
+## gene information
+row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+### The result of Splat contains the factors of different groups and uses can
+### calculate the fold change by division. For example, the DEFactors of A gene
+### in Group1 and Group2 are respectively 2 and 1, and the fold change of A gene
+### is 2/1=2 or 1/2=0.5.
+fc_group1_to_group2 <- row_data$DEFacGroup2/row_data$DEFacGroup1
+### number of DEGs
+table(row_data$de_gene)
+
+
+# (4) Simulate two groups (de.prob = 0.2) and two batches
+## Since we can not set nBatches directly, so we can set batchCells (a numeric vector)
+## to determin the number of batches and cells simutaniously.
+simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
+                                                other_prior = list(prob.group = c(0.4, 0.6),
+                                                                   batchCells = c(80, 80),
+                                                                   de.prob = 0.2),
+                                                return_format = "list",
+                                                verbose = T,
+                                                seed = 111)
+count_data <- simulate_result[["simulate_result"]][["count_data"]]
+dim(count_data)
+col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+table(col_data$group)
+table(col_data$batch)
+
+
+# (5) Simulate three groups (de.prob = 0.2) and two batches
+## Since we can not set nBatches directly, so we can set batchCells (a numeric vector)
+## to determin the number of batches and cells simutaniously.
+simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
+                                                other_prior = list(prob.group = c(0.4, 0.3, 0.3),
+                                                                   batchCells = c(80, 80),
+                                                                   de.prob = 0.2),
+                                                return_format = "list",
+                                                verbose = T,
+                                                seed = 111)
+count_data <- simulate_result[["simulate_result"]][["count_data"]]
+dim(count_data)
+col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+table(col_data$group)
+table(col_data$batch)
+### fold change of Group1 to Group2
+row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+fc_group1_to_group2 <- row_data$DEFacGroup2/row_data$DEFacGroup1
+### fold change of Group1 to Group3
+fc_group1_to_group3 <- row_data$DEFacGroup3/row_data$DEFacGroup1
+### fold change of Group2 to Group3
+fc_group2_to_group3 <- row_data$DEFacGroup3/row_data$DEFacGroup2
+}
