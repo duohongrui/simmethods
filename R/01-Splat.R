@@ -80,6 +80,8 @@ Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #' @importFrom stringr str_replace
 #'
 #' @export
+#' @references
+#' Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biol 18, 174 (2017)
 #' @examples
 #' # Load data
 #' ref_data <- simmethods::data
@@ -128,7 +130,7 @@ Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #' ### in Group1 and Group2 are respectively 2 and 1, and the fold change of A gene
 #' ### is 2/1=2 or 1/2=0.5.
 #' fc_group1_to_group2 <- row_data$DEFacGroup2/row_data$DEFacGroup1
-#' ### I guess that the true DEGs have >= 1 fold change
+#' ### I guess that the true DEGs have > 1 fold change
 #' table(fc_group1_to_group2 > 1)[2]/4000 ## de.prob = 0.1
 #' ### number of all DEGs
 #' table(row_data$de_gene)
