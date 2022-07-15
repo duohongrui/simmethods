@@ -1,0 +1,50 @@
+---
+output:
+  github_document:
+    html_preview: FALSE
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, error = FALSE, message = FALSE)
+```
+
+
+```{r}
+methods <- simmethods::get_method()
+```
+
+
+# A collection of 36 simulation methods for single-cell RNA-seq data
+
+Simmethods collects and documents 36 popular and common simulation methods for single-cell transcriptomics data. To satisfy user's requirements in different scenarios, we bundled the simulators comprehensively and users can simulate many kinds of single-cell RNA-seq data (different number of groups, batches, differential expressed genes and even data with differential trajectory) using certain methods. If you want to learn how to use a certain simulation method, please check the following chart and commit an issue or send an Email to us when you have any question.
+
+## The list of simulation methods
+
+```{r}
+method_name <- names(methods)
+
+method_table <- purrr::map_dfr(method_name, .f = function(x){
+  method_definition <- methods[[x]][[paste0(x, "_method")]]
+  method_summary <- tibble::tibble(method = method_definition$method,
+                                   language = method_definition$programming,
+                                   url = method_definition$url,
+                                   doi = method_definition$manuscript$doi,
+                                   journal = method_definition$manuscript$journal)
+  method_summary
+})
+
+knitr::kable(method_table)
+```
+
+## New methods
+
+We are glad to add new simulation methods if some methods are innovative and creative that many users commonly used. If you have the requirements, please tell me by email (duohongrui@cqnu.edu.cn) or raise an issue for that.
+
+
+
+
+
+
+
