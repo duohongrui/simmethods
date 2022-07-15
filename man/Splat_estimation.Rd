@@ -28,3 +28,10 @@ estimate_result <- simmethods::Splat_estimation(ref_data = data,
                                                 verbose = T,
                                                 seed = 10)
 }
+\references{
+Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biology 18, 174 (2017). https://doi.org/10.1186/s13059-017-1305-0
+
+Bioconductor URL: \url{https://bioconductor.org/packages/release/bioc/html/splatter.html}
+
+Github URL: \url{https://github.com/Oshlack/splatter}
+}
