@@ -41,10 +41,3 @@ knitr::kable(method_table)
 ## New methods
 
 We are glad to add new simulation methods if some methods are innovative and creative that many users commonly used. If you have the requirements, please tell me by email (duohongrui@cqnu.edu.cn) or raise an issue for that.
-
-
-
-
-
-
-
