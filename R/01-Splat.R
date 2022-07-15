@@ -128,7 +128,9 @@ Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #' ### in Group1 and Group2 are respectively 2 and 1, and the fold change of A gene
 #' ### is 2/1=2 or 1/2=0.5.
 #' fc_group1_to_group2 <- row_data$DEFacGroup2/row_data$DEFacGroup1
-#' ### number of DEGs
+#' ### I guess that the true DEGs have >= 1 fold change
+#' table(fc_group1_to_group2 > 1)[2]/4000 ## de.prob = 0.1
+#' ### number of all DEGs
 #' table(row_data$de_gene)
 #'
 #'
@@ -164,13 +166,20 @@ Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
 #' table(col_data$group)
 #' table(col_data$batch)
-#' ### fold change of Group1 to Group2
+#' ## row data
 #' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+#' ### DEGs
+#' table(row_data$de_gene)
+#' ### fold change of Group1 to Group2
 #' fc_group1_to_group2 <- row_data$DEFacGroup2/row_data$DEFacGroup1
+#' table(fc_group1_to_group2 > 1)[2]/4000
 #' ### fold change of Group1 to Group3
 #' fc_group1_to_group3 <- row_data$DEFacGroup3/row_data$DEFacGroup1
+#' table(fc_group1_to_group3 > 1)[2]/4000
 #' ### fold change of Group2 to Group3
 #' fc_group2_to_group3 <- row_data$DEFacGroup3/row_data$DEFacGroup2
+#' table(fc_group2_to_group3 > 1)[2]/4000
+
 Splat_simulation <- function(parameters,
                              other_prior = NULL,
                              return_format,
