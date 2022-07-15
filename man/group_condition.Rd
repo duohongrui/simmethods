@@ -11,7 +11,7 @@ An object of class \code{factor} of length 160.
 group_condition
 }
 \description{
-Group information of 160 Cells in GSE54695. Total 160 cells are
+Group information of 160 clls in GSE54695. Total 160 cells are
 cultured in two types of medium, 0 for two-inhibitor (2i) and 1 for serum.
 }
 \keyword{datasets}

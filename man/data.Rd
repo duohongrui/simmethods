@@ -5,7 +5,7 @@
 \alias{data}
 \title{Single-cell RNA-seq Data from GSE54695}
 \format{
-An object of class \code{data.frame} with 1000 rows and 160 columns.
+An object of class \code{matrix} (inherits from \code{array}) with 4000 rows and 160 columns.
 }
 \source{
 \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE54695}
@@ -14,7 +14,7 @@ An object of class \code{data.frame} with 1000 rows and 160 columns.
 data
 }
 \description{
-A dataset containing the single-cell gene expression data from
+A matrix contains the single-cell gene expression data from
 GSE54695. Total 160 cells are cultured in two types of medium, two-inhibitor (2i)
 and serum. In addtion, the count matrix contains ERCC spike-in information and
 it can be very important when uses are intended to simulate datasets by BEARscc

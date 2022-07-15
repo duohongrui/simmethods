@@ -22,3 +22,9 @@ detection.
 This function is used to estimate useful parameters from a real dataset by
 using \code{splatEstimate} function in Splatter package.
 }
+\examples{
+ref_data <- simmethods::data
+estimate_result <- simmethods::Splat_estimation(ref_data = data,
+                                                verbose = T,
+                                                seed = 10)
+}

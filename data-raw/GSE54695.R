@@ -13,10 +13,10 @@ ERCC_data <- data[grep(rownames(data), pattern = "^ERCC-"), ]
 ## Delete ERCC counts
 data <- data[-grep(rownames(data), pattern = "^ERCC-"), ]
 ## Sample extra 950 genes
-set.seed(111)
-data <- data[sample(1:nrow(data), 950), ]
+data <- data[rowSums(data) > 200, ]
+data <- data[sample(1:nrow(data), 3950), ]
 ## rbind
-data <- rbind(data, ERCC_data)
+data <- as.matrix(round(rbind(data, ERCC_data)))
 ## group condition (0 for 2i, 1 for serum)
 group_condition <- factor(c(rep(0, 80), rep(1, 80)))
 
