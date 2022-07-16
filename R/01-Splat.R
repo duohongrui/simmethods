@@ -9,6 +9,7 @@
 #' @param seed An integer of a random seed.
 #' @importFrom peakRAM peakRAM
 #' @importFrom splatter splatEstimate
+#' @importFrom SinglCellExperiment counts
 #'
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
@@ -303,26 +304,33 @@ Splat_simulation <- function(parameters,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
+  # counts
+  counts <- SingleCellExperiment::counts(simulate_result)
   # col_data
+  col_data <- as.data.frame(SummarizedExperiment::colData(simulate_result))
   if(params_check[['nGroups']] == 1){
-    SummarizedExperiment::colData(simulate_result)[, 3] <- rep("Group1", ncol(simulate_result))
+    col_data[, 3] <- rep("Group1", ncol(simulate_result))
   }else{
-    SummarizedExperiment::colData(simulate_result) <- SummarizedExperiment::colData(simulate_result)[, -4]
+    col_data <- col_data[, -4]
   }
-  colnames(SummarizedExperiment::colData(simulate_result)) <- c("cell_name", "batch", "group")
+  colnames(col_data) <- c("cell_name", "batch", "group")
   # row_data
+  row_data <- as.data.frame(SummarizedExperiment::rowData(simulate_result))
   if(params_check[['nGroups']] == 1){
-    SummarizedExperiment::rowData(simulate_result) <- SummarizedExperiment::rowData(simulate_result)[, -c(2:4)]
+    row_data <- row_data[, -c(2:4)]
   }else{
-    group_fac <- as.data.frame(SummarizedExperiment::rowData(simulate_result)[, grep(colnames(SummarizedExperiment::rowData(simulate_result)), pattern = "^DE")])
-    batch_fac <- as.data.frame(SummarizedExperiment::rowData(simulate_result)[, grep(colnames(SummarizedExperiment::rowData(simulate_result)), pattern = "^Batch")])
+    group_fac <- row_data[, grep(colnames(row_data), pattern = "^DE")]
+    batch_fac <- row_data[, grep(colnames(row_data), pattern = "^Batch")]
     total_sum <- rowSums(group_fac)
     de_gene <- ifelse(total_sum == params_check[['nGroups']], "no", "yes")
-    SummarizedExperiment::rowData(simulate_result)[, 2] <- de_gene
-    SummarizedExperiment::rowData(simulate_result) <- SummarizedExperiment::rowData(simulate_result)[, -c(3:4)]
-    colnames(SummarizedExperiment::rowData(simulate_result)) <- c("gene_name", "de_gene", colnames(batch_fac), colnames(group_fac))
+    row_data[, 2] <- de_gene
+    row_data <- row_data[, -c(3:4)]
+    colnames(row_data) <- c("gene_name", "de_gene", colnames(batch_fac), colnames(group_fac))
   }
-
+  # Establish SingleCellExperiment
+  simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
+                                                                colData = col_data,
+                                                                rowData = row_data)
   simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
                                                return_format = return_format)
 

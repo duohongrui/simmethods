@@ -16,6 +16,7 @@ License: GPL-3
 Depends: R (>= 4.0), SummarizedExperiment, SingleCellExperiment, gamlss.dist, gamlss.tr, TedSim, SymSim, VeloSim
 Imports: simutils (>= 0.0.0.9000),
          BiocManager,
+         SummarizedExperiment,
          reticulate,
          methods,
          scater,
