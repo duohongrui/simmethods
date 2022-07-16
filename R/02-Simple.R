@@ -65,12 +65,6 @@ Simple_estimation <- function(ref_data, verbose = FALSE, seed){
 #' @param seed A random seed.
 #'
 #' @importFrom splatter getParams setParam simpleSimulate
-#' @importFrom assertthat assert_that
-#' @importFrom glue glue
-#' @importFrom SingleCellExperiment counts colData rowData
-#' @importFrom Seurat as.Seurat
-#' @importFrom SeuratDisk SaveH5Seurat Convert
-#' @importFrom stringr str_replace
 #'
 #' @export
 #'
@@ -120,6 +114,19 @@ Simple_simulation <- function(parameters,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
+  ## counts
+  counts <- as.matrix(SingleCellExperiment::counts(simulate_result))
+  ## col_data
+  col_data <- as.data.frame(SingleCellExperiment::colData(simulate_result))
+  colnames(col_data) <- "cell_name"
+  ## row_data
+  row_data <- as.data.frame(SingleCellExperiment::rowData(simulate_result)[, 1])
+  rownames(row_data) <- row_data[, 1]
+  colnames(row_data) <- "gene_name"
+  # Establish SingleCellExperiment
+  simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
+                                                                colData = col_data,
+                                                                rowData = row_data)
   simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
                                                return_format = return_format)
 
