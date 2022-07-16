@@ -9,7 +9,7 @@
 #' @param seed An integer of a random seed.
 #' @importFrom peakRAM peakRAM
 #' @importFrom splatter splatEstimate
-#' @importFrom SinglCellExperiment counts
+#' @importFrom SingleCellExperiment counts
 #'
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.

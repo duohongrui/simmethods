@@ -127,8 +127,8 @@ SymSim_simulation <- function(parameters,
   }
 
   # Return to users
-  cat(glue::glue("nCells: {nCells}"), "\n")
-  cat(glue::glue("nGenes: {nGenes}"), "\n")
+  cat(glue::glue("nCells: {other_prior[['ncells_total']]}"), "\n")
+  cat(glue::glue("nGenes: {other_prior[['ngenes']]}"), "\n")
 
   simulate_formals <- simutils::change_parameters(function_expr = "SymSim::SimulateTrueCounts",
                                                   other_prior = other_prior,
