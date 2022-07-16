@@ -46,7 +46,7 @@ Splat_method_definition <- function(...){
       id = "nBatches",
       default = 1L,
       lower = 1L,
-      description = "The number of batches to simulate.",
+      description = "The number of batches to simulate. Set batchCells instead to change the value of nBatches",
       function_name = "splatSimulate"
     ),
     param_integer(
@@ -146,7 +146,7 @@ Splat_method_definition <- function(...){
       id = "nGroups",
       default = 1L,
       lower = 1L,
-      description = "The number of groups or paths to simulate.",
+      description = "The number of groups or paths to simulate. Set prob.group instead to change the value of nGroups",
       function_name = "splatSimulate"
     ),
     param_numeric(
@@ -279,7 +279,7 @@ Splat_method_definition <- function(...){
     ),
     param_integer(
       id = "seed",
-      default = 230355L,
+      force = TRUE,
       description = "Seed to use for generating random numbers.",
       function_name = "splatSimulate"
     )
