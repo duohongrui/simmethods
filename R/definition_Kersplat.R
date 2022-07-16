@@ -184,17 +184,20 @@ Kersplat_method_definition <- function(...){
       id = "nGenes",
       default = 10000L,
       lower = 1L,
+      description = "How many genes to be simulated",
       function_name = "kersplatSimulate"
     ),
     param_integer(
       id = "nCells",
       default = 100L,
       lower = 1L,
+      description = "How many cells to be simulated",
       function_name = "kersplatSimulate"
     ),
     param_integer(
       id = "seed",
-      default = 633483L,
+      force = TRUE,
+      description = "Random seed",
       function_name = "kersplatSimulate"
     )
   )

@@ -13,7 +13,21 @@
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
+#' @references
+#' Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biology 18, 174 (2017). <https://doi.org/10.1186/s13059-017-1305-0>
 #'
+#' Bioconductor URL: <https://bioconductor.org/packages/release/bioc/html/splatter.html>
+#'
+#' Github URL: <https://github.com/Oshlack/splatter>
+#' @examples
+#' ref_data <- simmethods::data
+#' # Estimate parameters
+#' estimate_result <- Kersplat_estimation(ref_data = ref_data,
+#'                                        verbose = TRUE,
+#'                                        seed = 111)
+#' estimate_result <- estimate_result[["estimate_result"]]
+#' ## Check the class
+#' class(estimate_result) == "KersplatParams"
 Kersplat_estimation <- function(ref_data, verbose = FALSE, seed){
 
   ##############################################################################
@@ -64,24 +78,53 @@ Kersplat_estimation <- function(ref_data, verbose = FALSE, seed){
 #' extra parameters to execute the estimation step, so you must input them. In
 #' simulation step, the number of cells, genes, groups, batches, the percent of
 #' DEGs and other variables are usually customed, so before simulating a dataset
-#' you must point it out.
+#' you must point it out. See `Details` below for more information.
 #' @param return_format A character. Alternatives choices: list, SingleCellExperiment,
 #' Seurat, h5ad
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#'
-#' @importFrom splatter getParams
-#' @importFrom assertthat assert_that
-#' @importFrom glue glue
-#' @importFrom SingleCellExperiment counts colData rowData
-#' @importFrom Seurat as.Seurat
-#' @importFrom SeuratDisk SaveH5Seurat Convert
-#' @importFrom stringr str_replace
+#' @importFrom splatter kersplatSimulate
 #'
 #' @export
+#' @details
+#' In addtion to simulate datasets with default parameters, users can set two extra
+#' parameters before executing simulation step within Simple method:
+#' 1. nCells. Just only type `other_prior = list(nCells = n)` when you want to
+#' simulate a dataset with n cells.
+#' 2. nGenes. Like `nCells`, users just only type `other_prior = list(nGenes = m)`
+#' to get the dataset with m genes.
+#' @export
+#' @references
+#' Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biology 18, 174 (2017). <https://doi.org/10.1186/s13059-017-1305-0>
 #'
+#' Bioconductor URL: <https://bioconductor.org/packages/release/bioc/html/splatter.html>
+#'
+#' Github URL: <https://github.com/Oshlack/splatter>
+#' @examples
+#' ref_data <- simmethods::data
+#' # Estimate parameters
+#' estimate_result <- Kersplat_estimation(ref_data = ref_data,
+#'                                        verbose = TRUE,
+#'                                        seed = 111)
+#' # (1) Simulate a dataset with default parameters
+#' simulate_result <- Kersplat_simulation(parameters = estimate_result[["estimate_result"]],
+#'                                        return_format = "list",
+#'                                        verbose = TRUE,
+#'                                        seed = 111)
+#' counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(counts)
+#'
+#' # (2) Simulate a dataset with customed number of cells and genes
+#' simulate_result <- Kersplat_simulation(parameters = estimate_result[["estimate_result"]],
+#'                                        return_format = "list",
+#'                                        other_prior = list(nCells = 500,
+#'                                                           nGenes = 3000),
+#'                                        verbose = TRUE,
+#'                                        seed = 111)
+#' counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(counts)
 Kersplat_simulation <- function(parameters,
-                                other_prior,
+                                other_prior = NULL,
                                 return_format,
                                 verbose = FALSE,
                                 seed
@@ -99,6 +142,12 @@ Kersplat_simulation <- function(parameters,
   ####                               Check                                   ###
   ##############################################################################
   assertthat::assert_that(class(parameters) == "KersplatParams")
+
+  if(!is.null(other_prior)){
+    parameters <- simutils::set_parameters(parameters = parameters,
+                                           other_prior = other_prior,
+                                           method = "Kersplat")
+  }
 
   # Get params to check
   params_check <- splatter::getParams(parameters, c("nCells",
@@ -130,6 +179,19 @@ Kersplat_simulation <- function(parameters,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
+  ## counts
+  counts <- as.matrix(SingleCellExperiment::counts(simulate_result))
+  ## col_data
+  col_data <- as.data.frame(SingleCellExperiment::colData(simulate_result))[, -(2:4)]
+  colnames(col_data) <- c("cell_name", "path", "step")
+  ## row_data
+  row_data <- as.data.frame(SingleCellExperiment::rowData(simulate_result)[, 1])
+  rownames(row_data) <- row_data[, 1]
+  colnames(row_data) <- "gene_name"
+  # Establish SingleCellExperiment
+  simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
+                                                                colData = col_data,
+                                                                rowData = row_data)
   simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
                                                return_format = return_format)
 

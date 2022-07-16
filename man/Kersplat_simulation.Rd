@@ -6,7 +6,7 @@
 \usage{
 Kersplat_simulation(
   parameters,
-  other_prior,
+  other_prior = NULL,
   return_format,
   verbose = FALSE,
   seed
@@ -19,7 +19,7 @@ Kersplat_simulation(
 extra parameters to execute the estimation step, so you must input them. In
 simulation step, the number of cells, genes, groups, batches, the percent of
 DEGs and other variables are usually customed, so before simulating a dataset
-you must point it out.}
+you must point it out. See \code{Details} below for more information.}
 
 \item{return_format}{A character. Alternatives choices: list, SingleCellExperiment,
 Seurat, h5ad}
@@ -30,4 +30,45 @@ Seurat, h5ad}
 }
 \description{
 Simulate Datasets by Kersplat
+}
+\details{
+In addtion to simulate datasets with default parameters, users can set two extra
+parameters before executing simulation step within Simple method:
+\enumerate{
+\item nCells. Just only type \code{other_prior = list(nCells = n)} when you want to
+simulate a dataset with n cells.
+\item nGenes. Like \code{nCells}, users just only type \code{other_prior = list(nGenes = m)}
+to get the dataset with m genes.
+}
+}
+\examples{
+ref_data <- simmethods::data
+# Estimate parameters
+estimate_result <- Kersplat_estimation(ref_data = ref_data,
+                                       verbose = TRUE,
+                                       seed = 111)
+# (1) Simulate a dataset with default parameters
+simulate_result <- Kersplat_simulation(parameters = estimate_result[["estimate_result"]],
+                                       return_format = "list",
+                                       verbose = TRUE,
+                                       seed = 111)
+counts <- simulate_result[["simulate_result"]][["count_data"]]
+dim(counts)
+
+# (2) Simulate a dataset with customed number of cells and genes
+simulate_result <- Kersplat_simulation(parameters = estimate_result[["estimate_result"]],
+                                       return_format = "list",
+                                       other_prior = list(nCells = 500,
+                                                          nGenes = 3000),
+                                       verbose = TRUE,
+                                       seed = 111)
+counts <- simulate_result[["simulate_result"]][["count_data"]]
+dim(counts)
+}
+\references{
+Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biology 18, 174 (2017). \url{https://doi.org/10.1186/s13059-017-1305-0}
+
+Bioconductor URL: \url{https://bioconductor.org/packages/release/bioc/html/splatter.html}
+
+Github URL: \url{https://github.com/Oshlack/splatter}
 }

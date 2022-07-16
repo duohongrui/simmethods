@@ -22,3 +22,20 @@ detection.
 This function is used to estimate useful parameters from a real dataset by
 using \code{kersplatEstimate} function in Splatter package.
 }
+\examples{
+ref_data <- simmethods::data
+# Estimate parameters
+estimate_result <- Kersplat_estimation(ref_data = ref_data,
+                                       verbose = TRUE,
+                                       seed = 111)
+estimate_result <- estimate_result[["estimate_result"]]
+## Check the class
+class(estimate_result) == "KersplatParams"
+}
+\references{
+Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biology 18, 174 (2017). \url{https://doi.org/10.1186/s13059-017-1305-0}
+
+Bioconductor URL: \url{https://bioconductor.org/packages/release/bioc/html/splatter.html}
+
+Github URL: \url{https://github.com/Oshlack/splatter}
+}
