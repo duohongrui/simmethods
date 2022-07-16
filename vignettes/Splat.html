@@ -668,7 +668,7 @@ dataset will have one group and one batch of cells.</p>
 ## Cell6       Cell6      Batch1      Group1</code></pre>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rowData</span>(SCE_result))</span></code></pre></div>
 <pre><code>## DataFrame with 6 rows and 1 column
-##             value
+##                 X
 ##       &lt;character&gt;
 ## Gene1       Gene1
 ## Gene2       Gene2
@@ -878,12 +878,28 @@ environment and the last <code>h5ad</code> format is suitable for
 <span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a><span class="do">##   ..$ Function_Call     : chr &quot;simulate_result&lt;-splatter::splatSimulate(parameters,method=submethod,verbose=verbose)&quot;</span></span>
 <span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a><span class="do">##   ..$ Elapsed_Time_sec  : num 0.55</span></span>
 <span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a><span class="do">##   ..$ Total_RAM_Used_MiB: num 6.9</span></span>
-<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a><span class="do">##   ..$ Peak_RAM_Used_MiB : num 36.7</span></span>
+<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a><span class="do">##   ..$ Peak_RAM_Used_MiB : num 36.8</span></span>
 <span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;count_data&quot;</span>]]</span>
 <span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a><span class="do">## cell information</span></span>
 <span id="cb33-39"><a href="#cb33-39" aria-hidden="true" tabindex="-1"></a>cell_info <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;col_meta&quot;</span>]]</span>
-<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a><span class="do">## gene information</span></span>
-<span id="cb33-41"><a href="#cb33-41" aria-hidden="true" tabindex="-1"></a>gene_info <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;row_meta&quot;</span>]]</span></code></pre></div>
+<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cell_info)</span>
+<span id="cb33-41"><a href="#cb33-41" aria-hidden="true" tabindex="-1"></a><span class="do">##       cell_name  batch  group</span></span>
+<span id="cb33-42"><a href="#cb33-42" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell1     Cell1 Batch1 Group2</span></span>
+<span id="cb33-43"><a href="#cb33-43" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell2     Cell2 Batch1 Group2</span></span>
+<span id="cb33-44"><a href="#cb33-44" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell3     Cell3 Batch1 Group3</span></span>
+<span id="cb33-45"><a href="#cb33-45" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell4     Cell4 Batch1 Group2</span></span>
+<span id="cb33-46"><a href="#cb33-46" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell5     Cell5 Batch1 Group3</span></span>
+<span id="cb33-47"><a href="#cb33-47" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell6     Cell6 Batch1 Group3</span></span>
+<span id="cb33-48"><a href="#cb33-48" aria-hidden="true" tabindex="-1"></a><span class="do">## gene information</span></span>
+<span id="cb33-49"><a href="#cb33-49" aria-hidden="true" tabindex="-1"></a>gene_info <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;row_meta&quot;</span>]]</span>
+<span id="cb33-50"><a href="#cb33-50" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gene_info)</span>
+<span id="cb33-51"><a href="#cb33-51" aria-hidden="true" tabindex="-1"></a><span class="do">##       gene_name de_gene BatchFacBatch1 BatchFacBatch2 DEFacGroup1 DEFacGroup2 DEFacGroup3</span></span>
+<span id="cb33-52"><a href="#cb33-52" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene1     Gene1      no      0.9098860      1.1054169           1           1           1</span></span>
+<span id="cb33-53"><a href="#cb33-53" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene2     Gene2      no      0.9774161      0.9501320           1           1           1</span></span>
+<span id="cb33-54"><a href="#cb33-54" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene3     Gene3      no      1.0541276      0.7597880           1           1           1</span></span>
+<span id="cb33-55"><a href="#cb33-55" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene4     Gene4      no      1.1708139      0.7762219           1           1           1</span></span>
+<span id="cb33-56"><a href="#cb33-56" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene5     Gene5      no      1.0017116      0.9963063           1           1           1</span></span>
+<span id="cb33-57"><a href="#cb33-57" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene6     Gene6      no      0.7654326      1.1497335           1           1           1</span></span></code></pre></div>
 <h4 id="singlecellexperiment">SingleCellExperiment</h4>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>simulate_result <span class="ot">&lt;-</span> simmethods<span class="sc">::</span><span class="fu">Splat_simulation</span>(<span class="at">parameters =</span> estimate_result[[<span class="st">&quot;estimate_result&quot;</span>]],</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">return_format =</span> <span class="st">&quot;SingleCellExperiment&quot;</span>,</span>
@@ -900,8 +916,124 @@ environment and the last <code>h5ad</code> format is suitable for
 <span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">counts</span>(simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]])</span>
 <span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="do">## cell information</span></span>
 <span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>cell_info <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]]))</span>
-<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a><span class="do">## gene information</span></span>
-<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>gene_info <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">rowData</span>(simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]]))</span></code></pre></div>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cell_info)</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="do">##       cell_name  batch  group</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell1     Cell1 Batch1 Group2</span></span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell2     Cell2 Batch1 Group2</span></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell3     Cell3 Batch1 Group3</span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell4     Cell4 Batch1 Group2</span></span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell5     Cell5 Batch1 Group3</span></span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell6     Cell6 Batch1 Group3</span></span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a><span class="do">## gene information</span></span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>gene_info <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">rowData</span>(simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]]))</span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gene_info)</span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a><span class="do">##       gene_name de_gene BatchFacBatch1 BatchFacBatch2 DEFacGroup1 DEFacGroup2 DEFacGroup3</span></span>
+<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene1     Gene1      no      0.9098860      1.1054169           1           1           1</span></span>
+<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene2     Gene2      no      0.9774161      0.9501320           1           1           1</span></span>
+<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene3     Gene3      no      1.0541276      0.7597880           1           1           1</span></span>
+<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene4     Gene4      no      1.1708139      0.7762219           1           1           1</span></span>
+<span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene5     Gene5      no      1.0017116      0.9963063           1           1           1</span></span>
+<span id="cb34-33"><a href="#cb34-33" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene6     Gene6      no      0.7654326      1.1497335           1           1           1</span></span></code></pre></div>
+<h4 id="seurat">Seurat</h4>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>simulate_result <span class="ot">&lt;-</span> simmethods<span class="sc">::</span><span class="fu">Splat_simulation</span>(<span class="at">parameters =</span> estimate_result[[<span class="st">&quot;estimate_result&quot;</span>]],</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">return_format =</span> <span class="st">&quot;Seurat&quot;</span>,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">other_prior =</span> <span class="fu">list</span>(<span class="at">batchCells =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">100</span>),</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">nGenes =</span> <span class="dv">1000</span>,</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">de.prob =</span> <span class="fl">0.1</span>,</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">prob.group =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>)),</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">seed =</span> <span class="dv">111</span>)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="do">## nCells: 200 </span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="do">## nGenes: 1000 </span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="do">## nGroups: 3 </span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="do">## de.prob: 0.1 </span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="do">## nBatches: 2</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>seurat_result <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]]</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Overview</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>seurat_result</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a><span class="do">## An object of class Seurat </span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="do">## 1000 features across 200 samples within 1 assay </span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Active assay: originalexp (1000 features, 0 variable features)</span></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a><span class="do">## count matrix</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> seurat_result<span class="sc">@</span>assays<span class="sc">$</span>originalexp<span class="sc">@</span>counts</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>counts[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 x 10 sparse Matrix of class &quot;dgCMatrix&quot;</span></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a><span class="do">##    [[ suppressing 10 column names &#39;Cell1&#39;, &#39;Cell2&#39;, &#39;Cell3&#39; ... ]]</span></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a><span class="do">##                                            </span></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene1   14  .  10   1  1  .  .  25  261   1</span></span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene2   19  .  18   7  .  1  .  22  265   .</span></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene3   21  2   6   5  .  .  1   6  136   1</span></span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene4   42  .   8  16  .  1  4  41  603   2</span></span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene5    .  .   3   3  1  .  .   8  127   .</span></span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene6   16  .   7  10  3  .  .  29  421   1</span></span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene7   17  .   8   5  .  .  .  21  110   6</span></span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene8  708 13 565 265 52 37 16 686 7368 101</span></span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene9   20  .  24   4  7  .  .  27  199   1</span></span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene10  17  1  17   7  .  .  .  20  206   4</span></span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a><span class="do">## cell information</span></span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a>cell_info <span class="ot">&lt;-</span> seurat_result<span class="sc">@</span>meta.data</span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cell_info)</span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a><span class="do">##          orig.ident nCount_originalexp nFeature_originalexp cell_name  batch  group</span></span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell1 SeuratProject              65961                  977     Cell1 Batch1 Group2</span></span>
+<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell2 SeuratProject               1140                  296     Cell2 Batch1 Group2</span></span>
+<span id="cb35-41"><a href="#cb35-41" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell3 SeuratProject              45613                  954     Cell3 Batch1 Group3</span></span>
+<span id="cb35-42"><a href="#cb35-42" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell4 SeuratProject              26289                  905     Cell4 Batch1 Group2</span></span>
+<span id="cb35-43"><a href="#cb35-43" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell5 SeuratProject               3266                  497     Cell5 Batch1 Group3</span></span>
+<span id="cb35-44"><a href="#cb35-44" aria-hidden="true" tabindex="-1"></a><span class="do">## Cell6 SeuratProject               2002                  389     Cell6 Batch1 Group3</span></span>
+<span id="cb35-45"><a href="#cb35-45" aria-hidden="true" tabindex="-1"></a><span class="do">## gene information</span></span>
+<span id="cb35-46"><a href="#cb35-46" aria-hidden="true" tabindex="-1"></a>gene_info <span class="ot">&lt;-</span> seurat_result<span class="sc">@</span>assays[[<span class="st">&quot;originalexp&quot;</span>]]<span class="sc">@</span>meta.features</span>
+<span id="cb35-47"><a href="#cb35-47" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gene_info)</span>
+<span id="cb35-48"><a href="#cb35-48" aria-hidden="true" tabindex="-1"></a><span class="do">##       gene_name de_gene BatchFacBatch1 BatchFacBatch2 DEFacGroup1 DEFacGroup2 DEFacGroup3</span></span>
+<span id="cb35-49"><a href="#cb35-49" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene1     Gene1      no      0.9098860      1.1054169           1           1           1</span></span>
+<span id="cb35-50"><a href="#cb35-50" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene2     Gene2      no      0.9774161      0.9501320           1           1           1</span></span>
+<span id="cb35-51"><a href="#cb35-51" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene3     Gene3      no      1.0541276      0.7597880           1           1           1</span></span>
+<span id="cb35-52"><a href="#cb35-52" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene4     Gene4      no      1.1708139      0.7762219           1           1           1</span></span>
+<span id="cb35-53"><a href="#cb35-53" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene5     Gene5      no      1.0017116      0.9963063           1           1           1</span></span>
+<span id="cb35-54"><a href="#cb35-54" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene6     Gene6      no      0.7654326      1.1497335           1           1           1</span></span></code></pre></div>
+<h4 id="h5ad">h5ad</h4>
+<p>If we select <code>h5ad</code> format, it is not possible to return
+the result in R, so you can get the path where the <code>h5ad</code>
+files save to and we can go to the path and read it in
+<strong>Python</strong> by <code>scanpy.read_h5ad</code> function (if
+you have already installed Python and <strong>scanpy</strong>
+module).</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>simulate_result <span class="ot">&lt;-</span> simmethods<span class="sc">::</span><span class="fu">Splat_simulation</span>(<span class="at">parameters =</span> estimate_result[[<span class="st">&quot;estimate_result&quot;</span>]],</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">return_format =</span> <span class="st">&quot;h5ad&quot;</span>,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">other_prior =</span> <span class="fu">list</span>(<span class="at">batchCells =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">100</span>),</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">nGenes =</span> <span class="dv">1000</span>,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">de.prob =</span> <span class="fl">0.1</span>,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="at">prob.group =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>)),</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">seed =</span> <span class="dv">111</span>)</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="do">## nCells: 200 </span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="do">## nGenes: 1000 </span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="do">## nGroups: 3 </span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="do">## de.prob: 0.1 </span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="do">## nBatches: 2</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Creating h5Seurat file for version 3.1.5.9900</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Adding counts for originalexp</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="do">## Adding data for originalexp</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a><span class="do">## No variable features found for originalexp</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Adding feature-level metadata for originalexp</span></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Validating h5Seurat file</span></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a><span class="do">## Adding data from originalexp as X</span></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Transfering meta.features to var</span></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a><span class="do">## Adding counts from originalexp as raw</span></span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Transfering meta.features to raw/var</span></span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a><span class="do">## Transfering meta.data to obs</span></span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a><span class="do">## Your data has been save to C:/Users/duoho/AppData/Local/Temp/RtmpGeYdMc/20220716133958.h5ad</span></span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>save_path <span class="ot">&lt;-</span> simulate_result[[<span class="st">&quot;simulate_result&quot;</span>]][[<span class="st">&quot;save_path&quot;</span>]]</span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>save_path</span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] &quot;C:/Users/duoho/AppData/Local/Temp/RtmpGeYdMc/20220716133958.h5ad&quot;</span></span></code></pre></div>
+<p>Now, we can go to the path and check the data. Here, we read the
+<code>h5ad</code> file in R using <strong>reticulate</strong> R package
+(note that <strong>Python</strong> and <strong>scanpy</strong> module
+must have been installed).</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="do">## install.packages(&quot;reticulate&quot;)</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>scanpy <span class="ot">&lt;-</span> reticulate<span class="sc">::</span><span class="fu">import</span>(<span class="st">&quot;scanpy&quot;</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> scanpy<span class="sc">$</span><span class="fu">read_h5ad</span>(save_path)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>data <span class="do">## Read h5ad file successfully</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="do">## AnnData object with n_obs × n_vars = 200 × 1000</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="do">##     obs: &#39;orig.ident&#39;, &#39;nCount_originalexp&#39;, &#39;nFeature_originalexp&#39;, &#39;cell_name&#39;, &#39;batch&#39;, &#39;group&#39;</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="do">##     var: &#39;gene_name&#39;, &#39;de_gene&#39;, &#39;BatchFacBatch1&#39;, &#39;BatchFacBatch2&#39;, &#39;DEFacGroup1&#39;, &#39;DEFacGroup2&#39;, &#39;DEFacGroup3&#39;</span></span></code></pre></div>
 
 </body>
 </html>

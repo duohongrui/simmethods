@@ -95,7 +95,7 @@ head(rowData(SCE_result))
 ```
 
     ## DataFrame with 6 rows and 1 column
-    ##             value
+    ##                 X
     ##       <character>
     ## Gene1       Gene1
     ## Gene2       Gene2
@@ -351,12 +351,28 @@ str(simulate_result)
 ##   ..$ Function_Call     : chr "simulate_result<-splatter::splatSimulate(parameters,method=submethod,verbose=verbose)"
 ##   ..$ Elapsed_Time_sec  : num 0.55
 ##   ..$ Total_RAM_Used_MiB: num 6.9
-##   ..$ Peak_RAM_Used_MiB : num 36.7
+##   ..$ Peak_RAM_Used_MiB : num 36.8
 counts <- simulate_result[["simulate_result"]][["count_data"]]
 ## cell information
 cell_info <- simulate_result[["simulate_result"]][["col_meta"]]
+head(cell_info)
+##       cell_name  batch  group
+## Cell1     Cell1 Batch1 Group2
+## Cell2     Cell2 Batch1 Group2
+## Cell3     Cell3 Batch1 Group3
+## Cell4     Cell4 Batch1 Group2
+## Cell5     Cell5 Batch1 Group3
+## Cell6     Cell6 Batch1 Group3
 ## gene information
 gene_info <- simulate_result[["simulate_result"]][["row_meta"]]
+head(gene_info)
+##       gene_name de_gene BatchFacBatch1 BatchFacBatch2 DEFacGroup1 DEFacGroup2 DEFacGroup3
+## Gene1     Gene1      no      0.9098860      1.1054169           1           1           1
+## Gene2     Gene2      no      0.9774161      0.9501320           1           1           1
+## Gene3     Gene3      no      1.0541276      0.7597880           1           1           1
+## Gene4     Gene4      no      1.1708139      0.7762219           1           1           1
+## Gene5     Gene5      no      1.0017116      0.9963063           1           1           1
+## Gene6     Gene6      no      0.7654326      1.1497335           1           1           1
 ```
 
 #### SingleCellExperiment
@@ -377,6 +393,132 @@ simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["e
 counts <- counts(simulate_result[["simulate_result"]])
 ## cell information
 cell_info <- as.data.frame(colData(simulate_result[["simulate_result"]]))
+head(cell_info)
+##       cell_name  batch  group
+## Cell1     Cell1 Batch1 Group2
+## Cell2     Cell2 Batch1 Group2
+## Cell3     Cell3 Batch1 Group3
+## Cell4     Cell4 Batch1 Group2
+## Cell5     Cell5 Batch1 Group3
+## Cell6     Cell6 Batch1 Group3
 ## gene information
 gene_info <- as.data.frame(rowData(simulate_result[["simulate_result"]]))
+head(gene_info)
+##       gene_name de_gene BatchFacBatch1 BatchFacBatch2 DEFacGroup1 DEFacGroup2 DEFacGroup3
+## Gene1     Gene1      no      0.9098860      1.1054169           1           1           1
+## Gene2     Gene2      no      0.9774161      0.9501320           1           1           1
+## Gene3     Gene3      no      1.0541276      0.7597880           1           1           1
+## Gene4     Gene4      no      1.1708139      0.7762219           1           1           1
+## Gene5     Gene5      no      1.0017116      0.9963063           1           1           1
+## Gene6     Gene6      no      0.7654326      1.1497335           1           1           1
+```
+
+#### Seurat
+
+``` r
+simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
+                                                return_format = "Seurat",
+                                                other_prior = list(batchCells = c(100, 100),
+                                                                   nGenes = 1000,
+                                                                   de.prob = 0.1,
+                                                                   prob.group = c(0.2, 0.3, 0.5)),
+                                                seed = 111)
+## nCells: 200 
+## nGenes: 1000 
+## nGroups: 3 
+## de.prob: 0.1 
+## nBatches: 2
+seurat_result <- simulate_result[["simulate_result"]]
+## Overview
+seurat_result
+## An object of class Seurat 
+## 1000 features across 200 samples within 1 assay 
+## Active assay: originalexp (1000 features, 0 variable features)
+## count matrix
+counts <- seurat_result@assays$originalexp@counts
+counts[1:10, 1:10]
+## 10 x 10 sparse Matrix of class "dgCMatrix"
+##    [[ suppressing 10 column names 'Cell1', 'Cell2', 'Cell3' ... ]]
+##                                            
+## Gene1   14  .  10   1  1  .  .  25  261   1
+## Gene2   19  .  18   7  .  1  .  22  265   .
+## Gene3   21  2   6   5  .  .  1   6  136   1
+## Gene4   42  .   8  16  .  1  4  41  603   2
+## Gene5    .  .   3   3  1  .  .   8  127   .
+## Gene6   16  .   7  10  3  .  .  29  421   1
+## Gene7   17  .   8   5  .  .  .  21  110   6
+## Gene8  708 13 565 265 52 37 16 686 7368 101
+## Gene9   20  .  24   4  7  .  .  27  199   1
+## Gene10  17  1  17   7  .  .  .  20  206   4
+## cell information
+cell_info <- seurat_result@meta.data
+head(cell_info)
+##          orig.ident nCount_originalexp nFeature_originalexp cell_name  batch  group
+## Cell1 SeuratProject              65961                  977     Cell1 Batch1 Group2
+## Cell2 SeuratProject               1140                  296     Cell2 Batch1 Group2
+## Cell3 SeuratProject              45613                  954     Cell3 Batch1 Group3
+## Cell4 SeuratProject              26289                  905     Cell4 Batch1 Group2
+## Cell5 SeuratProject               3266                  497     Cell5 Batch1 Group3
+## Cell6 SeuratProject               2002                  389     Cell6 Batch1 Group3
+## gene information
+gene_info <- seurat_result@assays[["originalexp"]]@meta.features
+head(gene_info)
+##       gene_name de_gene BatchFacBatch1 BatchFacBatch2 DEFacGroup1 DEFacGroup2 DEFacGroup3
+## Gene1     Gene1      no      0.9098860      1.1054169           1           1           1
+## Gene2     Gene2      no      0.9774161      0.9501320           1           1           1
+## Gene3     Gene3      no      1.0541276      0.7597880           1           1           1
+## Gene4     Gene4      no      1.1708139      0.7762219           1           1           1
+## Gene5     Gene5      no      1.0017116      0.9963063           1           1           1
+## Gene6     Gene6      no      0.7654326      1.1497335           1           1           1
+```
+
+#### h5ad
+
+If we select `h5ad` format, it is not possible to return the result in
+R, so you can get the path where the `h5ad` files save to and we can go
+to the path and read it in **Python** by `scanpy.read_h5ad` function (if
+you have already installed Python and **scanpy** module).
+
+``` r
+simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
+                                                return_format = "h5ad",
+                                                other_prior = list(batchCells = c(100, 100),
+                                                                   nGenes = 1000,
+                                                                   de.prob = 0.1,
+                                                                   prob.group = c(0.2, 0.3, 0.5)),
+                                                seed = 111)
+## nCells: 200 
+## nGenes: 1000 
+## nGroups: 3 
+## de.prob: 0.1 
+## nBatches: 2
+## Creating h5Seurat file for version 3.1.5.9900
+## Adding counts for originalexp
+## Adding data for originalexp
+## No variable features found for originalexp
+## Adding feature-level metadata for originalexp
+## Validating h5Seurat file
+## Adding data from originalexp as X
+## Transfering meta.features to var
+## Adding counts from originalexp as raw
+## Transfering meta.features to raw/var
+## Transfering meta.data to obs
+## Your data has been save to C:/Users/duoho/AppData/Local/Temp/RtmpGeYdMc/20220716133958.h5ad
+save_path <- simulate_result[["simulate_result"]][["save_path"]]
+save_path
+## [1] "C:/Users/duoho/AppData/Local/Temp/RtmpGeYdMc/20220716133958.h5ad"
+```
+
+Now, we can go to the path and check the data. Here, we read the `h5ad`
+file in R using **reticulate** R package (note that **Python** and
+**scanpy** module must have been installed).
+
+``` r
+## install.packages("reticulate")
+scanpy <- reticulate::import("scanpy")
+data <- scanpy$read_h5ad(save_path)
+data ## Read h5ad file successfully
+## AnnData object with n_obs × n_vars = 200 × 1000
+##     obs: 'orig.ident', 'nCount_originalexp', 'nFeature_originalexp', 'cell_name', 'batch', 'group'
+##     var: 'gene_name', 'de_gene', 'BatchFacBatch1', 'BatchFacBatch2', 'DEFacGroup1', 'DEFacGroup2', 'DEFacGroup3'
 ```

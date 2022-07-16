@@ -150,7 +150,7 @@ As mentioned before, we can set `prob.group` and `batchCells` to determine the n
 * three groups with 0.2 proportion of DEGs
 * two batches
 
-```{r collapse=TRUE}
+```{r group and batch, collapse=TRUE}
 simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
                                                 return_format = "list",
                                                 other_prior = list(batchCells = c(500, 500),
@@ -179,7 +179,7 @@ In simmethods package, we provide four formats of results to users without data 
 
 #### list
 
-```{r collapse=TRUE}
+```{r list, collapse=TRUE}
 simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
                                                 return_format = "list",
                                                 other_prior = list(batchCells = c(100, 100),
@@ -191,13 +191,15 @@ str(simulate_result)
 counts <- simulate_result[["simulate_result"]][["count_data"]]
 ## cell information
 cell_info <- simulate_result[["simulate_result"]][["col_meta"]]
+head(cell_info)
 ## gene information
 gene_info <- simulate_result[["simulate_result"]][["row_meta"]]
+head(gene_info)
 ```
 
 #### SingleCellExperiment
 
-```{r collapse=TRUE}
+```{r SCE, collapse=TRUE}
 simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
                                                 return_format = "SingleCellExperiment",
                                                 other_prior = list(batchCells = c(100, 100),
@@ -208,6 +210,55 @@ simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["e
 counts <- counts(simulate_result[["simulate_result"]])
 ## cell information
 cell_info <- as.data.frame(colData(simulate_result[["simulate_result"]]))
+head(cell_info)
 ## gene information
 gene_info <- as.data.frame(rowData(simulate_result[["simulate_result"]]))
+head(gene_info)
+```
+
+#### Seurat
+
+```{r Seurat, collapse=TRUE}
+simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
+                                                return_format = "Seurat",
+                                                other_prior = list(batchCells = c(100, 100),
+                                                                   nGenes = 1000,
+                                                                   de.prob = 0.1,
+                                                                   prob.group = c(0.2, 0.3, 0.5)),
+                                                seed = 111)
+seurat_result <- simulate_result[["simulate_result"]]
+## Overview
+seurat_result
+## count matrix
+counts <- seurat_result@assays$originalexp@counts
+counts[1:10, 1:10]
+## cell information
+cell_info <- seurat_result@meta.data
+head(cell_info)
+## gene information
+gene_info <- seurat_result@assays[["originalexp"]]@meta.features
+head(gene_info)
+```
+
+#### h5ad
+If we select `h5ad` format, it is not possible to return the result in R, so you can get the path where the `h5ad` files save to and we can go to the path and read it in **Python** by `scanpy.read_h5ad` function (if you have already installed Python and **scanpy** module).
+
+```{r h5ad, collapse=TRUE}
+simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
+                                                return_format = "h5ad",
+                                                other_prior = list(batchCells = c(100, 100),
+                                                                   nGenes = 1000,
+                                                                   de.prob = 0.1,
+                                                                   prob.group = c(0.2, 0.3, 0.5)),
+                                                seed = 111)
+save_path <- simulate_result[["simulate_result"]][["save_path"]]
+save_path
+```
+Now, we can go to the path and check the data. Here, we read the `h5ad` file in R using **reticulate** R package (note that **Python** and **scanpy** module must have been installed).
+
+```{r reticulate, collapse=TRUE}
+## install.packages("reticulate")
+scanpy <- reticulate::import("scanpy")
+data <- scanpy$read_h5ad(save_path)
+data ## Read h5ad file successfully
 ```
