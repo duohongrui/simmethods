@@ -25,6 +25,9 @@
 #' estimate_result <- simmethods::Splat_estimation(ref_data = data,
 #'                                                 verbose = TRUE,
 #'                                                 seed = 10)
+#' estimate_result <- estimate_result[["estimate_result"]]
+#' ## Check the class
+#' class(estimate_result) == "SplatParams"
 Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 
   ##############################################################################

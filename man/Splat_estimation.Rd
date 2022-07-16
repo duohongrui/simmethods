@@ -27,6 +27,9 @@ ref_data <- simmethods::data
 estimate_result <- simmethods::Splat_estimation(ref_data = data,
                                                 verbose = TRUE,
                                                 seed = 10)
+estimate_result <- estimate_result[["estimate_result"]]
+## Check the class
+class(estimate_result) == "SplatParams"
 }
 \references{
 Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biology 18, 174 (2017). https://doi.org/10.1186/s13059-017-1305-0
