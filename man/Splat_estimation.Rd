@@ -25,7 +25,7 @@ using \code{splatEstimate} function in Splatter package.
 \examples{
 ref_data <- simmethods::data
 estimate_result <- simmethods::Splat_estimation(ref_data = data,
-                                                verbose = T,
+                                                verbose = TRUE,
                                                 seed = 10)
 }
 \references{

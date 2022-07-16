@@ -57,7 +57,8 @@ Imports: simutils (>= 0.0.0.9000),
          dyngen,
          phenopath
 Suggests: edgeR,
-          mgcv
+          mgcv,
+          knitr
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,
@@ -83,4 +84,5 @@ biocViews:
 Author: Hongrui Duo [aut, cre] (<https://orcid.org/0000-0001-8683-015X>),
   Bo Li [aut] (<https://orcid.org/0000-0001-9944-0003>)
 RoxygenNote: 7.2.0
+VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)

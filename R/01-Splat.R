@@ -23,7 +23,7 @@
 #' @examples
 #' ref_data <- simmethods::data
 #' estimate_result <- simmethods::Splat_estimation(ref_data = data,
-#'                                                 verbose = T,
+#'                                                 verbose = TRUE,
 #'                                                 seed = 10)
 Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 
@@ -113,7 +113,7 @@ Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #' ref_data <- simmethods::data
 #' # Estimate parameters
 #' estimate_result <- simmethods::Splat_estimation(ref_data = data,
-#'                                                 verbose = T,
+#'                                                 verbose = TRUE,
 #'                                                 seed = 10)
 #'
 #' # (1) Simulate 500 cells (Since we can not set nBatches directly, so we can set
@@ -122,7 +122,7 @@ Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #'                                                 other_prior = list(batchCells = 500,
 #'                                                                    nGenes = 2000),
 #'                                                 return_format = "list",
-#'                                                 verbose = T,
+#'                                                 verbose = TRUE,
 #'                                                 seed = 111)
 #' count_data <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(count_data)
@@ -132,7 +132,7 @@ Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #' simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
 #'                                                 other_prior = NULL,
 #'                                                 return_format = "list",
-#'                                                 verbose = T,
+#'                                                 verbose = TRUE,
 #'                                                 seed = 111)
 #' count_data <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(count_data)
@@ -142,7 +142,7 @@ Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #' simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
 #'                                                 other_prior = list(prob.group = c(0.4, 0.6)),
 #'                                                 return_format = "list",
-#'                                                 verbose = T,
+#'                                                 verbose = TRUE,
 #'                                                 seed = 111)
 #' count_data <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(count_data)
@@ -170,7 +170,7 @@ Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #'                                                                    batchCells = c(80, 80),
 #'                                                                    de.prob = 0.2),
 #'                                                 return_format = "list",
-#'                                                 verbose = T,
+#'                                                 verbose = TRUE,
 #'                                                 seed = 111)
 #' count_data <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(count_data)
@@ -187,7 +187,7 @@ Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #'                                                                    batchCells = c(80, 80),
 #'                                                                    de.prob = 0.2),
 #'                                                 return_format = "list",
-#'                                                 verbose = T,
+#'                                                 verbose = TRUE,
 #'                                                 seed = 111)
 #' count_data <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(count_data)
@@ -196,7 +196,7 @@ Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #' table(col_data$batch)
 #' ## row data
 #' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
-#' ### DEGs
+#' ### DEGsj
 #' table(row_data$de_gene)
 #' ### fold change of Group1 to Group2
 #' fc_group1_to_group2 <- row_data$DEFacGroup2/row_data$DEFacGroup1
