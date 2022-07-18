@@ -119,7 +119,7 @@ Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #'                                                 verbose = TRUE,
 #'                                                 seed = 10)
 #'
-#' # (1) Simulate 500 cells (Since we can not set nBatches directly, so we can set
+#' # (1) Simulate 500 cells (Since we can not set nCells directly, so we can set
 #' # batchCells (a numeric vector)) and 2000 genes
 #' simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
 #'                                                 other_prior = list(batchCells = 500,
@@ -308,7 +308,7 @@ Splat_simulation <- function(parameters,
   ####                        Format Conversion                              ###
   ##############################################################################
   # counts
-  counts <- SingleCellExperiment::counts(simulate_result)
+  counts <- as.matrix(SingleCellExperiment::counts(simulate_result))
   # col_data
   col_data <- as.data.frame(SummarizedExperiment::colData(simulate_result))
   if(params_check[['nGroups']] == 1){

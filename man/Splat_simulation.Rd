@@ -56,7 +56,7 @@ estimate_result <- simmethods::Splat_estimation(ref_data = data,
                                                 verbose = TRUE,
                                                 seed = 10)
 
-# (1) Simulate 500 cells (Since we can not set nBatches directly, so we can set
+# (1) Simulate 500 cells (Since we can not set nCells directly, so we can set
 # batchCells (a numeric vector)) and 2000 genes
 simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
                                                 other_prior = list(batchCells = 500,

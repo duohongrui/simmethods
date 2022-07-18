@@ -57,10 +57,10 @@
 #'   ## Docker file path
 #'   docker_path <- "/scGAN"
 #'   ## change parameters in .json file
-#'   parameters <- simutils::change_scGAN_parameters("use_scGAN", ...)
-#'   ## Save to /scGAN
-#'   param_json <- rjson::toJSON(parameters)
-#'   write(param_json, file = file.path(tmp_path, "scGAN", "parameters.json"))
+  # parameters <- simutils::change_scGAN_parameters("use_scGAN", ...)
+  # ## Save to /scGAN
+  # param_json <- rjson::toJSON(parameters)
+  # write(param_json, file = file.path(tmp_path, "scGAN", "parameters.json"))
 #'
 #'   ## convert data to .h5ad and save to /scGAN
 #'   input_data <- SingleCellExperiment::SingleCellExperiment(list(counts = ref_data),

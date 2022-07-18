@@ -74,17 +74,116 @@ Lun_estimation <- function(ref_data, verbose = FALSE, seed){
 #' @param other_prior A list with names of certain parameters. Some methods need
 #' extra parameters to execute the estimation step, so you must input them. In
 #' simulation step, the number of cells, genes, groups, batches, the percent of
-#' DEGs and other variables are usually customed, so before simulating a dataset
-#' you must point it out.
+#' DEGs are usually customed, so before simulating a dataset you must point it out.
+#' See `Details` below for more information.
 #' @param return_format A character. Alternatives choices: list, SingleCellExperiment,
 #' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#'
 #' @importFrom splatter lunSimulate
-#'
 #' @export
+#' @details
+#' In addtion to simulate datasets with default parameters, users want to simulate
+#' other kinds of datasets, e.g. a counts matrix with 2 or more cell groups. In
+#' Lun, you can set extra parameters to simulate datasets.
 #'
+#' The customed parameters you can set are below:
+#' 1. nCells. In Lun, you can not set nCells directly and should set groupCells instead. For example, if you want to simulate 1000 cells, you can type `other_prior = list(groupCells = 1000)`. If you type `other_prior = list(groupCells = c(500, 500))`, the simulated data will have two groups
+#' 2. nGenes. You can directly set `other_prior = list(nGenes = 5000)` to simulate 5000 genes.
+#' 3. nGroups. You can not directly set `other_prior = list(nGroups = 3)` to simulate 3 groups. Instead, you should set `other_prior = list(prob.group = c(0.2, 0.3, 0.5))` where the sum of group probabilities must equal to 1.
+#' 4. de.prob. You can directly set `other_prior = list(de.prob = 0.2)` to simulate DEGs that account for 20 percent of all genes.
+#' 5. prob.group. You can directly set `other_prior = list(prob.group = c(0.2, 0.3, 0.5))` to assign three proportions of cell groups. Note that the number of groups always equals to the length of the vector.
+#'
+#' For more customed parameters in Lun, please check [splatter::LunParams()].
+#' @references
+#' Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biology 18, 174 (2017). <https://doi.org/10.1186/s13059-017-1305-0>
+#'
+#' Bioconductor URL: <https://bioconductor.org/packages/release/bioc/html/splatter.html>
+#'
+#' Github URL: <https://github.com/Oshlack/splatter>
+#'
+#' @examples
+#' # Load data
+#' ref_data <- simmethods::data
+#' # Estimate parameters
+#' estimate_result <- simmethods::Lun_estimation(ref_data = ref_data,
+#'                                               verbose = TRUE,
+#'                                               seed = 10)
+#'
+#' # (1) Simulate 500 cells (Since we can not set nCells directly, so we can set
+#' # groupCells (a numeric vector)) and 2000 genes
+#' simulate_result <- simmethods::Lun_simulation(parameters = estimate_result[["estimate_result"]],
+#'                                               other_prior = list(groupCells = 500,
+#'                                                                  nGenes = 2000),
+#'                                               return_format = "list",
+#'                                               verbose = TRUE,
+#'                                               seed = 111)
+#' count_data <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(count_data)
+#'
+#'
+#' # (2) Simulate one group
+#' simulate_result <- simmethods::Lun_simulation(parameters = estimate_result[["estimate_result"]],
+#'                                               other_prior = NULL,
+#'                                               return_format = "list",
+#'                                               verbose = TRUE,
+#'                                               seed = 111)
+#' count_data <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(count_data)
+#'
+#'
+#' # (3) Simulate two groups (de.prob = 0.2)
+#' simulate_result <- simmethods::Lun_simulation(parameters = estimate_result[["estimate_result"]],
+#'                                               other_prior = list(prob.group = c(0.4, 0.6),
+#'                                                                  de.prob = 0.2),
+#'                                               return_format = "list",
+#'                                               verbose = TRUE,
+#'                                               seed = 111)
+#' count_data <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(count_data)
+#' ## cell information
+#' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+#' table(col_data$group)
+#' ## gene information
+#' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+#' ### The result of Lun contains the factors of different groups and uses can
+#' ### calculate the fold change by division. For example, the DEFactors of A gene
+#' ### in Group1 and Group2 are respectively 2 and 1, and the fold change of A gene
+#' ### is 2/1=2 or 1/2=0.5.
+#' fc_group1_to_group2 <- row_data$DEFacGroup2/row_data$DEFacGroup1
+#' table(fc_group1_to_group2 != 1)[2]/4000 ## de.prob = 0.2
+#' ### number of all DEGs
+#' table(row_data$de_gene)[2]/4000 ## de.prob = 0.2
+#'
+#'
+#' # (3) Simulate two groups (de.prob = 0.2, fc.up.group = 2, fc.down.group = 0.5)
+#' simulate_result <- simmethods::Lun_simulation(parameters = estimate_result[["estimate_result"]],
+#'                                               other_prior = list(prob.group = c(0.4, 0.6),
+#'                                                                  de.prob = 0.2,
+#'                                                                  fc.up.group = 2,
+#'                                                                  fc.down.group = 0.5),
+#'                                               return_format = "list",
+#'                                               verbose = TRUE,
+#'                                               seed = 111)
+#' count_data <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(count_data)
+#' ## cell information
+#' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+#' table(col_data$group)
+#' ## gene information
+#' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+#' ### The result of Lun contains the factors of different groups and uses can
+#' ### calculate the fold change by division. For example, the DEFactors of A gene
+#' ### in Group1 and Group2 are respectively 2 and 1, and the fold change of A gene
+#' ### is 2/1=2 or 1/2=0.5.
+#' fc_group1_to_group2 <- row_data$DEFacGroup2/row_data$DEFacGroup1
+#' table(fc_group1_to_group2 != 1)[2]/4000 ## de.prob = 0.2
+#' ### number of all DEGs
+#' table(row_data$de_gene)[2]/4000 ## de.prob = 0.2
+#' ### fc.up.group
+#' max(row_data$DEFacGroup1)
+#' ### fc.down.group
+#' min(row_data$DEFacGroup1)
 Lun_simulation <- function(parameters,
                            other_prior,
                            return_format,
@@ -105,17 +204,54 @@ Lun_simulation <- function(parameters,
   ##############################################################################
   assertthat::assert_that(class(parameters) == "LunParams")
 
+  if(!is.null(other_prior)){
+    parameters <- simutils::set_parameters(parameters = parameters,
+                                           other_prior = other_prior,
+                                           method = "Lun")
+  }
+  # prob.group
+  if(!is.null(other_prior[["prob.group"]])){
+    nGroups <- length(other_prior[["prob.group"]])
+    groupCells <- c(round(parameters@nCells*other_prior[["prob.group"]][1:(nGroups-1)]),
+                    parameters@nCells-sum(round(parameters@nCells*other_prior[["prob.group"]][1:(nGroups-1)])))
+    parameters <- splatter::setParam(parameters,
+                                     name = "groupCells",
+                                     value = groupCells)
+  }
+  # de.prob
+  if(!is.null(other_prior[["de.prob"]])){
+    nGroups <- splatter::getParam(parameters, "nGroups")
+    parameters <- splatter::setParam(parameters,
+                                     name = "de.nGenes",
+                                     value = other_prior[["de.prob"]]*parameters@nGenes/nGroups)
+  }
+  # fc.up.group
+  if(!is.null(other_prior[["fc.up.group"]])){
+    parameters <- splatter::setParam(parameters,
+                                     name = "de.upFC",
+                                     value = other_prior[["fc.up.group"]])
+  }
+  # fc.down.group
+  if(!is.null(other_prior[["fc.down.group"]])){
+    parameters <- splatter::setParam(parameters,
+                                     name = "de.downFC",
+                                     value = other_prior[["fc.down.group"]])
+  }
   # Get params to check
   params_check <- splatter::getParams(parameters, c("nCells",
                                                     "nGenes",
                                                     "nGroups",
-                                                    "de.nGenes"))
+                                                    "de.nGenes",
+                                                    "de.upFC",
+                                                    "de.downFC"))
 
   # Return to users
   cat(glue::glue("nCells: {params_check[['nCells']]}"), "\n")
   cat(glue::glue("nGenes: {params_check[['nGenes']]}"), "\n")
   cat(glue::glue("nGroups: {params_check[['nGroups']]}"), "\n")
-  cat(glue::glue("de.prob: {params_check[['de.nGenes']]/params_check[['nGenes']]}"), "\n")
+  cat(glue::glue("de.prob: {params_check[['de.nGenes']]/params_check[['nGenes']]*params_check[['nGroups']]}"), "\n")
+  cat(glue::glue("fc.up.group: {params_check[['de.upFC']]}"), "\n")
+  cat(glue::glue("fc.down.group: {params_check[['de.downFC']]}"), "\n")
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -124,12 +260,7 @@ Lun_simulation <- function(parameters,
   }
   # Seed
   parameters <- splatter::setParam(parameters, name = "seed", value = seed)
-  # de.prob
-  if(!is.null(other_prior[["de.prob"]])){
-    parameters <- splatter::setParam(parameters,
-                                     name = "de.nGenes",
-                                     value = other_prior[["de.prob"]]*params_check[['nGenes']])
-  }
+
   # Estimation
   tryCatch({
     simulate_detection <- peakRAM::peakRAM(
@@ -142,6 +273,36 @@ Lun_simulation <- function(parameters,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
+  # counts
+  counts <- as.matrix(SingleCellExperiment::counts(simulate_result))
+  # col_data
+  col_data <- as.data.frame(SummarizedExperiment::colData(simulate_result))
+  if(params_check[['nGroups']] == 1){
+    col_data[, 2] <- rep("Group1", ncol(col_data))
+    colnames(col_data) <- c("cell_name", "group")
+  }else{
+    col_data <- col_data[, c("Cell", "Group")]
+    colnames(col_data) <- c("cell_name", "group")
+  }
+
+  # row_data
+  row_data <- as.data.frame(SummarizedExperiment::rowData(simulate_result))
+  if(params_check[['nGroups']] == 1){
+    row_data <- data.frame("gene_name" = row_data$Gene)
+    rownames(row_data) <- row_data$gene_name
+  }else{
+    group_fac <- row_data[, grep(colnames(row_data), pattern = "^DEFac")]
+    total_sum <- rowSums(group_fac)
+    de_gene <- ifelse(total_sum == params_check[['nGroups']], "no", "yes")
+    row_data[, 2] <- de_gene
+    row_data <- row_data[, 1:2]
+    row_data <- cbind(row_data, group_fac)
+    colnames(row_data) <- c("gene_name", "de_gene", colnames(group_fac))
+  }
+  # Establish SingleCellExperiment
+  simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
+                                                                colData = col_data,
+                                                                rowData = row_data)
   simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
                                                return_format = return_format)
 
