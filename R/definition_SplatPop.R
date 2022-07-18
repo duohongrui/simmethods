@@ -21,18 +21,18 @@ SplatPop_method_definition <- function(...){
       function_name = "splatPopEstimate"
     ),
     param_others(
-      id = "KersplatParams",
-      type = "KersplatParams",
-      default = "splatter::newKersplatParams()",
+      id = "SplatPopParams",
+      type = "SplatPopParams",
+      default = "splatter::newSplatPopParams()",
       process = "estimation",
-      description = "Usually it is default by splatter::newKersplatParams function. Users can change the parameters by splatter::setParam function.",
+      description = "Usually it is default by splatter::newSplatPopParams function. Users can change the parameters by splatter::setParam function.",
       function_name = "splatPopEstimate"
     ),
     param_Boolean(
       id = "paths",
       default = FALSE,
       description = "Whether to simulation trajectory datasets",
-      function_name = "splatPopEstimate"
+      function_name = "splatPopSimulate"
     ),
     param_others(
       id = "vcf",
@@ -265,7 +265,7 @@ SplatPop_method_definition <- function(...){
       id = "nBatches",
       default = 1L,
       lower = 1L,
-      description = "The number of batches to simulate.",
+      description = "The number of batches to simulate. Set batchCells instead to change the value of nBatches",
       function_name = "splatPopSimulate"
     ),
     param_integer(
@@ -365,7 +365,7 @@ SplatPop_method_definition <- function(...){
       id = "nGroups",
       default = 1L,
       lower = 1L,
-      description = "The number of groups or paths to simulate.",
+      description = "The number of groups or paths to simulate. Set prob.group instead to change the value of nGroups",
       function_name = "splatPopSimulate"
     ),
     param_numeric(
@@ -495,7 +495,7 @@ SplatPop_method_definition <- function(...){
     ),
     param_integer(
       id = "seed",
-      default = 687680L,
+      force = TRUE,,
       description = "Seed to use for generating random numbers.",
       function_name = "splatPopSimulate"
     )

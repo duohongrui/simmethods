@@ -12,8 +12,9 @@ data <- data[, c(1:80, 161:240)]
 ERCC_data <- data[grep(rownames(data), pattern = "^ERCC-"), ]
 ## Delete ERCC counts
 data <- data[-grep(rownames(data), pattern = "^ERCC-"), ]
-## Sample extra 950 genes
+## Sample extra 3950 genes
 data <- data[rowSums(data) > 200, ]
+set.seed(111)
 data <- data[sample(1:nrow(data), 3950), ]
 ## rbind
 data <- as.matrix(round(rbind(data, ERCC_data)))

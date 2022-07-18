@@ -4,7 +4,7 @@
 \alias{SplatPop_estimation}
 \title{Estimate Parameters From Real Datasets by SplatPop}
 \usage{
-SplatPop_estimation(ref_data, verbose = FALSE, other_prior, seed)
+SplatPop_estimation(ref_data, verbose = FALSE, other_prior = NULL, seed)
 }
 \arguments{
 \item{ref_data}{A count matrix. Each row represents a gene and each column
@@ -16,7 +16,7 @@ represents a cell.}
 extra parameters to execute the estimation step, so you must input them. In
 simulation step, the number of cells, genes, groups, batches, the percent of
 DEGs and other variables are usually customed, so before simulating a dataset
-you must point it out.}
+you must point it out. See \code{Details} below for more information.}
 
 \item{seed}{An integer of a random seed.}
 }
@@ -27,4 +27,30 @@ detection.
 \description{
 This function is used to estimate useful parameters from a real dataset by
 using \code{splatPopEstimate} function in Splatter package.
+}
+\details{
+When estimating parameters with SplatPop, users can input some extra information
+(but it is rarely used):
+\enumerate{
+\item means. Matrix of real gene means across a population, where each row is a gene and each column is an individual in the population.
+\item eqtl. A data.frame with all or top eQTL pairs from a real eQTL analysis. Must include columns: 'gene_id', 'pval_nominal', and 'slope'.
+For more information, please check \link[splatter:splatPopEstimate]{splatter::splatPopEstimate} or \url{https://www.bioconductor.org/packages/release/bioc/vignettes/splatter/inst/doc/splatPop.html}
+}
+}
+\examples{
+ref_data <- simmethods::data
+# Estimate parameters
+estimate_result <- SplatPop_estimation(ref_data = ref_data,
+                                       verbose = TRUE,
+                                       seed = 111)
+estimate_result <- estimate_result[["estimate_result"]]
+## Check the class
+class(estimate_result) == "SplatPopParams"
+}
+\references{
+Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biology 18, 174 (2017). \url{https://doi.org/10.1186/s13059-017-1305-0}
+
+Bioconductor URL: \url{https://bioconductor.org/packages/release/bioc/html/splatter.html}
+
+Github URL: \url{https://github.com/Oshlack/splatter}
 }
