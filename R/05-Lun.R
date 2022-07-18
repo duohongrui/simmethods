@@ -93,6 +93,8 @@ Lun_estimation <- function(ref_data, verbose = FALSE, seed){
 #' 3. nGroups. You can not directly set `other_prior = list(nGroups = 3)` to simulate 3 groups. Instead, you should set `other_prior = list(prob.group = c(0.2, 0.3, 0.5))` where the sum of group probabilities must equal to 1.
 #' 4. de.prob. You can directly set `other_prior = list(de.prob = 0.2)` to simulate DEGs that account for 20 percent of all genes.
 #' 5. prob.group. You can directly set `other_prior = list(prob.group = c(0.2, 0.3, 0.5))` to assign three proportions of cell groups. Note that the number of groups always equals to the length of the vector.
+#' 6. fc.up.group. You can directly set `other_prior = list(fc.up.group = 2)` to specify the foldchange of up-regulated DEGs.
+#' 7. fc.down.group. You can directly set `other_prior = list(fc.down.group = 0.5)` to specify the foldchange of down-regulated DEGs.
 #'
 #' For more customed parameters in Lun, please check [splatter::LunParams()].
 #' @references
@@ -185,7 +187,7 @@ Lun_estimation <- function(ref_data, verbose = FALSE, seed){
 #' ### fc.down.group
 #' min(row_data$DEFacGroup1)
 Lun_simulation <- function(parameters,
-                           other_prior,
+                           other_prior = NULL,
                            return_format,
                            verbose = FALSE,
                            seed
@@ -223,7 +225,7 @@ Lun_simulation <- function(parameters,
     nGroups <- splatter::getParam(parameters, "nGroups")
     parameters <- splatter::setParam(parameters,
                                      name = "de.nGenes",
-                                     value = other_prior[["de.prob"]]*parameters@nGenes/nGroups)
+                                     value = round(other_prior[["de.prob"]]*parameters@nGenes/nGroups))
   }
   # fc.up.group
   if(!is.null(other_prior[["fc.up.group"]])){

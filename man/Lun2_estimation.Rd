@@ -4,7 +4,7 @@
 \alias{Lun2_estimation}
 \title{Estimate Parameters From Real Datasets by Lun2}
 \usage{
-Lun2_estimation(ref_data, verbose = FALSE, other_prior, seed)
+Lun2_estimation(ref_data, verbose = FALSE, other_prior = NULL, seed)
 }
 \arguments{
 \item{ref_data}{A count matrix. Each row represents a gene and each column
@@ -15,8 +15,8 @@ represents a cell.}
 \item{other_prior}{A list with names of certain parameters. Some methods need
 extra parameters to execute the estimation step, so you must input them. In
 simulation step, the number of cells, genes, groups, batches, the percent of
-DEGs and other variables are usually customed, so before simulating a dataset
-you must point it out.}
+DEGs are usually customed, so before simulating a dataset you must point it out.
+See \code{Details} below for more information.}
 
 \item{seed}{An integer of a random seed.}
 }
@@ -27,4 +27,30 @@ detection.
 \description{
 This function is used to estimate useful parameters from a real dataset by
 using \code{lun2Estimate} function in Splatter package.
+}
+\details{
+When you use Lun2 to estimate parameters from a real dataset, you must input
+a numeric vector to specify the groups or plates that each cell comes from,
+like \verb{other_prior = list(group.condition = the numeric vector)}. See \code{Examples}
+and learn from it.
+}
+\examples{
+ref_data <- simmethods::data
+group_condition <- simmethods::group_condition
+## group_condition can must be a numeric vector.
+other_prior <- list(group.condition = as.numeric(group_condition))
+## Estimation
+estimate_result <- simmethods::Lun2_estimation(ref_data = ref_data,
+                                               other_prior = other_prior,
+                                               verbose = TRUE,
+                                               seed = 10)
+estimate_result <- estimate_result[["estimate_result"]]
+class(estimate_result) == "Lun2Params"
+}
+\references{
+Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biology 18, 174 (2017). https://doi.org/10.1186/s13059-017-1305-0
+
+Bioconductor URL: \url{https://bioconductor.org/packages/release/bioc/html/splatter.html}
+
+Github URL: \url{https://github.com/Oshlack/splatter}
 }

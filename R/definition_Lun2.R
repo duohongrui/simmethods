@@ -142,7 +142,7 @@ Lun2_method_definition <- function(...){
     ),
     param_integer(
       id = "seed",
-      default = 41234L,
+      force = TRUE,
       description = "Seed to use for generating random numbers.",
       function_name = "lun2Simulate"
     )
