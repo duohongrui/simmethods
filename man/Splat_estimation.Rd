@@ -32,7 +32,7 @@ estimate_result <- estimate_result[["estimate_result"]]
 class(estimate_result) == "SplatParams"
 }
 \references{
-Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biology 18, 174 (2017). https://doi.org/10.1186/s13059-017-1305-0
+Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biology 18, 174 (2017). \url{https://doi.org/10.1186/s13059-017-1305-0}
 
 Bioconductor URL: \url{https://bioconductor.org/packages/release/bioc/html/splatter.html}
 

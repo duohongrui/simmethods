@@ -16,7 +16,7 @@
 #' #' @importFrom simutils fix_path change_scGAN_parameters data_conversion
 #' #' @importFrom babelwhale list_docker_images pull_container
 #' #' @importFrom tidyr unite
-#' #' @import rjson
+#' #' @importFrom jsonlite toJSON
 #' #'
 #' #' @return A list contains the estimated parameters and the results of execution
 #' #' detection.
@@ -46,21 +46,25 @@
 #'     babelwhale::pull_container(container_id = "fhausmann/scgan:latest")
 #'   }
 #'
-#'   ## Local file to store .h5ad file
-#'   local_path <- system.file("scGAN", package = "simmethods")
-#'   tmp_path <- tempdir() %>% simutils::fix_path()
-#'   ## Move /scGAN to a tmp dir
-#'   file.copy(from = local_path,
-#'             to = tmp_path,
-#'             overwrite = TRUE,
-#'             recursive = TRUE)
-#'   ## Docker file path
-#'   docker_path <- "/scGAN"
-#'   ## change parameters in .json file
-  # parameters <- simutils::change_scGAN_parameters("use_scGAN", ...)
-  # ## Save to /scGAN
-  # param_json <- rjson::toJSON(parameters)
-  # write(param_json, file = file.path(tmp_path, "scGAN", "parameters.json"))
+# ## Local file to store .h5ad file
+# local_path <- system.file("scGAN", package = "simmethods")
+# tmp_path <- tempdir() %>% simutils::fix_path()
+# ## Move /scGAN to a tmp dir
+# file.copy(from = local_path,
+#           to = tmp_path,
+#           overwrite = TRUE,
+#           recursive = TRUE)
+# ## Docker file path
+# docker_path <- "/scGAN"
+# ## change parameters in .json file
+# parameters <- simutils::change_scGAN_parameters("use_scGAN", ...)
+# ## Save to /scGAN
+# param_json <- jsonlite::toJSON(parameters,
+#                                pretty = 4,
+#                                dataframe = "values",
+#                                null = "null",
+#                                auto_unbox = TRUE)
+# write(param_json, file = file.path(tmp_path, "scGAN", "parameters.json"))
 #'
 #'   ## convert data to .h5ad and save to /scGAN
 #'   input_data <- SingleCellExperiment::SingleCellExperiment(list(counts = ref_data),
