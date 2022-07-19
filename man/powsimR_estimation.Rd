@@ -15,8 +15,8 @@ represents a cell.}
 \item{other_prior}{A list with names of certain parameters. Some methods need
 extra parameters to execute the estimation step, so you must input them. In
 simulation step, the number of cells, genes, groups, batches, the percent of
-DEGs and other variables are usually customed, so before simulating a dataset
-you must point it out.}
+DEGs are usually customed, so before simulating a dataset you must point it out.
+See \code{Details} below for more information.}
 
 \item{seed}{An integer of a random seed.}
 }
@@ -27,4 +27,20 @@ detection.
 \description{
 This function is used to estimate useful parameters from a real dataset by
 using \code{estimateParam} or \code{estimateSpike} function in powsimR package.
+}
+\details{
+powsimR provides some choices for users to select suitable parameters according
+to different types of data, platforms, normalization methods, distributions and
+so on.
+\enumerate{
+\item RNAseq. "bulk" or "singlecell" (default).
+\item Protocol. Options are "UMI" (default) (e.g. 10X Genomics, CEL-seq2) or "Read" (e.g. Smart-seq2).
+\item Distribution. "NB" (default) for negative binomial or "ZINB" for zero-inflated negative binomial distribution fitting.
+\item Normalisation. "TMM" (default), "MR", "PosCounts", "UQ", "scran", "Linnorm", "SCnorm", "Census", "depth", "none".
+}
+}
+\references{
+Vieth B, Ziegenhain C, Parekh S, et al. powsimR: power analysis for bulk and single cell RNA-seq experiments\link{J}. Bioinformatics, 2017, 33(21): 3486-3488. \url{https://doi.org/10.1093/bioinformatics/btx435}
+
+Github URL: \url{https://github.com/bvieth/powsimR}
 }
