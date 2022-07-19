@@ -14,7 +14,7 @@
 #' detection.
 #' @export
 #' @references
-#' Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biology 18, 174 (2017). <https://doi.org/10.1186/s13059-017-1305-0>
+#' Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data[J]. Genome biology, 2017, 18(1): 1-15. <https://doi.org/10.1186/s13059-017-1305-0>
 #'
 #' Bioconductor URL: <https://bioconductor.org/packages/release/bioc/html/splatter.html>
 #'
@@ -92,7 +92,7 @@ Simple_estimation <- function(ref_data, verbose = FALSE, seed){
 #' to get the dataset with m genes.
 #' @export
 #' @references
-#' Zappia, L., Phipson, B. & Oshlack, A. Splatter: simulation of single-cell RNA sequencing data. Genome Biology 18, 174 (2017). <https://doi.org/10.1186/s13059-017-1305-0>
+#' Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data[J]. Genome biology, 2017, 18(1): 1-15. <https://doi.org/10.1186/s13059-017-1305-0>
 #'
 #' Bioconductor URL: <https://bioconductor.org/packages/release/bioc/html/splatter.html>
 #'
