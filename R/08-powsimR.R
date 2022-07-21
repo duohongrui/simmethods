@@ -26,7 +26,7 @@
 #' via spike-ins. If users want to use this, make sure that the reference data
 #' must contain ERCC spike-in counts. In addtion, users must set dilution.factor and
 #' volume information by `other_prior = list(dilution.factor = xxx, volume = xxx)`.
-#' For more instructions, see `examples`.
+#' For more instructions, see `Examples`.
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export

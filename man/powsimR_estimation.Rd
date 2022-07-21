@@ -43,7 +43,7 @@ powsimR also provides an another choice to estimate parameters (not neccessary)
 via spike-ins. If users want to use this, make sure that the reference data
 must contain ERCC spike-in counts. In addtion, users must set dilution.factor and
 volume information by \code{other_prior = list(dilution.factor = xxx, volume = xxx)}.
-For more instructions, see \code{examples}.
+For more instructions, see \code{Examples}.
 }
 \examples{
 ref_data <- simmethods::data

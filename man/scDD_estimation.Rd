@@ -15,8 +15,8 @@ represents a cell.}
 \item{other_prior}{A list with names of certain parameters. Some methods need
 extra parameters to execute the estimation step, so you must input them. In
 simulation step, the number of cells, genes, groups, batches, the percent of
-DEGs and other variables are usually customed, so before simulating a dataset
-you must point it out.}
+DEGs are usually customed, so before simulating a dataset you must point it out.
+See \code{Details} below for more information.}
 
 \item{seed}{An integer of a random seed.}
 }
@@ -27,4 +27,29 @@ detection.
 \description{
 This function is used to estimate useful parameters from a real dataset by
 using \code{scDDEstimate} function in Splatter package.
+}
+\details{
+When you use scDD to estimate parameters from a real dataset, you must input
+a numeric vector to specify the groups or plates that each cell comes from,
+like \verb{other_prior = list(group.condition = the numeric vector)}. See \code{Examples}
+and learn from it.
+}
+\examples{
+ref_data <- SingleCellExperiment::counts(scater::mockSCE())
+## group information
+set.seed(111)
+group_condition <- sample(c(1, 2), 200, replace = TRUE)
+other_prior <- list(group.condition = group_condition)
+## estimation
+estimate_result <- simmethods::scDD_estimation(ref_data = ref_data,
+                                               other_prior = other_prior,
+                                               verbose = TRUE,
+                                               seed = 111)
+}
+\references{
+Korthauer K D, Chu L F, Newton M A, et al. A statistical approach for identifying differential distributions in single-cell RNA-seq experiments\link{J}. Genome biology, 2016, 17(1): 1-15. \url{https://doi.org/10.1186/s13059-016-1077-y}
+
+Bioconductor URL: \url{https://www.bioconductor.org/packages/release/bioc/html/scDD.html}
+
+Github URL: \url{https://github.com/kdkorthauer/scDD}
 }
