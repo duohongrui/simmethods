@@ -4,7 +4,7 @@
 \alias{powsimR_estimation}
 \title{Estimate Parameters From Real Datasets by powsimR}
 \usage{
-powsimR_estimation(ref_data, verbose = FALSE, other_prior, seed)
+powsimR_estimation(ref_data, verbose = FALSE, other_prior = NULL, seed)
 }
 \arguments{
 \item{ref_data}{A count matrix. Each row represents a gene and each column
@@ -38,6 +38,36 @@ so on.
 \item Distribution. "NB" (default) for negative binomial or "ZINB" for zero-inflated negative binomial distribution fitting.
 \item Normalisation. "TMM" (default), "MR", "PosCounts", "UQ", "scran", "Linnorm", "SCnorm", "Census", "depth", "none".
 }
+
+powsimR also provides an another choice to estimate parameters (not neccessary)
+via spike-ins. If users want to use this, make sure that the reference data
+must contain ERCC spike-in counts. In addtion, users must set dilution.factor and
+volume information by \code{other_prior = list(dilution.factor = xxx, volume = xxx)}.
+For more instructions, see \code{examples}.
+}
+\examples{
+ref_data <- simmethods::data
+
+## Estimate parameters without ERCC spike-in
+estimate_result <- powsimR_estimation(ref_data = ref_data,
+                                      other_prior = list(RNAseq = "singlecell",
+                                                         Protocol = "UMI",
+                                                         Normalisation = "scran"),
+                                      verbose = TRUE,
+                                      seed = 111)
+
+## Estimate parameters with ERCC spike-in
+### Make sure there are ERCC names in reference data
+rownames(ref_data)[grep(rownames(ref_data), pattern = "^ERCC")]
+### Users must input the dilution.factor and volume (nanoliter) to determine the ERCC molecules
+estimate_result <- powsimR_estimation(ref_data = ref_data,
+                                      other_prior = list(RNAseq = "singlecell",
+                                                         Protocol = "UMI",
+                                                         Normalisation = "scran",
+                                                         dilution.factor = 50000,
+                                                         volume = 1),
+                                      verbose = TRUE,
+                                      seed = 111)
 }
 \references{
 Vieth B, Ziegenhain C, Parekh S, et al. powsimR: power analysis for bulk and single cell RNA-seq experiments\link{J}. Bioinformatics, 2017, 33(21): 3486-3488. \url{https://doi.org/10.1093/bioinformatics/btx435}

@@ -18,11 +18,11 @@ powsimR_simulation(
 \item{other_prior}{A list with names of certain parameters. Some methods need
 extra parameters to execute the estimation step, so you must input them. In
 simulation step, the number of cells, genes, groups, batches, the percent of
-DEGs and other variables are usually customed, so before simulating a dataset
-you must point it out.}
+DEGs are usually customed, so before simulating a dataset you must point it out.
+See \code{Details} below for more information.}
 
-\item{return_format}{A character. Alternatives choices: list, SingleCellExperiment,
-Seurat, h5ad}
+\item{return_format}{A character. Alternative choices: list, SingleCellExperiment,
+Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad file saves to.}
 
 \item{verbose}{Logical. Whether to return messages or not.}
 
@@ -30,4 +30,102 @@ Seurat, h5ad}
 }
 \description{
 Simulate Datasets by powsimR
+}
+\details{
+powsimR provides some choices for users to select suitable parameters according
+to different normalization methods, and methods for differential expressed analysis.
+\enumerate{
+\item Normalisation. "TMM" (default), "MR", "PosCounts", "UQ", "scran", "Linnorm", "sctransform", "SCnorm", "Census", "depth".
+\item DEmethod. "T-Test", "edgeR-LRT", "edgeR-QL", "edgeR-zingeR", "edgeR-ZINB-WaVE", "limma-voom", "limma-trend" (default), "DESeq2", "DESeq2-zingeR", "DESeq2-ZINB-WaVE", "ROTS", "baySeq", "NOISeq", "EBSeq", "MAST", "BPSC", "scDD", "DECENT".
+}
+
+In addtion to simulate datasets with default parameters, users want to simulate
+other kinds of datasets, e.g. a counts matrix with 2 or more cell groups. In
+powsimR, you can set extra parameters to simulate datasets.
+
+The customed parameters you can set are below:
+\enumerate{
+\item nCells. In powsimR, You can directly set \code{other_prior = list(nCells = 5000)} to simulate 5000 cells.
+\item nGenes. You can directly set \code{other_prior = list(nGenes = 5000)} to simulate 5000 genes.
+\item de.prob. You can directly set \code{other_prior = list(de.prob = 0.2)} to simulate DEGs that account for 20 percent of all genes.
+\item prob.group. You can directly set \code{other_prior = list(prob.group = c(0.4, 0.6))} to assign two proportions of cell groups. Note that the the length of the vector must be \strong{2}.
+\item nBatches. You can not directly set \code{other_prior = list(nBatches = 3)} to simulate 3 batches. Instead, you should set \code{other_prior = list(prob.batch = c(0.3, 0.4, 0.3))} to reach the goal.
+}
+
+For more customed parameters in Splat, please check \code{\link[powsimR:simulateDE]{powsimR::simulateDE()}}.
+}
+\examples{
+ref_data <- simmethods::data
+
+## Estimate parameters with ERCC spike-in
+### Make sure there are ERCC names in reference data
+rownames(ref_data)[grep(rownames(ref_data), pattern = "^ERCC")]
+### Users must input the dilution.factor and volume (nanoliter) to determine the ERCC molecules
+estimate_result <- powsimR_estimation(ref_data = ref_data,
+                                      other_prior = list(RNAseq = "singlecell",
+                                                         Protocol = "UMI",
+                                                         Normalisation = "scran",
+                                                         dilution.factor = 50000,
+                                                         volume = 1),
+                                      verbose = TRUE,
+                                      seed = 111)
+
+# (1) Simulate 500 cells and 2000 genes
+simulate_result <- simmethods::powsimR_simulation(parameters = estimate_result[["estimate_result"]],
+                                                  other_prior = list(nCells = 500,
+                                                                     nGenes = 2000),
+                                                  return_format = "list",
+                                                  verbose = TRUE,
+                                                  seed = 111)
+count_data <- simulate_result[["simulate_result"]][["count_data"]]
+dim(count_data)
+## In powsimR, users always get two groups of cells, and the numbers of cells in
+## different groups are the same (default, prob.group = c(0.5, 0.5)).
+col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+table(col_data$group)
+## row_data
+row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+table(row_data$de_genes)[2]/2000
+
+# (2) Simulate two groups with 20\% of DEGs and 4 fold change.
+simulate_result <- simmethods::powsimR_simulation(parameters = estimate_result[["estimate_result"]],
+                                                  other_prior = list(prob.group = c(0.3, 0.7),
+                                                                     de.prob = 0.2,
+                                                                     fc.group = 4),
+                                                  return_format = "list",
+                                                  verbose = TRUE,
+                                                  seed = 111)
+count_data <- simulate_result[["simulate_result"]][["count_data"]]
+dim(count_data)
+## cell information
+col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+table(col_data$group)
+## gene information
+row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+table(row_data$de_genes)[2]/4000
+
+
+# (3) Simulate two batches (2 fold change)
+simulate_result <- simmethods::powsimR_simulation(parameters = estimate_result[["estimate_result"]],
+                                                  other_prior = list(prob.batch = c(0.4, 0.6),
+                                                                     fc.batch = 2),
+                                                  return_format = "list",
+                                                  verbose = TRUE,
+                                                  seed = 111)
+count_data <- simulate_result[["simulate_result"]][["count_data"]]
+dim(count_data)
+## cell information
+col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+table(col_data$group)
+table(col_data$batch)
+## gene information
+row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+head(row_data)
+table(row_data$de_fc)
+table(row_data$batch_genes)
+}
+\references{
+Vieth B, Ziegenhain C, Parekh S, et al. powsimR: power analysis for bulk and single cell RNA-seq experiments\link{J}. Bioinformatics, 2017, 33(21): 3486-3488. \url{https://doi.org/10.1093/bioinformatics/btx435}
+
+Github URL: \url{https://github.com/bvieth/powsimR}
 }
