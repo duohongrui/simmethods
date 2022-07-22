@@ -44,7 +44,7 @@ The customed parameters you can set are below:
 \item nGroups. You can directly set \code{other_prior = list(nGroups = 3)} to simulate 3 groups. But the cells will be assigned to these three groups equally if you do not set \code{prob.group} below.
 \item prob.group. You can directly set \code{other_prior = list(prob.group = c(0.2, 0.3, 0.5))} to assign three proportions of cell groups. Note that the number of groups always equals to the length of the vector.
 \item de.prob. You can directly set \code{other_prior = list(de.prob = 0.2)} to simulate DEGs that account for 20 percent of all genes.
-\item fc.group. You can directly set \code{other_prior = list(fc.group. = 2)} to specify the fold change of DEGs. But note that, you would better set \code{fc.group} because scDesign dose not retrun the fold changes of DEGs in the result.
+\item fc.group. You can directly set \code{other_prior = list(fc.group = 2)} to specify the fold change of DEGs. But note that, you would better set \code{fc.group} because scDesign dose not retrun the fold changes of DEGs in the result.
 }
 
 For more customed parameters in scDesign, please check \code{\link[scDesign:design_data]{scDesign::design_data()}}.

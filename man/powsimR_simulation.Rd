@@ -49,7 +49,9 @@ The customed parameters you can set are below:
 \item nGenes. You can directly set \code{other_prior = list(nGenes = 5000)} to simulate 5000 genes.
 \item de.prob. You can directly set \code{other_prior = list(de.prob = 0.2)} to simulate DEGs that account for 20 percent of all genes.
 \item prob.group. You can directly set \code{other_prior = list(prob.group = c(0.4, 0.6))} to assign two proportions of cell groups. Note that the the length of the vector must be \strong{2}.
+\item fc.group. You can directly set \code{other_prior = list(fc.group = 2)} to specify the fold change of DEGs.
 \item nBatches. You can not directly set \code{other_prior = list(nBatches = 3)} to simulate 3 batches. Instead, you should set \code{other_prior = list(prob.batch = c(0.3, 0.4, 0.3))} to reach the goal.
+\item fc.batch. You can directly set \code{other_prior = list(fc.batch = 2)} to specify the fold change of genes between batches.
 }
 
 For more customed parameters in powsimR, please check \code{\link[powsimR:simulateDE]{powsimR::simulateDE()}}.

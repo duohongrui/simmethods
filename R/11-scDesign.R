@@ -28,7 +28,7 @@
 #' 2. nGroups. You can directly set `other_prior = list(nGroups = 3)` to simulate 3 groups. But the cells will be assigned to these three groups equally if you do not set `prob.group` below.
 #' 3. prob.group. You can directly set `other_prior = list(prob.group = c(0.2, 0.3, 0.5))` to assign three proportions of cell groups. Note that the number of groups always equals to the length of the vector.
 #' 4. de.prob. You can directly set `other_prior = list(de.prob = 0.2)` to simulate DEGs that account for 20 percent of all genes.
-#' 5. fc.group. You can directly set `other_prior = list(fc.group. = 2)` to specify the fold change of DEGs. But note that, you would better set `fc.group` because scDesign dose not retrun the fold changes of DEGs in the result.
+#' 5. fc.group. You can directly set `other_prior = list(fc.group = 2)` to specify the fold change of DEGs. But note that, you would better set `fc.group` because scDesign dose not retrun the fold changes of DEGs in the result.
 #'
 #' For more customed parameters in scDesign, please check [scDesign::design_data()].
 #' @references

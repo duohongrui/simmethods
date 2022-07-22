@@ -88,7 +88,7 @@ zingeR_method_definition <- function(...){
     ),
     param_numeric(
       id = "foldDiff",
-      default = 3,
+      default = 2,
       description = "The fold changes used in simulating the differentially expressed genes. Either one numeric value for specifying the same fold change for all DE genes, or a vector of the same length as ind to specify fold changes for all differentially expressed genes. Note that fold changes above $1$ should be used as input of which a fraction will be inversed (i.e. simulation downregulation) according to 'pUp'. Defaults to $3$.",
       function_name = "NBsimSingleCell"
     ),
