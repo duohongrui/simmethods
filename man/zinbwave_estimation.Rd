@@ -4,7 +4,7 @@
 \alias{zinbwave_estimation}
 \title{Estimate Parameters From Real Datasets by zinbwave}
 \usage{
-zinbwave_estimation(ref_data, verbose = FALSE, other_prior, seed)
+zinbwave_estimation(ref_data, verbose = FALSE, other_prior = NULL, seed)
 }
 \arguments{
 \item{ref_data}{A count matrix. Each row represents a gene and each column
@@ -15,8 +15,8 @@ represents a cell.}
 \item{other_prior}{A list with names of certain parameters. Some methods need
 extra parameters to execute the estimation step, so you must input them. In
 simulation step, the number of cells, genes, groups, batches, the percent of
-DEGs and other variables are usually customed, so before simulating a dataset
-you must point it out.}
+DEGs are usually customed, so before simulating a dataset you must point it out.
+See \code{Details} below for more information.}
 
 \item{seed}{An integer of a random seed.}
 }
@@ -27,4 +27,23 @@ detection.
 \description{
 This function is used to estimate useful parameters from a real dataset by
 using \code{zinbEstimate} function in Splatter package.
+}
+\details{
+In zinbwave, users do not input other extra information usually. If users want
+to check the parameters, please see \code{\link[splatter:zinbEstimate]{splatter::zinbEstimate()}} or \code{\link[splatter:ZINBParams]{splatter::ZINBParams()}}.
+}
+\examples{
+ref_data <- simmethods::data
+## maybe it will take a long time
+estimate_result <- simmethods::zinbwave_estimation(ref_data = ref_data,
+                                                   other_prior = NULL,
+                                                   verbose = TRUE,
+                                                   seed = 111)
+}
+\references{
+Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data\link{J}. Genome biology, 2017, 18(1): 1-15. \url{https://doi.org/10.1186/s13059-017-1305-0}
+
+Bioconductor URL: \url{https://bioconductor.org/packages/release/bioc/html/splatter.html}
+
+Github URL: \url{https://github.com/Oshlack/splatter}
 }
