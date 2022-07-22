@@ -178,7 +178,7 @@ powsimR_estimation <- function(ref_data,
 #' 4. prob.group. You can directly set `other_prior = list(prob.group = c(0.4, 0.6))` to assign two proportions of cell groups. Note that the the length of the vector must be **2**.
 #' 5. nBatches. You can not directly set `other_prior = list(nBatches = 3)` to simulate 3 batches. Instead, you should set `other_prior = list(prob.batch = c(0.3, 0.4, 0.3))` to reach the goal.
 #'
-#' For more customed parameters in Splat, please check [powsimR::simulateDE()].
+#' For more customed parameters in powsimR, please check [powsimR::simulateDE()].
 #' @references
 #' Vieth B, Ziegenhain C, Parekh S, et al. powsimR: power analysis for bulk and single cell RNA-seq experiments[J]. Bioinformatics, 2017, 33(21): 3486-3488. <https://doi.org/10.1093/bioinformatics/btx435>
 #'
@@ -447,9 +447,10 @@ powsimR_simulation <- function(parameters,
   }
   if(length(simulate_result[["Counts"]]) != 1){
     col_data <- data.frame("cell_name" = colnames(counts),
-                           "group" = paste0("Group",
-                                            c(rep(1, sum(other_prior[["n1"]])),
-                                              rep(2, sum(other_prior[["n2"]])))),
+                           "group" = c(rep("Group1", other_prior[["n1"]][1]),
+                                       rep("Group2", other_prior[["n2"]][1]),
+                                       rep("Group1", other_prior[["n1"]][2]),
+                                       rep("Group2", other_prior[["n2"]][2])),
                            "batch" = rep(paste0("Batch", 1:nbatches), (other_prior[["n1"]] + other_prior[["n2"]])))
   }else{
     col_data <- data.frame("cell_name" = colnames(counts),

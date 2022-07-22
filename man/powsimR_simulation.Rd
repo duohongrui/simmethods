@@ -52,7 +52,7 @@ The customed parameters you can set are below:
 \item nBatches. You can not directly set \code{other_prior = list(nBatches = 3)} to simulate 3 batches. Instead, you should set \code{other_prior = list(prob.batch = c(0.3, 0.4, 0.3))} to reach the goal.
 }
 
-For more customed parameters in Splat, please check \code{\link[powsimR:simulateDE]{powsimR::simulateDE()}}.
+For more customed parameters in powsimR, please check \code{\link[powsimR:simulateDE]{powsimR::simulateDE()}}.
 }
 \examples{
 ref_data <- simmethods::data
