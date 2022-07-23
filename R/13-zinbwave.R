@@ -121,10 +121,12 @@ zinbwave_estimation <- function(ref_data,
 #'                                                    seed = 111)
 #'
 #' ## In zinbwave, users can not set the number of cells and genes.
-#' simulate_result <- simmethods::zinbwave_simulation(parameters = estimate_result[["estimate_result"]],
-#'                                                    return_format = "list",
-#'                                                    verbose = TRUE,
-#'                                                    seed = 111)
+#' simulate_result <- simmethods::zinbwave_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 zinbwave_simulation <- function(parameters,
                                 return_format,
                                 verbose = FALSE,

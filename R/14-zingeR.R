@@ -29,10 +29,12 @@
 #' ref_data <- simmethods::data
 #' group_condition <- as.numeric(simmethods::group_condition)
 #'
-#' estimate_result <- simmethods::zingeR_estimation(ref_data = ref_data,
-#'                                                  other_prior = list(group.condition = group_condition),
-#'                                                  verbose = TRUE,
-#'                                                  seed = 111)
+#' estimate_result <- simmethods::zingeR_estimation(
+#'   ref_data = ref_data,
+#'   other_prior = list(group.condition = group_condition),
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 zingeR_estimation <- function(ref_data,
                               verbose = FALSE,
                               other_prior,
@@ -133,18 +135,22 @@ zingeR_estimation <- function(ref_data,
 #' ref_data <- simmethods::data
 #' group_condition <- as.numeric(simmethods::group_condition)
 #'
-#' estimate_result <- simmethods::zingeR_estimation(ref_data = ref_data,
-#'                                                  other_prior = list(group.condition = group_condition),
-#'                                                  verbose = TRUE,
-#'                                                  seed = 111)
+#' estimate_result <- simmethods::zingeR_estimation(
+#'   ref_data = ref_data,
+#'   other_prior = list(group.condition = group_condition),
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 #'
 #' ## Default parameters
-#' simulate_result <- simmethods::zingeR_simulation(ref_data = ref_data,
-#'                                                  other_prior = list(group.condition = group_condition),
-#'                                                  parameters = estimate_result[["estimate_result"]],
-#'                                                  return_format = "list",
-#'                                                  verbose = TRUE,
-#'                                                  seed = 111)
+#' simulate_result <- simmethods::zingeR_simulation(
+#'   ref_data = ref_data,
+#'   other_prior = list(group.condition = group_condition),
+#'   parameters = estimate_result[["estimate_result"]],
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 #' ## counts
 #' counts <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(counts)
@@ -159,16 +165,18 @@ zingeR_estimation <- function(ref_data,
 #' ## than the reference data. In addtion, the proportion of DEGs and fold change are
 #' ## able to be customed. Not that zingeR dose not return cell group information.
 #' ## Default parameters
-#' simulate_result <- simmethods::zingeR_simulation(ref_data = ref_data,
-#'                                                  other_prior = list(group.condition = group_condition,
-#'                                                                     nCells = 1000,
-#'                                                                     nGenes = 5000,
-#'                                                                     de.prob = 0.2,
-#'                                                                     fc.group = 4),
-#'                                                  parameters = estimate_result[["estimate_result"]],
-#'                                                  return_format = "list",
-#'                                                  verbose = TRUE,
-#'                                                  seed = 111)
+#' simulate_result <- simmethods::zingeR_simulation(
+#'   ref_data = ref_data,
+#'   other_prior = list(group.condition = group_condition,
+#'                      nCells = 1000,
+#'                      nGenes = 5000,
+#'                      de.prob = 0.2,
+#'                      fc.group = 4),
+#'   parameters = estimate_result[["estimate_result"]],
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 #' ## counts
 #' counts <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(counts)

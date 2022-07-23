@@ -38,10 +38,12 @@ and learn from it.
 ref_data <- simmethods::data
 group_condition <- as.numeric(simmethods::group_condition)
 
-estimate_result <- simmethods::zingeR_estimation(ref_data = ref_data,
-                                                 other_prior = list(group.condition = group_condition),
-                                                 verbose = TRUE,
-                                                 seed = 111)
+estimate_result <- simmethods::zingeR_estimation(
+  ref_data = ref_data,
+  other_prior = list(group.condition = group_condition),
+  verbose = TRUE,
+  seed = 111
+)
 }
 \references{
 Github URL: \url{https://github.com/statOmics/zingeR}

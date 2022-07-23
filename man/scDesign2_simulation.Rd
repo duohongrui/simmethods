@@ -51,18 +51,22 @@ ref_data <- simmethods::data
 group_condition <- as.numeric(simmethods::group_condition)
 ## In scDesign2, cell group information is not neccessary which indicates the type
 ## that each cell belongs to.
-estimate_result <- simmethods::scDesign2_estimation(ref_data = ref_data,
-                                                    other_prior = list(group.condition = group_condition),
-                                                    verbose = TRUE,
-                                                    seed = 111)
+estimate_result <- simmethods::scDesign2_estimation(
+  ref_data = ref_data,
+  other_prior = list(group.condition = group_condition),
+  verbose = TRUE,
+  seed = 111
+)
 
 ## Simulate 1000 cells (40\% in Group1, 60\% in Group2)
-simulate_result <- simmethods::scDesign2_simulation(parameters = estimate_result[["estimate_result"]],
-                                                    other_prior = list(nCells = 1000,
-                                                                       prob.group = c(0.4, 0.6)),
-                                                    return_format = "list",
-                                                    verbose = TRUE,
-                                                    seed = 111)
+simulate_result <- simmethods::scDesign2_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  other_prior = list(nCells = 1000,
+                     prob.group = c(0.4, 0.6)),
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111
+)
 ## counts
 counts <- simulate_result[["simulate_result"]][["count_data"]]
 dim(counts)

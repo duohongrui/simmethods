@@ -40,17 +40,21 @@ ref_data <- simmethods::data
 group_condition <- as.numeric(simmethods::group_condition)
 ## In scDesign2, cell group information is not neccessary which indicates the type
 ## that each cell belongs to.
-estimate_result <- simmethods::scDesign2_estimation(ref_data = ref_data,
-                                                    other_prior = list(group.condition = group_condition),
-                                                    verbose = TRUE,
-                                                    seed = 111)
+estimate_result <- simmethods::scDesign2_estimation(
+  ref_data = ref_data,
+  other_prior = list(group.condition = group_condition),
+  verbose = TRUE,
+  seed = 111
+)
 ## Or you can input information of cell types via cell_type_sel parameter described
 ## in scDesign2::fit_model_scDesign2 function
-estimate_result <- simmethods::scDesign2_estimation(ref_data = ref_data,
-                                                    other_prior = list(cell_type_sel = paste0("cell_type",
-                                                                                              group_condition)),
-                                                    verbose = TRUE,
-                                                    seed = 111)
+estimate_result <- simmethods::scDesign2_estimation(
+  ref_data = ref_data,
+  other_prior = list(cell_type_sel = paste0("cell_type",
+                                            group_condition)),
+  verbose = TRUE,
+  seed = 111
+)
 }
 \references{
 Sun T, Song D, Li W V, et al. scDesign2: a transparent simulator that generates high-fidelity single-cell gene expression count data with gene correlations captured. Genome biology, 2021, 22(1): 1-37. \url{https://doi.org/10.1186/s13059-021-02367-2}

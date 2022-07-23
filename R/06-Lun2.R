@@ -145,12 +145,14 @@ Lun2_estimation <- function(ref_data,
 #'
 #' # (1) Simulate 500 cells (Since we can not set nCells directly, so we can set
 #' # cell.plates (a numeric vector)) and 2000 genes
-#' simulate_result <- simmethods::Lun2_simulation(parameters = estimate_result[["estimate_result"]],
-#'                                                other_prior = list(cell.plates = sample(1:2, 500, replace = TRUE),
-#'                                                                   nGenes = 2000),
-#'                                                return_format = "list",
-#'                                                verbose = TRUE,
-#'                                                seed = 111)
+#' simulate_result <- simmethods::Lun2_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(cell.plates = sample(1:2, 500, replace = TRUE),
+#'                      nGenes = 2000),
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 #' count_data <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(count_data)
 #' ## col_data
@@ -162,14 +164,16 @@ Lun2_estimation <- function(ref_data,
 #'
 #'
 #' # (2) Simulate two groups (de.prob = 0.2, fc.group = 2)
-#' simulate_result <- simmethods::Lun2_simulation(parameters = estimate_result[["estimate_result"]],
-#'                                                other_prior = list(cell.plates = sample(1:2, 500, replace = TRUE),
-#'                                                                   nGenes = 10000,
-#'                                                                   de.prob = 0.2,
-#'                                                                   fc.group = 2),
-#'                                                return_format = "list",
-#'                                                verbose = TRUE,
-#'                                                seed = 111)
+#' simulate_result <- simmethods::Lun2_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(cell.plates = sample(1:2, 500, replace = TRUE),
+#'                      nGenes = 10000,
+#'                      de.prob = 0.2,
+#'                      fc.group = 2),
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 #' count_data <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(count_data)
 #' ## cell information
