@@ -34,7 +34,7 @@ simulate_result <- simmethods::zinbwave_simulation(parameters = estimate_result[
                                                    seed = 111)
 }
 \references{
-Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data\link{J}. Genome biology, 2017, 18(1): 1-15. \url{https://doi.org/10.1186/s13059-017-1305-0}
+Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. \url{https://doi.org/10.1186/s13059-017-1305-0}
 
 Bioconductor URL: \url{https://bioconductor.org/packages/release/bioc/html/splatter.html}
 

@@ -127,7 +127,7 @@ table(row_data$de_fc)
 table(row_data$batch_genes)
 }
 \references{
-Vieth B, Ziegenhain C, Parekh S, et al. powsimR: power analysis for bulk and single cell RNA-seq experiments\link{J}. Bioinformatics, 2017, 33(21): 3486-3488. \url{https://doi.org/10.1093/bioinformatics/btx435}
+Vieth B, Ziegenhain C, Parekh S, et al. powsimR: power analysis for bulk and single cell RNA-seq experiments. Bioinformatics, 2017, 33(21): 3486-3488. \url{https://doi.org/10.1093/bioinformatics/btx435}
 
 Github URL: \url{https://github.com/bvieth/powsimR}
 }

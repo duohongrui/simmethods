@@ -159,10 +159,9 @@ phenopath_simulation <- function(ref_data = NULL,
                          Regime = pheno_sim$parameters$regime)
   rownames(features) <- gene.names
   # SCE object
-  simulate_result <- SingleCellExperiment(assays = list(counts = counts,
-                                                        LogExprs = exprs),
-                                          rowData = features,
-                                          colData = cells)
+  simulate_result <- SingleCellExperiment::SingleCellExperiment(assays = list(counts = counts),
+                                                                rowData = features,
+                                                                colData = cells)
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

@@ -24,7 +24,7 @@
 #' 2. eqtl. A data.frame with all or top eQTL pairs from a real eQTL analysis. Must include columns: 'gene_id', 'pval_nominal', and 'slope'.
 #' For more information, please check [splatter::splatPopEstimate] or <https://www.bioconductor.org/packages/release/bioc/vignettes/splatter/inst/doc/splatPop.html>
 #' @references
-#' Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data[J]. Genome biology, 2017, 18(1): 1-15. <https://doi.org/10.1186/s13059-017-1305-0>
+#' Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. <https://doi.org/10.1186/s13059-017-1305-0>
 #'
 #' Bioconductor URL: <https://bioconductor.org/packages/release/bioc/html/splatter.html>
 #'
@@ -115,7 +115,7 @@ SplatPop_estimation <- function(ref_data,
 #'
 #' @export
 #' @references
-#' Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data[J]. Genome biology, 2017, 18(1): 1-15. <https://doi.org/10.1186/s13059-017-1305-0>
+#' Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. <https://doi.org/10.1186/s13059-017-1305-0>
 #'
 #' Bioconductor URL: <https://bioconductor.org/packages/release/bioc/html/splatter.html>
 #'

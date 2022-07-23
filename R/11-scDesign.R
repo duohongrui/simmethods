@@ -32,7 +32,7 @@
 #'
 #' For more customed parameters in scDesign, please check [scDesign::design_data()].
 #' @references
-#' Li W V, Li J J. A statistical simulator scDesign for rational scRNA-seq experimental design[J]. Bioinformatics, 2019, 35(14): i41-i50. <https://doi.org/10.1093/bioinformatics/btz321>
+#' Li W V, Li J J. A statistical simulator scDesign for rational scRNA-seq experimental design. Bioinformatics, 2019, 35(14): i41-i50. <https://doi.org/10.1093/bioinformatics/btz321>
 #'
 #' Github URL: <https://github.com/Vivianstats/scDesign>
 #' @examples

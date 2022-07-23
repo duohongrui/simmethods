@@ -53,7 +53,7 @@ estimate_result <- simmethods::scDesign2_estimation(ref_data = ref_data,
                                                     seed = 111)
 }
 \references{
-Sun T, Song D, Li W V, et al. scDesign2: a transparent simulator that generates high-fidelity single-cell gene expression count data with gene correlations captured\link{J}. Genome biology, 2021, 22(1): 1-37. \url{https://doi.org/10.1186/s13059-021-02367-2}
+Sun T, Song D, Li W V, et al. scDesign2: a transparent simulator that generates high-fidelity single-cell gene expression count data with gene correlations captured. Genome biology, 2021, 22(1): 1-37. \url{https://doi.org/10.1186/s13059-021-02367-2}
 
 Github URL: \url{https://github.com/JSB-UCLA/scDesign2}
 }

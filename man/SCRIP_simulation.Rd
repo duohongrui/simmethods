@@ -167,7 +167,7 @@ fc_group2_to_group3 <- row_data$DEFacGroup3/row_data$DEFacGroup2
 table(fc_group2_to_group3 != 1)[2]/4000
 }
 \references{
-Qin F, Luo X, Xiao F, et al. SCRIP: an accurate simulator for single-cell RNA sequencing data\link{J}. Bioinformatics, 2022, 38(5): 1304-1311. \url{https://doi.org/10.1093/bioinformatics/btab824}
+Qin F, Luo X, Xiao F, et al. SCRIP: an accurate simulator for single-cell RNA sequencing data. Bioinformatics, 2022, 38(5): 1304-1311. \url{https://doi.org/10.1093/bioinformatics/btab824}
 
 CRAN URL: \url{https://cran.r-project.org/web/packages/SCRIP/index.html}
 

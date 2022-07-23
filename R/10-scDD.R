@@ -22,7 +22,7 @@
 #' like `other_prior = list(group.condition = the numeric vector)`. See `Examples`
 #' and learn from it.
 #' @references
-#' Korthauer K D, Chu L F, Newton M A, et al. A statistical approach for identifying differential distributions in single-cell RNA-seq experiments[J]. Genome biology, 2016, 17(1): 1-15. <https://doi.org/10.1186/s13059-016-1077-y>
+#' Korthauer K D, Chu L F, Newton M A, et al. A statistical approach for identifying differential distributions in single-cell RNA-seq experiments. Genome biology, 2016, 17(1): 1-15. <https://doi.org/10.1186/s13059-016-1077-y>
 #'
 #' Bioconductor URL: <https://www.bioconductor.org/packages/release/bioc/html/scDD.html>
 #'
@@ -107,7 +107,7 @@ scDD_estimation <- function(ref_data,
 #' In scDD, users can only set `nCells` to specify the number of cells because
 #' the genes are already fixed after estimation step. See `Examples`.
 #' @references
-#' Korthauer K D, Chu L F, Newton M A, et al. A statistical approach for identifying differential distributions in single-cell RNA-seq experiments[J]. Genome biology, 2016, 17(1): 1-15. <https://doi.org/10.1186/s13059-016-1077-y>
+#' Korthauer K D, Chu L F, Newton M A, et al. A statistical approach for identifying differential distributions in single-cell RNA-seq experiments. Genome biology, 2016, 17(1): 1-15. <https://doi.org/10.1186/s13059-016-1077-y>
 #'
 #' Bioconductor URL: <https://www.bioconductor.org/packages/release/bioc/html/scDD.html>
 #'
@@ -128,6 +128,7 @@ scDD_estimation <- function(ref_data,
 #' ## Simulate 1000 cells
 #' simulate_result <- simmethods::scDD_simulation(parameters = estimate_result[["estimate_result"]],
 #'                                                other_prior = list(nCells = 1000),
+#'                                                return_format = "list",
 #'                                                verbose = TRUE,
 #'                                                seed = 111)
 #' ## counts

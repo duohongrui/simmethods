@@ -23,7 +23,7 @@
 #' parameters from real datasets. For more instructions or information, see `Examples`
 #' or [scDesign2::fit_model_scDesign2()]
 #' @references
-#' Sun T, Song D, Li W V, et al. scDesign2: a transparent simulator that generates high-fidelity single-cell gene expression count data with gene correlations captured[J]. Genome biology, 2021, 22(1): 1-37. <https://doi.org/10.1186/s13059-021-02367-2>
+#' Sun T, Song D, Li W V, et al. scDesign2: a transparent simulator that generates high-fidelity single-cell gene expression count data with gene correlations captured. Genome biology, 2021, 22(1): 1-37. <https://doi.org/10.1186/s13059-021-02367-2>
 #'
 #' Github URL: <https://github.com/JSB-UCLA/scDesign2>
 #' @examples
@@ -143,7 +143,7 @@ scDesign2_estimation <- function(ref_data,
 #' For more customed parameters in scDesign2, please check [scDesign2::simulate_count_scDesign2()].
 #'
 #' @references
-#' Sun T, Song D, Li W V, et al. scDesign2: a transparent simulator that generates high-fidelity single-cell gene expression count data with gene correlations captured[J]. Genome biology, 2021, 22(1): 1-37. <https://doi.org/10.1186/s13059-021-02367-2>
+#' Sun T, Song D, Li W V, et al. scDesign2: a transparent simulator that generates high-fidelity single-cell gene expression count data with gene correlations captured. Genome biology, 2021, 22(1): 1-37. <https://doi.org/10.1186/s13059-021-02367-2>
 #'
 #' Github URL: <https://github.com/JSB-UCLA/scDesign2>
 #'

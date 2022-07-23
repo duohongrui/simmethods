@@ -14,7 +14,7 @@
 #' detection.
 #' @export
 #' @references
-#' Qin F, Luo X, Xiao F, et al. SCRIP: an accurate simulator for single-cell RNA sequencing data[J]. Bioinformatics, 2022, 38(5): 1304-1311. <https://doi.org/10.1093/bioinformatics/btab824>
+#' Qin F, Luo X, Xiao F, et al. SCRIP: an accurate simulator for single-cell RNA sequencing data. Bioinformatics, 2022, 38(5): 1304-1311. <https://doi.org/10.1093/bioinformatics/btab824>
 #'
 #' CRAN URL: <https://cran.r-project.org/web/packages/SCRIP/index.html>
 #'
@@ -111,7 +111,7 @@ SCRIP_estimation <- function(ref_data, verbose = FALSE, seed){
 #'
 #' For more customed parameters in SCRIP, please check [SCRIP::SCRIPsimu()].
 #' @references
-#' Qin F, Luo X, Xiao F, et al. SCRIP: an accurate simulator for single-cell RNA sequencing data[J]. Bioinformatics, 2022, 38(5): 1304-1311. <https://doi.org/10.1093/bioinformatics/btab824>
+#' Qin F, Luo X, Xiao F, et al. SCRIP: an accurate simulator for single-cell RNA sequencing data. Bioinformatics, 2022, 38(5): 1304-1311. <https://doi.org/10.1093/bioinformatics/btab824>
 #'
 #' CRAN URL: <https://cran.r-project.org/web/packages/SCRIP/index.html>
 #'

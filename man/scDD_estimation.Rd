@@ -47,7 +47,7 @@ estimate_result <- simmethods::scDD_estimation(ref_data = ref_data,
                                                seed = 111)
 }
 \references{
-Korthauer K D, Chu L F, Newton M A, et al. A statistical approach for identifying differential distributions in single-cell RNA-seq experiments\link{J}. Genome biology, 2016, 17(1): 1-15. \url{https://doi.org/10.1186/s13059-016-1077-y}
+Korthauer K D, Chu L F, Newton M A, et al. A statistical approach for identifying differential distributions in single-cell RNA-seq experiments. Genome biology, 2016, 17(1): 1-15. \url{https://doi.org/10.1186/s13059-016-1077-y}
 
 Bioconductor URL: \url{https://www.bioconductor.org/packages/release/bioc/html/scDD.html}
 

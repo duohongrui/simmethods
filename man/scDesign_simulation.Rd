@@ -101,7 +101,7 @@ col_data <- simulate_result[["simulate_result"]][["col_meta"]]
 table(col_data$group)
 }
 \references{
-Li W V, Li J J. A statistical simulator scDesign for rational scRNA-seq experimental design\link{J}. Bioinformatics, 2019, 35(14): i41-i50. \url{https://doi.org/10.1093/bioinformatics/btz321}
+Li W V, Li J J. A statistical simulator scDesign for rational scRNA-seq experimental design. Bioinformatics, 2019, 35(14): i41-i50. \url{https://doi.org/10.1093/bioinformatics/btz321}
 
 Github URL: \url{https://github.com/Vivianstats/scDesign}
 }

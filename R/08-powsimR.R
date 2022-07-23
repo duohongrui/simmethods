@@ -31,7 +31,7 @@
 #' detection.
 #' @export
 #' @references
-#' Vieth B, Ziegenhain C, Parekh S, et al. powsimR: power analysis for bulk and single cell RNA-seq experiments[J]. Bioinformatics, 2017, 33(21): 3486-3488. <https://doi.org/10.1093/bioinformatics/btx435>
+#' Vieth B, Ziegenhain C, Parekh S, et al. powsimR: power analysis for bulk and single cell RNA-seq experiments. Bioinformatics, 2017, 33(21): 3486-3488. <https://doi.org/10.1093/bioinformatics/btx435>
 #'
 #' Github URL: <https://github.com/bvieth/powsimR>
 #'
@@ -182,7 +182,7 @@ powsimR_estimation <- function(ref_data,
 #'
 #' For more customed parameters in powsimR, please check [powsimR::simulateDE()].
 #' @references
-#' Vieth B, Ziegenhain C, Parekh S, et al. powsimR: power analysis for bulk and single cell RNA-seq experiments[J]. Bioinformatics, 2017, 33(21): 3486-3488. <https://doi.org/10.1093/bioinformatics/btx435>
+#' Vieth B, Ziegenhain C, Parekh S, et al. powsimR: power analysis for bulk and single cell RNA-seq experiments. Bioinformatics, 2017, 33(21): 3486-3488. <https://doi.org/10.1093/bioinformatics/btx435>
 #'
 #' Github URL: <https://github.com/bvieth/powsimR>
 #'
