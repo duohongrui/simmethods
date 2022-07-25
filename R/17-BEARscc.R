@@ -20,6 +20,7 @@
 #' @importFrom methods as
 #' @importFrom BiocGenerics do.call
 #' @importFrom stats na.omit
+#' @importFrom S4Vectors isEmpty
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
@@ -103,25 +104,28 @@ BEARscc_estimation <- function(ref_data,
   rownames(ERCC_meta) <- rownames(ERCC_count)
   colnames(ERCC_meta) <- "Transcripts"
   ref_data <- ref_data[-grep(pattern = '^ERCC-', rownames(ref_data)), ]
-  ## Gene name transformation
-  if(other_prior[["species"]] == "mouse"){
-    ensembl <- biomaRt::useEnsembl(biomart = "genes", dataset = "mmusculus_gene_ensembl")
-  }else if(other_prior[["species"]] == "human"){
-    ensembl <- biomaRt::useEnsembl(biomart = "genes", dataset = "hsapiens_gene_ensembl")
+  if(S4Vectors::isEmpty(grep(rownames(ref_data)[1:10], pattern = "ENS"))){
+    ## Gene name transformation
+    if(other_prior[["species"]] == "mouse"){
+      ensembl <- biomaRt::useEnsembl(biomart = "genes", dataset = "mmusculus_gene_ensembl")
+    }else if(other_prior[["species"]] == "human"){
+      ensembl <- biomaRt::useEnsembl(biomart = "genes", dataset = "hsapiens_gene_ensembl")
+    }else{
+      stop("You do not input species or the species name is not human/mouse.")
+    }
+    id_convert <- biomaRt::getBM(attributes = c("ensembl_gene_id",
+                                                "transcript_biotype",
+                                                "external_gene_name"), mart = ensembl) %>%
+      dplyr::filter("external_gene_name" != "")
+    gene_filter <- id_convert$external_gene_name[stats::na.omit(match(rownames(ref_data),
+                                                                      id_convert$external_gene_name))]
+    cat(glue::glue("In gene id conversion step, {nrow(ref_data)-(length(gene_filter)+nrow(ERCC_count))} are filtered, {length(gene_filter)+nrow(ERCC_count)} genes are retained."), "\n")
+    ref_data <- ref_data[gene_filter, ]
+    rownames(ref_data) <- id_convert$ensembl_gene_id[stats::na.omit(match(rownames(ref_data),
+                                                                          id_convert$external_gene_name))]
   }else{
-    stop("You do not input species or the species name is not human/mouse.")
+    ref_data <- rbind(ref_data, ERCC_count)
   }
-  id_convert <- biomaRt::getBM(attributes = c("ensembl_gene_id",
-                                              "transcript_biotype",
-                                              "external_gene_name"), mart = ensembl) %>%
-    dplyr::filter("external_gene_name" != "")
-  gene_filter <- id_convert$external_gene_name[stats::na.omit(match(rownames(ref_data),
-                                                                    id_convert$external_gene_name))]
-  cat(glue::glue("In gene id conversion step, {nrow(ref_data)-(length(gene_filter)+nrow(ERCC_count))} are filtered, {length(gene_filter)+nrow(ERCC_count)} genes are retained."))
-  ref_data <- ref_data[gene_filter, ]
-  rownames(ref_data) <- id_convert$ensembl_gene_id[stats::na.omit(match(rownames(ref_data),
-                                                                  id_convert$external_gene_name))]
-  ref_data <- rbind(ref_data, ERCC_count)
   ## Data format
   ref_data <- SummarizedExperiment::SummarizedExperiment(assays = list(counts = as.matrix(ref_data)))
   ref_data <- methods::as(ref_data, "SingleCellExperiment")
