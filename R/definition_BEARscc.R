@@ -97,7 +97,7 @@ BEARscc_method_definition <- function(...){
     ),
     param_integer(
       id = "n",
-      default = 3L,
+      default = 1L,
       description = "The number of simulated technical replicates to generate.",
       process = "simulation",
       function_name = "simulate_replicates"

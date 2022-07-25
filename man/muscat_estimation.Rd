@@ -4,7 +4,7 @@
 \alias{muscat_estimation}
 \title{Estimate Parameters From Real Datasets by muscat}
 \usage{
-muscat_estimation(ref_data, verbose = FALSE, other_prior, seed)
+muscat_estimation(ref_data, verbose = FALSE, other_prior = NULL, seed)
 }
 \arguments{
 \item{ref_data}{A count matrix. Each row represents a gene and each column
@@ -27,4 +27,9 @@ detection.
 \description{
 This function is used to estimate useful parameters from a real dataset by
 using \code{prepSim} function in muscat package.
+}
+\references{
+Crowell H L, Soneson C, Germain P L, et al. Muscat detects subpopulation-specific state transitions from multi-sample multi-condition single-cell transcriptomics data. Nature communications, 2020, 11(1): 1-12. \url{https://doi.org/10.1038/s41467-020-19894-4}
+
+Github URL: \url{https://github.com/HelenaLC/muscat}
 }

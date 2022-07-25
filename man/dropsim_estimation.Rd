@@ -22,3 +22,6 @@ detection.
 This function is used to estimate useful parameters from a real dataset by
 using \code{fit_parameters} function in hierarchicell package.
 }
+\references{
+Github URL: \url{https://github.com/marchinilab/dropsim}
+}

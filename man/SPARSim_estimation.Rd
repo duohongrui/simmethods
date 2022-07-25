@@ -4,7 +4,7 @@
 \alias{SPARSim_estimation}
 \title{Estimate Parameters From Real Datasets by SPARSim}
 \usage{
-SPARSim_estimation(ref_data, verbose = FALSE, other_prior, seed)
+SPARSim_estimation(ref_data, verbose = FALSE, other_prior = NULL, seed)
 }
 \arguments{
 \item{ref_data}{A count matrix. Each row represents a gene and each column
@@ -15,8 +15,8 @@ represents a cell.}
 \item{other_prior}{A list with names of certain parameters. Some methods need
 extra parameters to execute the estimation step, so you must input them. In
 simulation step, the number of cells, genes, groups, batches, the percent of
-DEGs and other variables are usually customed, so before simulating a dataset
-you must point it out.}
+DEGs are usually customed, so before simulating a dataset you must point it out.
+See \code{Details} below for more information.}
 
 \item{seed}{An integer of a random seed.}
 }

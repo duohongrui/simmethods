@@ -15,8 +15,8 @@ represents a cell.}
 \item{other_prior}{A list with names of certain parameters. Some methods need
 extra parameters to execute the estimation step, so you must input them. In
 simulation step, the number of cells, genes, groups, batches, the percent of
-DEGs and other variables are usually customed, so before simulating a dataset
-you must point it out.}
+DEGs are usually customed, so before simulating a dataset you must point it out.
+See \code{Details} below for more information.}
 
 \item{seed}{An integer of a random seed.}
 }
@@ -27,4 +27,9 @@ detection.
 \description{
 This function is used to estimate useful parameters from a real dataset by
 using \code{sparseDCEstimate} function in Splatter package.
+}
+\references{
+Barron M, Zhang S, Li J. A sparse differential clustering algorithm for tracing cell type changes via single-cell RNA-sequencing data. Nucleic acids research, 2018, 46(3): e14-e14. \url{https://doi.org/10.1093/nar/gkx1113}
+
+CRAN URL: \url{https://cran.rstudio.com/web/packages/SparseDC/index.html}
 }

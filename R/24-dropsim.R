@@ -2,18 +2,18 @@
 #'
 #' This function is used to estimate useful parameters from a real dataset by
 #' using \code{fit_parameters} function in hierarchicell package.
-#'
 #' @param ref_data A count matrix. Each row represents a gene and each column
 #' represents a cell.
 #' @param verbose Logical.
 #' @param seed An integer of a random seed.
-#' @importFrom peakRAM peakRAM
 #' @importFrom dropsim fit_parameters
-#'
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
 #'
+#' @references
+#'
+#' Github URL: <https://github.com/marchinilab/dropsim>
 dropsim_estimation <- function(ref_data,
                                verbose = FALSE,
                                seed){
@@ -64,19 +64,20 @@ dropsim_estimation <- function(ref_data,
 #' @param other_prior A list with names of certain parameters. Some methods need
 #' extra parameters to execute the estimation step, so you must input them. In
 #' simulation step, the number of cells, genes, groups, batches, the percent of
-#' DEGs and other variables are usually customed, so before simulating a dataset
-#' you must point it out.
-#' @param return_format A character. Alternatives choices: list, SingleCellExperiment,
-#' Seurat, h5ad
+#' DEGs are usually customed, so before simulating a dataset you must point it out.
+#' See `Details` below for more information.
+#' @param return_format A character. Alternative choices: list, SingleCellExperiment,
+#' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#'
 #' @importFrom dropsim simulateDGE
-#'
 #' @export
 #'
+#' @references
+#'
+#' Github URL: <https://github.com/marchinilab/dropsim>
 dropsim_simulation <- function(parameters,
-                               other_prior,
+                               other_prior = NULL,
                                return_format,
                                verbose = FALSE,
                                seed

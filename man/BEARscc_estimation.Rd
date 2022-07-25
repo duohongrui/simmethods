@@ -4,7 +4,7 @@
 \alias{BEARscc_estimation}
 \title{Estimate Parameters From Real Datasets by BEARscc}
 \usage{
-BEARscc_estimation(ref_data, verbose = FALSE, other_prior, seed)
+BEARscc_estimation(ref_data, verbose = FALSE, other_prior = NULL, seed)
 }
 \arguments{
 \item{ref_data}{A count matrix. Each row represents a gene and each column
@@ -26,4 +26,11 @@ detection.
 \description{
 This function is used to estimate useful parameters from a real dataset by
 using \code{estimate_noiseparameters} function in BEARscc package.
+}
+\references{
+Severson D T, Owen R P, White M J, et al. BEARscc determines robustness of single-cell clusters using simulated technical replicates. Nature communications, 2018, 9(1): 1-7. \url{https://doi.org/10.1038/s41467-018-03608-y}
+
+Bioconductor URL: \url{https://www.bioconductor.org/packages/release/bioc/html/BEARscc.html}
+
+Github URL: \url{https://github.com/seversond12/BEARscc}
 }

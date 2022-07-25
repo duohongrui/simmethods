@@ -147,7 +147,6 @@ SparseDC_method_definition <- function(...){
       first = "Martin",
       last = "Barron",
       email = "jun.li@nd.edu",
-      github = "benjamin.schuster-boeckler@ludwig.ox.ac.uk",
       orcid = NULL
     ),
     manuscript = manuscript_definition(

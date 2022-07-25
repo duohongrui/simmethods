@@ -6,22 +6,23 @@
 #' @param other_prior A list with names of certain parameters. Some methods need
 #' extra parameters to execute the estimation step, so you must input them. In
 #' simulation step, the number of cells, genes, groups, batches, the percent of
-#' DEGs and other variables are usually customed, so before simulating a dataset
-#' you must point it out.
-#' @param return_format A character. Alternatives choices: list, SingleCellExperiment,
-#' Seurat, h5ad
+#' DEGs are usually customed, so before simulating a dataset you must point it out.
+#' See `Details` below for more information.
+#' @param return_format A character. Alternative choices: list, SingleCellExperiment,
+#' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#'
-#' @importFrom SPsimSeq SPsimSeq
-#' @importFrom assertthat assert_that
-#' @importFrom glue glue
-#' @importFrom SingleCellExperiment counts colData rowData
-#'
 #' @export
 #'
+#' @references
+#' Assefa A T, Vandesompele J, Thas O. SPsimSeq: semi-parametric simulation of bulk and single-cell RNA-sequencing data[J]. Bioinformatics, 2020, 36(10): 3276-3278. <https://doi.org/10.1093/bioinformatics/btaa105>
+#'
+#' Bioconductor URL: <https://www.bioconductor.org/packages/release/bioc/html/SPsimSeq.html>
+#'
+#' Github URL: <https://github.com/CenterForStatistics-UGent/SPsimSeq>
+#'
 SPsimSeq_simulation <- function(ref_data,
-                                other_prior,
+                                other_prior = NULL,
                                 return_format,
                                 verbose = FALSE,
                                 seed
