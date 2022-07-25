@@ -23,13 +23,44 @@
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
+#' @details
+#' In BEARscc, there are some important things that users should know before using
+#' it.
 #'
+#' 1. Make sure that there are spike-in genes in your count matrix. If not, an
+#' error may occur.
+#' 2. BEARscc needs ensembl gene id to execute estimation step, so it is better
+#' to transform the gene id previously. But users can also input official gene id
+#' and the procedure will convert them into ensembl gene id and note that this
+#' step may result in losing some genes when matching gene ids.
+#' 3. If users need the transformation of gene ids, users must input the species
+#' name: mouse or human. And we will match the according database to accomplish
+#' the conversion step.
+#' 4. Another important parameters: dilution.factor, volume
+#' * dilution.factor: The dilution factor to dilute the ERCC spike-in mix liquid.
+#' * volume: The volume (nanoliter) of spike-in mix used in sequencing step.
+#'
+#' For more customed parameters in Splat, please check [BEARscc::estimate_noiseparameters()].
 #' @references
 #' Severson D T, Owen R P, White M J, et al. BEARscc determines robustness of single-cell clusters using simulated technical replicates. Nature communications, 2018, 9(1): 1-7. <https://doi.org/10.1038/s41467-018-03608-y>
 #'
 #' Bioconductor URL: <https://www.bioconductor.org/packages/release/bioc/html/BEARscc.html>
 #'
 #' Github URL: <https://github.com/seversond12/BEARscc>
+#'
+#' @examples
+#' ref_data <- simmethods::data
+#'
+#' other_prior = list(dilution.factor = 50000,
+#'                    volume = 0.1,
+#'                    species = "mouse")
+#'
+#' # estimate_result <- simmethods::BEARscc_estimation(
+#' #   ref_data = ref_data,
+#' #   other_prior = other_prior,
+#' #   verbose = TRUE,
+#' #   seed = 111
+#' # )
 BEARscc_estimation <- function(ref_data,
                                verbose = FALSE,
                                other_prior = NULL,
@@ -73,14 +104,20 @@ BEARscc_estimation <- function(ref_data,
   colnames(ERCC_meta) <- "Transcripts"
   ref_data <- ref_data[-grep(pattern = '^ERCC-', rownames(ref_data)), ]
   ## Gene name transformation
-  ensembl <- biomaRt::useEnsembl(biomart = "genes", dataset = "mmusculus_gene_ensembl")
-
+  if(other_prior[["species"]] == "mouse"){
+    ensembl <- biomaRt::useEnsembl(biomart = "genes", dataset = "mmusculus_gene_ensembl")
+  }else if(other_prior[["species"]] == "human"){
+    ensembl <- biomaRt::useEnsembl(biomart = "genes", dataset = "hsapiens_gene_ensembl")
+  }else{
+    stop("You do not input species or the species name is not human/mouse.")
+  }
   id_convert <- biomaRt::getBM(attributes = c("ensembl_gene_id",
                                               "transcript_biotype",
                                               "external_gene_name"), mart = ensembl) %>%
     dplyr::filter("external_gene_name" != "")
   gene_filter <- id_convert$external_gene_name[stats::na.omit(match(rownames(ref_data),
                                                                     id_convert$external_gene_name))]
+  cat(glue::glue("In gene id conversion step, {nrow(ref_data)-(length(gene_filter)+nrow(ERCC_count))} are filtered, {length(gene_filter)+nrow(ERCC_count)} genes are retained."))
   ref_data <- ref_data[gene_filter, ]
   rownames(ref_data) <- id_convert$ensembl_gene_id[stats::na.omit(match(rownames(ref_data),
                                                                   id_convert$external_gene_name))]
@@ -139,13 +176,37 @@ BEARscc_estimation <- function(ref_data,
 #' @param seed A random seed.
 #' @importFrom BEARscc simulate_replicates
 #' @export
-#'
+#' @details
+#' In BEARscc, users can not even set the number of cell and genes. But some other
+#' unusually used parameters can be found in [BEARscc::simulate_replicates()]
 #' @references
 #' Severson D T, Owen R P, White M J, et al. BEARscc determines robustness of single-cell clusters using simulated technical replicates. Nature communications, 2018, 9(1): 1-7. <https://doi.org/10.1038/s41467-018-03608-y>
 #'
 #' Bioconductor URL: <https://www.bioconductor.org/packages/release/bioc/html/BEARscc.html>
 #'
 #' Github URL: <https://github.com/seversond12/BEARscc>
+#'
+#' @examples
+#' ref_data <- simmethods::data
+#'
+#' other_prior = list(dilution.factor = 50000,
+#'                    volume = 0.1,
+#'                    species = "mouse")
+#'
+#' # estimate_result <- simmethods::BEARscc_estimation(
+#' #   ref_data = ref_data,
+#' #   other_prior = other_prior,
+#' #   verbose = TRUE,
+#' #   seed = 111
+#' # )
+#' #
+#' # simulate_result <- simmethods::BEARscc_simulation(
+#' #   parameters = estimate_result[["estimate_result"]],
+#' #   other_prior = NULL,
+#' #   return_format = "list",
+#' #   verbose = TRUE,
+#' #   seed = 111
+#' # )
 BEARscc_simulation <- function(parameters,
                                other_prior = NULL,
                                return_format,
@@ -194,7 +255,9 @@ BEARscc_simulation <- function(parameters,
   ##############################################################################
   counts <- simulate_result@metadata[["simulated_replicates"]][["Iteration_1"]]
   col_data <- data.frame("cell_name" = colnames(counts))
+  rownames(col_data) <- col_data$cell_name
   row_data <- data.frame("gene_name" = rownames(counts))
+  rownames(row_data) <- row_data$gene_name
   simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
                                                                 colData = col_data,
                                                                 rowData = row_data)

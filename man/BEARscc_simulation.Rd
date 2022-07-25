@@ -31,6 +31,32 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \description{
 Simulate Datasets by BEARscc
 }
+\details{
+In BEARscc, users can not even set the number of cell and genes. But some other
+unusually used parameters can be found in \code{\link[BEARscc:simulate_replicates]{BEARscc::simulate_replicates()}}
+}
+\examples{
+ref_data <- simmethods::data
+
+other_prior = list(dilution.factor = 50000,
+                   volume = 0.1,
+                   species = "mouse")
+
+# estimate_result <- simmethods::BEARscc_estimation(
+#   ref_data = ref_data,
+#   other_prior = other_prior,
+#   verbose = TRUE,
+#   seed = 111
+# )
+#
+# simulate_result <- simmethods::BEARscc_simulation(
+#   parameters = estimate_result[["estimate_result"]],
+#   other_prior = NULL,
+#   return_format = "list",
+#   verbose = TRUE,
+#   seed = 111
+# )
+}
 \references{
 Severson D T, Owen R P, White M J, et al. BEARscc determines robustness of single-cell clusters using simulated technical replicates. Nature communications, 2018, 9(1): 1-7. \url{https://doi.org/10.1038/s41467-018-03608-y}
 
