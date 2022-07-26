@@ -49,9 +49,9 @@ ESCO_estimation <- function(ref_data,
     other_prior[["cellinfo"]] <- other_prior[["group.condition"]]
   }
   other_prior[["params"]] <- ESCO::newescoParams()
-  other_prior[["dirname"]] <- "./"
+  other_prior[["dirname"]] <- tempdir()
   ## tree
-  if(other_prior[["tree"]] | other_prior[["paths"]]){
+  if(!is.null(other_prior[["tree"]]) | !is.null(other_prior[["paths"]])){
     tree <- simutils::make_trees(ref_data = ref_data,
                                  group = other_prior[["cellinfo"]],
                                  is_Newick = FALSE,
@@ -137,8 +137,16 @@ ESCO_simulation <- function(parameters,
     tree <- parameters[["tree"]]
     group <- parameters[["group"]]
     parameters <- parameters[["estimate_result"]]
+  }else{
+    group <- NULL
+    tree <- NULL
   }
   assertthat::assert_that(class(parameters) == "escoParams")
+  if(!is.null(other_prior)){
+    parameters <- simutils::set_parameters(parameters = parameters,
+                                           other_prior = other_prior,
+                                           method = "ESCO")
+  }
   # nCells
   if(!is.null(other_prior[["nCells"]])){
     parameters <- splatter::setParam(parameters, name = "nCells", value = other_prior[["nCells"]])
@@ -157,12 +165,14 @@ ESCO_simulation <- function(parameters,
                                      value = other_prior[["prob.group"]])
 
   }else{
-    nGroups <- splatter::getParam(parameters, name = "nGroups")
-    prob.group <- c(rep(1/nGroups, nGroups-1),
-                    1 - c(1/nGroups * c(nGroups-1)))
-    parameters <- splatter::setParam(parameters,
-                                     name = "group.prob",
-                                     value = prob.group)
+    if(!is.null(tree)){
+      nGroups <- splatter::getParam(parameters, name = "nGroups")
+      prob.group <- c(rep(1/nGroups, nGroups-1),
+                      1 - c(1/nGroups * c(nGroups-1)))
+      parameters <- splatter::setParam(parameters,
+                                       name = "group.prob",
+                                       value = prob.group)
+    }
   }
   # Get params to check
   params_check <- splatter::getParams(parameters, c("nCells",
@@ -175,7 +185,6 @@ ESCO_simulation <- function(parameters,
   cat(glue::glue("nCells: {params_check[['nCells']]}"), "\n")
   cat(glue::glue("nGenes: {params_check[['nGenes']]}"), "\n")
   cat(glue::glue("nGroups: {params_check[['nGroups']]}"), "\n")
-  cat(glue::glue("prob.group: {params_check[['group.prob']]}"), "\n")
   cat(glue::glue("de.group: {params_check[['de.prob']]}"), "\n")
   ##############################################################################
   ####                            Simulation                                 ###
@@ -185,6 +194,9 @@ ESCO_simulation <- function(parameters,
   }
   # Seed
   parameters <- splatter::setParam(parameters, name = "seed", value = seed)
+  parameters <- splatter::setParam(parameters,
+                                   name = "deall.prob",
+                                   value = params_check[['de.prob']])
   # Estimation
   tryCatch({
     if(!is.null(other_prior[["tree"]])){
@@ -199,7 +211,7 @@ ESCO_simulation <- function(parameters,
       if(params_check[["nGroups"]] == 1){
         submethod <- "single"
       }else if(params_check[["nGroups"]] != 1){
-        submethod <- "groups"
+        submethod <- "group"
       }
     }
     simulate_detection <- peakRAM::peakRAM(
@@ -212,6 +224,35 @@ ESCO_simulation <- function(parameters,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
+  # counts
+  counts <- as.matrix(SingleCellExperiment::counts(simulate_result))
+  # col_data
+  col_data <- as.data.frame(SummarizedExperiment::colData(simulate_result))
+  if(params_check[['nGroups']] == 1){
+    col_data <- data.frame("cell_name" = colnames(counts),
+                           "group" = rep("Group1", ncol(counts)))
+  }else{
+    col_data <- data.frame("cell_name" = colnames(counts),
+                           "group" = col_data$Group)
+  }
+  rownames(col_data) <- col_data$cell_name
+  # row_data
+  row_data <- as.data.frame(SummarizedExperiment::rowData(simulate_result))
+  if(params_check[['nGroups']] == 1){
+    row_data <- data.frame("gene_name" = rownames(counts))
+    rownames(row_data) <- row_data$gene_name
+  }else{
+    group_fac <- row_data[, grep(colnames(row_data), pattern = "^DEFac")]
+    total_sum <- rowSums(group_fac)
+    de_gene <- ifelse(total_sum == params_check[['nGroups']], "no", "yes")
+    row_data[, 2] <- de_gene
+    row_data <- row_data[, -c(3:5, ncol(row_data))]
+    colnames(row_data) <- c("gene_name", "de_gene", colnames(group_fac))
+  }
+  # Establish SingleCellExperiment
+  simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
+                                                                colData = col_data,
+                                                                rowData = row_data)
   simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
                                                return_format = return_format)
 
