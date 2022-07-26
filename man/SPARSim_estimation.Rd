@@ -37,7 +37,7 @@ each cell belongs to. See \code{Examples} below for more.
 \examples{
 ref_data <- simmethods::data
 
-# Estimation without cell group information
+# 1) Estimation without cell group information
 estimate_result <- simmethods::SPARSim_estimation(
   ref_data = ref_data,
   other_prior = NULL,
@@ -45,7 +45,7 @@ estimate_result <- simmethods::SPARSim_estimation(
   seed = 111
 )
 
-# Estimation with cell group information (Note that an integer vector to specify
+# 2) Estimation with cell group information (Note that an integer vector to specify
 # which condition that each cell belongs to)
 group_condition <- as.numeric(simmethods::group_condition)
 estimate_result <- simmethods::SPARSim_estimation(
@@ -54,6 +54,23 @@ estimate_result <- simmethods::SPARSim_estimation(
   verbose = TRUE,
   seed = 111
 )
+
+# 3) Users can also utilize spike-in genes to estimate parameters. In this case, users
+## must input dilution.factor and volume (nanoliter) parameters. Note that the
+## reference matrix must contain spike-in gene counts.
+ref_data <- simmethods::data
+
+group_condition <- as.numeric(simmethods::group_condition)
+estimate_result <- simmethods::SPARSim_estimation(
+  ref_data = ref_data,
+  other_prior = list(group.condition = group_condition,
+                     dilution.factor = 50000,
+                     volume = 0.01),
+  verbose = TRUE,
+  seed = 111
+)
+## check spike-in parameters
+spikein_params <- estimate_result[["estimate_result"]][["SPARSim_spikein_parameter"]]
 }
 \references{
 Baruzzo G, Patuzzi I, Di Camillo B. SPARSim single cell: a count data simulator for scRNA-seq data. Bioinformatics, 2020, 36(5): 1468-1475. \url{https://doi.org/10.1093/bioinformatics/btz752}
