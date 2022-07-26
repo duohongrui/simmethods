@@ -70,7 +70,7 @@ SPsimSeq_simulation <- function(ref_data,
   }
   ## fc
   if(is.null(other_prior[["fc.group"]])){
-    other_prior[["lfc.thrld"]] <- 0.5
+    other_prior[["lfc.thrld"]] <- 2
   }else{
     other_prior[["lfc.thrld"]] <- other_prior[["fc.group"]]
   }
@@ -88,6 +88,7 @@ SPsimSeq_simulation <- function(ref_data,
   cat(glue::glue("nGenes: {simulate_formals[['n.genes']]}"), "\n")
   cat(glue::glue("nGroups: {length(unique(simulate_formals[['group']]))}"), "\n")
   cat(glue::glue("de.prob: {simulate_formals[['pDE']]}"), "\n")
+  cat(glue::glue("fc.group: {other_prior[['lfc.thrld']]}"), "\n")
   cat(glue::glue("nBatches: {length(unique(simulate_formals[['batch']]))}"), "\n")
 
   ##############################################################################
@@ -109,13 +110,29 @@ SPsimSeq_simulation <- function(ref_data,
   ####                        Format Conversion                              ###
   ##############################################################################
   ## counts
-  colnames(simulate_result[[1]]) <- paste0("Cell", 1:ncol(simulate_result[[1]]))
-  rownames(simulate_result[[1]]) <- paste0("Gene", 1:nrow(simulate_result[[1]]))
-  ## col_data
-  simulate_result[[1]]$Batch <- paste0("Batch", simulate_result[[1]]$Batch)
-  simulate_result[[1]]$Group <- paste0("Group", simulate_result[[1]]$Group)
+  counts <- counts(simulate_result[[1]])
+  colnames(counts) <- paste0("Cell", 1:ncol(counts))
+  rownames(counts) <- paste0("Gene", 1:nrow(counts))
+  ## cell information
+  col_data <- data.frame("cell_name" = colnames(counts),
+                         "group" = paste0("Group", simulate_result[[1]]$Group),
+                         "batch" = paste0("Batch", simulate_result[[1]]$Batch))
+  rownames(col_data) <- col_data$cell_name
+  ## gene information
+  row_data <- as.data.frame(SummarizedExperiment::rowData(simulate_result[[1]]))
+  if(is.null(other_prior[["group.condition"]])){
+    row_data <- data.frame("gene_name" = rownames(counts))
+  }else{
+    row_data <- data.frame("gene_name" = rownames(counts),
+                           "de_gene" = ifelse(row_data$DE.ind, "yes", "no"))
+  }
+  rownames(row_data) <- row_data$gene_name
+  # Establish SingleCellExperiment
+  simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
+                                                                colData = col_data,
+                                                                rowData = row_data)
   ## Data format conversion
-  simulate_result <- simutils::data_conversion(SCE_object = simulate_result[[1]],
+  simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
                                                return_format = return_format)
 
   ##############################################################################

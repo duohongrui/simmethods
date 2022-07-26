@@ -73,7 +73,7 @@ SPsimSeq_method_definition <- function(...){
     ),
     param_numeric(
       id = "lfc.thrld",
-      default = 0.5,
+      default = 2,
       lower = 0,
       border = FALSE,
       description = "A positive numeric value for the minimum absolute log-fold-change for selecting candidate DE genes in the source data (when group is not NULL, pDE>0 and cand.DE.genes is NULL).",
