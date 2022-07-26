@@ -74,7 +74,7 @@ col_data <- simulate_result[["simulate_result"]][["col_meta"]]
 table(col_data$group)
 ## gene information
 row_data <- simulate_result[["simulate_result"]][["row_meta"]]
-table(row_data$de_genes)[2]/4000
+table(row_data$de_gene)[2]/4000
 
 ## 2) In SPARSim, users can simulate batches when batch.condition parameter is available
 simulate_result <- simmethods::SPARSim_simulation(

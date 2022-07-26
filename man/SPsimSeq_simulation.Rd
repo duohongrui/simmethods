@@ -33,6 +33,97 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \description{
 Simulate Datasets by SPsimSeq
 }
+\details{
+In addtion to simulate datasets with default parameters, users want to simulate
+other kinds of datasets, e.g. a counts matrix with 2 or more cell groups. In
+SPsimSeq, you can set extra parameters to simulate datasets.
+
+The customed parameters you can set are below:
+\enumerate{
+\item nCells. In SPsimSeq, you can set nCells directly. For example, if you want to simulate 1000 cells, you can type \code{other_prior = list(nCells = 1000)}.
+\item nGenes. You can directly set \code{other_prior = list(nGenes = 5000)} to simulate 5000 genes.
+\item group.condition. You can input cell group information as an integer vector to specify which group that each cell belongs to. See \code{Examples}.
+\item de.prob. You can directly set \code{other_prior = list(de.prob = 0.2)} to simulate DEGs that account for 20 percent of all genes.
+\item fc.group. You can directly set \code{other_prior = list(fc.group = 2)} to specify the minimum fold change of DEGs.
+\item batch.condition. You can input cell batch information as an integer vector to specify which batch that each cell belongs to. See \code{Examples}.
+}
+
+For more customed parameters in SPsimSeq, please check \code{\link[SPsimSeq:SPsimSeq]{SPsimSeq::SPsimSeq()}}.
+}
+\examples{
+# SPsimSeq can simulate datasets directly without estimation step.
+ref_data <- simmethods::data
+
+# 1) Simulate with default parameters
+simulate_result <- simmethods::SPsimSeq_simulation(
+  ref_data = ref_data,
+  other_prior = NULL,
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111
+)
+
+## counts
+counts <- simulate_result[["simulate_result"]][["count_data"]]
+dim(counts)
+## cell information
+col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+table(col_data$group)
+table(col_data$batch)
+
+
+# 2) Simulate two groups (20\% proportion of DEGs, minimum 2 fold change)
+group_condition <- as.numeric(simmethods::group_condition)
+simulate_result <- simmethods::SPsimSeq_simulation(
+  ref_data = ref_data,
+  other_prior = list(nCells = 1000,
+                     nGenes = 2000,
+                     group.condition = group_condition,
+                     de.prob = 0.2,
+                     fc.group = 2),
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111
+)
+
+## counts
+counts <- simulate_result[["simulate_result"]][["count_data"]]
+dim(counts)
+## cell information
+col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+table(col_data$group)
+table(col_data$batch)
+## gene information
+row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+table(row_data$de_gene)[2]/2000
+
+
+# 3) Simulate two batches
+group_condition <- as.numeric(simmethods::group_condition)
+simulate_result <- simmethods::SPsimSeq_simulation(
+  ref_data = ref_data,
+  other_prior = list(nCells = 1000,
+                     nGenes = 2000,
+                     group.condition = group_condition,
+                     de.prob = 0.2,
+                     fc.group = 2,
+                     batch.condition = sample(1:2, ncol(ref_data), replace = TRUE)),
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111
+)
+
+## counts
+counts <- simulate_result[["simulate_result"]][["count_data"]]
+dim(counts)
+## cell information
+col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+table(col_data$group)
+table(col_data$batch)
+## gene information
+row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+table(row_data$de_gene)[2]/2000
+}
 \references{
 Assefa A T, Vandesompele J, Thas O. SPsimSeq: semi-parametric simulation of bulk and single-cell RNA-sequencing data\link{J}. Bioinformatics, 2020, 36(10): 3276-3278. \url{https://doi.org/10.1093/bioinformatics/btaa105}
 

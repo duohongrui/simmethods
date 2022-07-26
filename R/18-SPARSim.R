@@ -222,7 +222,7 @@ SPARSim_estimation <- function(ref_data,
 #' table(col_data$group)
 #' ## gene information
 #' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
-#' table(row_data$de_genes)[2]/4000
+#' table(row_data$de_gene)[2]/4000
 #'
 #' ## 2) In SPARSim, users can simulate batches when batch.condition parameter is available
 #' simulate_result <- simmethods::SPARSim_simulation(
@@ -506,12 +506,12 @@ SPARSim_simulation <- function(parameters,
       fc <- fold_change_multiplier_record
     }
     row_data <- data.frame("gene_name" = rownames(counts),
-                           "de_genes" = de_genes,
+                           "de_gene" = de_genes,
                            "fc_gene" = fc,
-                           "de_genes_group" = c(rep(paste0("Group1_Group",
-                                                           2:(length(DE_group)+1)),
-                                                    DE_group),
-                                                rep("Group1", nrow(counts)-DE_gene_number)))
+                           "de_gene_group" = c(rep(paste0("Group1_Group",
+                                                          2:(length(DE_group)+1)),
+                                                   DE_group),
+                                               rep("Group1", nrow(counts)-DE_gene_number)))
   }else{
     row_data <- data.frame("gene_name" = rownames(counts))
   }
