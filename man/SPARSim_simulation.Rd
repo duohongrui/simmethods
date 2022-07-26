@@ -31,6 +31,69 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \description{
 Simulate Datasets by SPARSim
 }
+\details{
+In addtion to simulate datasets with default parameters, users want to simulate
+other kinds of datasets, e.g. a counts matrix with 2 or more cell groups. In
+SPARSim, you can set extra parameters to simulate datasets.
+
+The customed parameters you can set are below:
+\enumerate{
+\item de.prob. You can directly set \code{other_prior = list(de.prob = 0.2)} to simulate DEGs that account for 20 percent of all genes.
+\item fc.group. You can directly set \code{other_prior = list(fc.group = 3)} to specify the fold change of DEGs.
+\item batch.condition. You can input the batch vector that each cell belongs to and set \code{other_prior = list(batch.condition = xxxx)}. This parameter also determine the number of batches.
+}
+
+If users want to simulate groups, they should estimate group parameters by inputting \code{group.condition} parameter previously. Otherwise, thay can not simulate groups.
+
+For more customed parameters in SPARSim, please check \code{\link[SPARSim:SPARSim_simulation]{SPARSim::SPARSim_simulation()}}.
+}
+\examples{
+ref_data <- simmethods::data
+## Estimation
+group_condition <- as.numeric(simmethods::group_condition)
+estimate_result <- simmethods::SPARSim_estimation(
+  ref_data = ref_data,
+  other_prior = list(group.condition = group_condition),
+  verbose = TRUE,
+  seed = 111
+)
+## Simulation (20\% proportion of DEGs, fold change 3)
+simulate_result <- simmethods::SPARSim_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  other_prior = list(de.prob = 0.2,
+                     fc.group = 3),
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111
+)
+## counts
+counts <- simulate_result[["simulate_result"]][["count_data"]]
+dim(counts)
+## cell information
+col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+table(col_data$group)
+## gene information
+row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+table(row_data$de_genes)[2]/4000
+
+## In SPARSim, users can simulate batches when batch.condition parameter is available
+simulate_result <- simmethods::SPARSim_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  other_prior = list(de.prob = 0.2,
+                     fc.group = 3,
+                     batch.condition = sample(1:3, 160, replace = TRUE)),
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111
+)
+## counts
+counts <- simulate_result[["simulate_result"]][["count_data"]]
+dim(counts)
+## cell information
+col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+table(col_data$group)
+table(col_data$batch)
+}
 \references{
 Baruzzo G, Patuzzi I, Di Camillo B. SPARSim single cell: a count data simulator for scRNA-seq data. Bioinformatics, 2020, 36(5): 1468-1475. \url{https://doi.org/10.1093/bioinformatics/btz752}
 
