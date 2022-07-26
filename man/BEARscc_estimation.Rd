@@ -47,7 +47,7 @@ the conversion step.
 \item volume: The volume (nanoliter) of spike-in mix used in sequencing step.
 }
 
-For more customed parameters in Splat, please check \code{\link[BEARscc:estimate_noiseparameters]{BEARscc::estimate_noiseparameters()}}.
+For more customed parameters in BEARscc, please check \code{\link[BEARscc:estimate_noiseparameters]{BEARscc::estimate_noiseparameters()}}.
 }
 \examples{
 ref_data <- simmethods::data

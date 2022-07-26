@@ -31,3 +31,8 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \description{
 Simulate Datasets by SPARSim
 }
+\references{
+Baruzzo G, Patuzzi I, Di Camillo B. SPARSim single cell: a count data simulator for scRNA-seq data. Bioinformatics, 2020, 36(5): 1468-1475. \url{https://doi.org/10.1093/bioinformatics/btz752}
+
+Gitlab URL: \url{https://gitlab.com/sysbiobig/sparsim}
+}

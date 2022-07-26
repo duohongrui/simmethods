@@ -28,3 +28,35 @@ detection.
 This function is used to estimate useful parameters from a real dataset by
 using \code{SPARSim_estimate_parameter_from_data} function in SPARSim package.
 }
+\details{
+In SPARSim, the information of cell group condition can be input if neccessary
+by \code{other_prior = list(group.condition = xxx)}. Note that the cell group condition
+must be an integer vactor (e.g. 1, 2, 3, ...) to specify which condition that
+each cell belongs to. See \code{Examples} below for more.
+}
+\examples{
+ref_data <- simmethods::data
+
+# Estimation without cell group information
+estimate_result <- simmethods::SPARSim_estimation(
+  ref_data = ref_data,
+  other_prior = NULL,
+  verbose = TRUE,
+  seed = 111
+)
+
+# Estimation with cell group information (Note that an integer vector to specify
+# which condition that each cell belongs to)
+group_condition <- as.numeric(simmethods::group_condition)
+estimate_result <- simmethods::SPARSim_estimation(
+  ref_data = ref_data,
+  other_prior = list(group.condition = group_condition),
+  verbose = TRUE,
+  seed = 111
+)
+}
+\references{
+Baruzzo G, Patuzzi I, Di Camillo B. SPARSim single cell: a count data simulator for scRNA-seq data. Bioinformatics, 2020, 36(5): 1468-1475. \url{https://doi.org/10.1093/bioinformatics/btz752}
+
+Gitlab URL: \url{https://gitlab.com/sysbiobig/sparsim}
+}

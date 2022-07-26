@@ -18,7 +18,37 @@
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
+#' @details
+#' In SPARSim, the information of cell group condition can be input if neccessary
+#' by `other_prior = list(group.condition = xxx)`. Note that the cell group condition
+#' must be an integer vactor (e.g. 1, 2, 3, ...) to specify which condition that
+#' each cell belongs to. See `Examples` below for more.
 #'
+#' @references
+#' Baruzzo G, Patuzzi I, Di Camillo B. SPARSim single cell: a count data simulator for scRNA-seq data. Bioinformatics, 2020, 36(5): 1468-1475. <https://doi.org/10.1093/bioinformatics/btz752>
+#'
+#' Gitlab URL: <https://gitlab.com/sysbiobig/sparsim>
+#'
+#' @examples
+#' ref_data <- simmethods::data
+#'
+#' # Estimation without cell group information
+#' estimate_result <- simmethods::SPARSim_estimation(
+#'   ref_data = ref_data,
+#'   other_prior = NULL,
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#'
+#' # Estimation with cell group information (Note that an integer vector to specify
+#' # which condition that each cell belongs to)
+#' group_condition <- as.numeric(simmethods::group_condition)
+#' estimate_result <- simmethods::SPARSim_estimation(
+#'   ref_data = ref_data,
+#'   other_prior = list(group.condition = group_condition),
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 SPARSim_estimation <- function(ref_data,
                                verbose = FALSE,
                                other_prior = NULL,
@@ -100,8 +130,13 @@ SPARSim_estimation <- function(ref_data,
 #' @param seed A random seed.
 #' @import SPARSim
 #' @importFrom stats runif
+#' @importFrom BiocGenerics get
 #' @export
 #'
+#' @references
+#' Baruzzo G, Patuzzi I, Di Camillo B. SPARSim single cell: a count data simulator for scRNA-seq data. Bioinformatics, 2020, 36(5): 1468-1475. <https://doi.org/10.1093/bioinformatics/btz752>
+#'
+#' Gitlab URL: <https://gitlab.com/sysbiobig/sparsim>
 SPARSim_simulation <- function(parameters,
                                other_prior = NULL,
                                return_format,
@@ -180,47 +215,59 @@ SPARSim_simulation <- function(parameters,
     other_prior[["batch_parameter"]] <- SPARSim_batch_parameter
   }
   ## DEGs
-  if(!is.null(other_prior[["fc.group"]]) | !is.null(other_prior[["de.prob"]])){
-    if(length(parameters) != 2){
-      stop("We only now support 2 groups when you want to simulate DEGs, please set group.condition before the data is estimated")
-    }
-    cond_A_param <- parameters[[1]]
-
+  if(length(parameters) != 1){
+    ## gene number
+    n_genes <- length(parameters[[1]][['intensity']])
+    ## fold change
     if(is.null(other_prior[["fc.group"]])){
       cat("You do not point the fold change of DEGs between two groups, we will set it as 2 \n")
       other_prior[["fc.group"]] <- 2
     }
+    ## proportion of DEGs
     if(is.null(other_prior[["de.prob"]])){
       cat("You do not point the percent of DEGs, we will set it as 0.1 \n")
       other_prior[["de.prob"]] <- 0.1
     }
-    n_genes <- length(parameters[[1]][['intensity']])
 
-    set.seed(seed)
-    DE_multiplier <- c(stats::runif(n = ceiling(n_genes*other_prior[["de.prob"]]/2),
-                                    min = 1/other_prior[["fc.group"]]-0.1,
-                                    max = 1/other_prior[["fc.group"]]),
-                       stats::runif(n = floor(n_genes*other_prior[["de.prob"]]/2),
-                                    min = other_prior[["fc.group"]],
-                                    max = other_prior[["fc.group"]]+0.1))
-    set.seed(seed)
-    not_DE_multiplier <- stats::runif(n = n_genes-length(DE_multiplier),
-                                      min = 1/other_prior[["fc.group"]]+0.1,
-                                      max = other_prior[["fc.group"]]-0.1)
+    DE_gene_number <- round(n_genes * other_prior[["de.prob"]])
+    DE_group <- simutils::proportionate(number = DE_gene_number,
+                                        result_sum_strict = DE_gene_number,
+                                        prop = rep(1/(length(parameters)-1), (length(parameters)-1)),
+                                        prop_sum_strict = 1,
+                                        digits = 0)
 
-    # In this example, the first 1000 genes will be the DE ones, while the last 16128 will be the not DE ones
-    fold_change_multiplier <- c(DE_multiplier, not_DE_multiplier)
+    cond_A_param <- parameters[[1]]
+    SPARSim_param_with_DE <- list(cond_A = cond_A_param)
+    for(group in seq_len(length(parameters)-1)){
 
+      set.seed(seed)
+      DE_multiplier <- c(stats::runif(n = ceiling(DE_group[group]/2),
+                                      min = 1/other_prior[["fc.group"]],
+                                      max = 1/other_prior[["fc.group"]]),
+                         stats::runif(n = floor(DE_group[group]/2),
+                                      min = other_prior[["fc.group"]],
+                                      max = other_prior[["fc.group"]]))
+      if(group >= 2){
+        pre_DE <- sum(DE_group[1:(group-1)])
+        fold_change_multiplier <- c(rep(1, pre_DE),
+                                    DE_multiplier,
+                                    rep(1, n_genes-pre_DE-length(DE_multiplier)))
+      }else{
+        not_DE_multiplier <- rep(1, n_genes-DE_group[group])
+        fold_change_multiplier <- c(DE_multiplier, not_DE_multiplier)
+      }
+      cond_name <- paste0("cond_", LETTERS[group+1], "_param")
+      assign(cond_name, parameters[[group+1]])
 
-    ## STEP 3: Use SPARSim built-in function to create a simulation parameter with DE genes
-    cond_B_param <- parameters[[2]]
-    cond_B_param <- SPARSim::SPARSim_create_DE_genes_parameter(sim_param = cond_A_param,
-                                                               fc_multiplier = fold_change_multiplier,
-                                                               N_cells = length(cond_B_param[["lib_size"]]),
-                                                               lib_size_DE = cond_B_param[["lib_size"]],
-                                                               condition_name = "cond_B")
-
-    SPARSim_param_with_DE <- list(cond_A = cond_A_param, cond_B = cond_B_param)
+      assign(cond_name, SPARSim::SPARSim_create_DE_genes_parameter(
+        sim_param = cond_A_param,
+        fc_multiplier = fold_change_multiplier,
+        N_cells = length(BiocGenerics::get(cond_name)[["lib_size"]]),
+        lib_size_DE = BiocGenerics::get(cond_name)[["lib_size"]],
+        condition_name = paste0("cond_", LETTERS[group+1]))
+      )
+      SPARSim_param_with_DE[[paste0("cond_", LETTERS[group+1])]] <- BiocGenerics::get(cond_name)
+    }
     other_prior[["dataset_parameter"]] <- SPARSim_param_with_DE
   }
 
@@ -267,7 +314,6 @@ SPARSim_simulation <- function(parameters,
   cat(glue::glue("de.prob: {de.prob}"), "\n")
   cat(glue::glue("nBatches: {nBatches}"), "\n")
 
-
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -288,12 +334,15 @@ SPARSim_simulation <- function(parameters,
   ##############################################################################
   ## counts
   counts <- simulate_result[["count_matrix"]]
-  group_index <- which(stringr::str_extract_all(colnames(counts), pattern = "^cond_B", simplify = T) == "cond_B")
-  if(S4Vectors::isEmpty(group_index)){
-    group <- rep("Group1", ncol(counts))
-  }else{
-    group <- c(rep("Group1", min(group_index)-1),
-               rep("Group2", ncol(counts)-min(group_index)+1))
+
+  group_name_tmp <- stringr::str_split(colnames(counts),
+                                       pattern = "_",
+                                       simplify = TRUE)[, 2]
+  group_name <- unique(group_name_tmp)
+  group <- rep("Group1", ncol(counts))
+  for(i in 1:length(group_name)){
+    index <- which(group_name[i] == group_name_tmp)
+    group[index] <- rep(paste0("Group", i), length(index))
   }
 
   colnames(counts) <- paste0("Cell", 1:ncol(counts))
@@ -311,13 +360,12 @@ SPARSim_simulation <- function(parameters,
 
 
   ## row_data
-  if(!is.null(other_prior[["fc.group"]])){
-    de_genes <- c(rep(TRUE, length(DE_multiplier)),
-                  rep(FALSE, length(not_DE_multiplier)))
-    fc <- c(DE_multiplier, not_DE_multiplier)
+  if(length(parameters) != 1){
+    de_genes <- ifelse(fold_change_multiplier == 1, "no", "yes")
+    fc <- fold_change_multiplier
     row_data <- data.frame("gene_name" = rownames(counts),
                            "de_genes" = de_genes,
-                           "fc" = fc)
+                           "fc_gene" = fc)
   }else{
     row_data <- data.frame("gene_name" = rownames(counts))
   }

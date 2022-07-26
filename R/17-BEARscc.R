@@ -41,7 +41,7 @@
 #' * dilution.factor: The dilution factor to dilute the ERCC spike-in mix liquid.
 #' * volume: The volume (nanoliter) of spike-in mix used in sequencing step.
 #'
-#' For more customed parameters in Splat, please check [BEARscc::estimate_noiseparameters()].
+#' For more customed parameters in BEARscc, please check [BEARscc::estimate_noiseparameters()].
 #' @references
 #' Severson D T, Owen R P, White M J, et al. BEARscc determines robustness of single-cell clusters using simulated technical replicates. Nature communications, 2018, 9(1): 1-7. <https://doi.org/10.1038/s41467-018-03608-y>
 #'
