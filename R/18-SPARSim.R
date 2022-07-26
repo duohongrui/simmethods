@@ -249,12 +249,17 @@ SPARSim_simulation <- function(parameters,
                                       max = other_prior[["fc.group"]]))
       if(group >= 2){
         pre_DE <- sum(DE_group[1:(group-1)])
+        if(group < 3){
+          fold_change_multiplier_record <- fold_change_multiplier
+        }
+        fold_change_multiplier_record[(pre_DE+1):(pre_DE+length(DE_multiplier))] <- DE_multiplier
         fold_change_multiplier <- c(rep(1, pre_DE),
                                     DE_multiplier,
                                     rep(1, n_genes-pre_DE-length(DE_multiplier)))
       }else{
         not_DE_multiplier <- rep(1, n_genes-DE_group[group])
         fold_change_multiplier <- c(DE_multiplier, not_DE_multiplier)
+        fold_change_multiplier_record <- NULL
       }
       cond_name <- paste0("cond_", LETTERS[group+1], "_param")
       assign(cond_name, parameters[[group+1]])
@@ -358,18 +363,25 @@ SPARSim_simulation <- function(parameters,
                            "group" = group)
   }
 
-
   ## row_data
   if(length(parameters) != 1){
-    de_genes <- ifelse(fold_change_multiplier == 1, "no", "yes")
-    fc <- fold_change_multiplier
+    if(is.null(fold_change_multiplier_record)){
+      de_genes <- ifelse(fold_change_multiplier == 1, "no", "yes")
+      fc <- fold_change_multiplier
+    }else{
+      de_genes <- ifelse(fold_change_multiplier_record == 1, "no", "yes")
+      fc <- fold_change_multiplier_record
+    }
     row_data <- data.frame("gene_name" = rownames(counts),
                            "de_genes" = de_genes,
-                           "fc_gene" = fc)
+                           "fc_gene" = fc,
+                           "de_genes_group" = c(rep(paste0("Group1_Group",
+                                                           2:(length(DE_group)+1)),
+                                                    DE_group),
+                                                rep("Group1", nrow(counts)-DE_gene_number)))
   }else{
     row_data <- data.frame("gene_name" = rownames(counts))
   }
-
 
   # Establish SingleCellExperiment
   simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
