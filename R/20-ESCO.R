@@ -16,11 +16,32 @@
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
-#'
+#' @details
+#' In ESCO, users can input cell group information when it is available but in this case
+#' ESCO is not stable and may fail to estimate suitable distribution parameters
+#' from real data. See `Examples`.
 #' @references
 #' Tian J, Wang J, Roeder K. ESCO: single cell expression simulation incorporating gene co-expression. Bioinformatics, 2021, 37(16): 2374-2381. <https://doi.org/10.1093/bioinformatics/btab116>
 #'
 #' Github URL: <https://github.com/JINJINT/ESCO>
+#'
+#' @examples
+#' ref_data <- simmethods::data
+#'
+#' estimate_result <- simmethods::ESCO_estimation(ref_data = ref_data,
+#'                                                other_prior = NULL,
+#'                                                verbose = TRUE,
+#'                                                seed = 111)
+#' # If cell group information is available, it can be another prior information.
+#' # But there is a bug in ESCO, and some datasets can not be estimated due to the
+#' # failing estimation of distribution parameters.
+#' # group_condition <- as.numeric(simmethods::group_condition)
+#' # estimate_result <- simmethods::ESCO_estimation(
+#' #   ref_data = ref_data,
+#' #   other_prior = list(group.condition = group_condition),
+#' #   verbose = TRUE,
+#' #   seed = 111
+#' # )
 ESCO_estimation <- function(ref_data,
                             other_prior = NULL,
                             verbose = FALSE,
@@ -110,11 +131,76 @@ ESCO_estimation <- function(ref_data,
 #' @param seed A random seed.
 #' @importFrom ESCO escoEstimate
 #' @export
+#' @details
+#' In addtion to simulate datasets with default parameters, users want to simulate
+#' other kinds of datasets, e.g. a counts matrix with 2 or more cell groups. In
+#' ESCO, you can set extra parameters to simulate datasets.
+#'
+#' The customed parameters you can set are below:
+#' 1. nCells. You can directly set `other_prior = list(nCells = 1000)` to simulate 1000 cells.
+#' 2. nGenes. You can directly set `other_prior = list(nGenes = 5000)` to simulate 5000 genes.
+#' 3. nGroups. You can not directly set `other_prior = list(nGroups = 3)` to simulate 3 groups. Instead, you should set `other_prior = list(prob.group = c(0.2, 0.3, 0.5))` where the sum of group probabilities must equal to 1.
+#' 4. de.prob. You can directly set `other_prior = list(de.prob = 0.2)` to simulate DEGs that account for 20 percent of all genes.
+#' 5. prob.group. You can directly set `other_prior = list(prob.group = c(0.2, 0.3, 0.5))` to assign three proportions of cell groups. Note that the number of groups always equals to the length of the vector.
+#'
+#' For more customed parameters in ESCO, please check [ESCO::escoParams()].
 #' @references
 #' Tian J, Wang J, Roeder K. ESCO: single cell expression simulation incorporating gene co-expression. Bioinformatics, 2021, 37(16): 2374-2381. <https://doi.org/10.1093/bioinformatics/btab116>
 #'
 #' Github URL: <https://github.com/JINJINT/ESCO>
 #'
+#' @examples
+#' ## Estimation
+#' ref_data <- simmethods::data
+#'
+#' estimate_result <- simmethods::ESCO_estimation(ref_data = ref_data,
+#'                                                other_prior = NULL,
+#'                                                verbose = TRUE,
+#'                                                seed = 111)
+#' # 1) Simulate with default parameters
+#' simulate_result <- simmethods::ESCO_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = NULL,
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#'
+#' ## counts
+#' counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(counts)
+#' ## cell information
+#' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+#' table(col_data$group)
+#'
+#'
+#' # 2) Simulate two groups (20% proportion of DEGs)
+#' simulate_result <- simmethods::ESCO_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(nCells = 1000,
+#'                      nGenes = 2000,
+#'                      de.prob = 0.2,
+#'                      prob.group = c(0.3, 0.7)),
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#'
+#' ## counts
+#' counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(counts)
+#' ## cell information
+#' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+#' table(col_data$group)/1000
+#' ## gene information
+#' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+#' table(row_data$de_gene)[2]/2000
+#' ### The result of ESCO contains the factors of different groups and uses can
+#' ### calculate the fold change by division. For example, the DEFactors of A gene
+#' ### in Group1 and Group2 are respectively 2 and 1, and the fold change of A gene
+#' ### is 2/1=2 or 1/2=0.5.
+#' fc_group1_to_group2 <- row_data$DEFacGroup2/row_data$DEFacGroup1
+#' table(fc_group1_to_group2 != 1)[2]/2000 ## de.prob = 0.2
 ESCO_simulation <- function(parameters,
                             return_format,
                             other_prior = NULL,

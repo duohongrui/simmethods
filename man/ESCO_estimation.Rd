@@ -28,6 +28,29 @@ detection.
 This function is used to estimate useful parameters from a real dataset by
 using \code{escoEstimate} function in ESCO package.
 }
+\details{
+In ESCO, users can input cell group information when it is available but in this case
+ESCO is not stable and may fail to estimate suitable distribution parameters
+from real data. See \code{Examples}.
+}
+\examples{
+ref_data <- simmethods::data
+
+estimate_result <- simmethods::ESCO_estimation(ref_data = ref_data,
+                                               other_prior = NULL,
+                                               verbose = TRUE,
+                                               seed = 111)
+# If cell group information is available, it can be another prior information.
+# But there is a bug in ESCO, and some datasets can not be estimated due to the
+# failing estimation of distribution parameters.
+# group_condition <- as.numeric(simmethods::group_condition)
+# estimate_result <- simmethods::ESCO_estimation(
+#   ref_data = ref_data,
+#   other_prior = list(group.condition = group_condition),
+#   verbose = TRUE,
+#   seed = 111
+# )
+}
 \references{
 Tian J, Wang J, Roeder K. ESCO: single cell expression simulation incorporating gene co-expression. Bioinformatics, 2021, 37(16): 2374-2381. \url{https://doi.org/10.1093/bioinformatics/btab116}
 
