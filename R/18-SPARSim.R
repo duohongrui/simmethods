@@ -86,6 +86,31 @@ SPARSim_estimation <- function(ref_data,
     other_prior[["conditions"]] <- count_matrix_conditions
   }
 
+  if(!is.null(other_prior[["dilution.factor"]]) & !is.null(other_prior[["volume"]])){
+    if(S4Vectors::isEmpty(grep(rownames(ref_data), pattern = "^ERCC"))){
+      stop("Reference data does not contain ERCC spike-in")
+    }
+    ERCC_index <- grep(rownames(ref_data), pattern = "^ERCC")
+    ERCC_counts <- ref_data[ERCC_index, ]
+    ref_data <- ref_data[-ERCC_index, ]
+    ref_data <- rbind(ref_data, ERCC_counts)
+    ERCC_info <- simmethods::ERCC_info
+    ERCC_info <- ERCC_info[which(rownames(ERCC_counts) %in% ERCC_info$ERCC_id), ]
+    concentration <- ERCC_info$con_Mix1_attomoles_ul
+    spikein_abund <- concentration*10^-18*6.022*10^23*other_prior[["volume"]]/other_prior[["dilution.factor"]]
+    spikein <- SPARSim::SPARSim_create_spikein_mix(mix_name= "spikein",
+                                                   abundance = spikein_abund)
+    spikein_set <- SPARSim::SPARSim_create_spikein_set(spikein_mixes = list(spikein = spikein))
+    spikein_sample_association <- c(rep("spikein", ncol(ref_data)))
+    spikein_abundance <- 0.05
+    SPARSim_spikein_parameter <- SPARSim_create_spikein_parameter(spikein_set = spikein_set,
+                                                                  spikein_sample = spikein_sample_association,
+                                                                  spikein_proportion = spikein_abundance)
+
+  }else{
+    SPARSim_spikein_parameter <- NULL
+  }
+
   estimate_formals <- simutils::change_parameters(function_expr = "SPARSim::SPARSim_estimate_parameter_from_data",
                                                   other_prior = other_prior,
                                                   step = "estimation")
@@ -107,6 +132,8 @@ SPARSim_estimation <- function(ref_data,
   }, error = function(e){
     as.character(e)
   })
+  estimate_result <- list(estimate_result = estimate_result,
+                          SPARSim_spikein_parameter = SPARSim_spikein_parameter)
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -161,7 +188,7 @@ SPARSim_estimation <- function(ref_data,
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
-#' ## Simulation (20% proportion of DEGs, fold change 3)
+#' ## 1) Simulation (20% proportion of DEGs, fold change 3)
 #' simulate_result <- simmethods::SPARSim_simulation(
 #'   parameters = estimate_result[["estimate_result"]],
 #'   other_prior = list(de.prob = 0.2,
@@ -180,7 +207,7 @@ SPARSim_estimation <- function(ref_data,
 #' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 #' table(row_data$de_genes)[2]/4000
 #'
-#' ## In SPARSim, users can simulate batches when batch.condition parameter is available
+#' ## 2) In SPARSim, users can simulate batches when batch.condition parameter is available
 #' simulate_result <- simmethods::SPARSim_simulation(
 #'   parameters = estimate_result[["estimate_result"]],
 #'   other_prior = list(de.prob = 0.2,
@@ -197,6 +224,32 @@ SPARSim_estimation <- function(ref_data,
 #' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
 #' table(col_data$group)
 #' table(col_data$batch)
+#'
+#' ## 3) Users can also utilize spike-in genes to simulate datasets. In this case, users
+#' ## must input dilution.factor and volume (nanoliter) parameters. Note that the
+#' ## reference matrix must contain spike-in gene counts.
+#' ref_data <- simmethods::data
+#'
+#' group_condition <- as.numeric(simmethods::group_condition)
+#' estimate_result <- simmethods::SPARSim_estimation(
+#'   ref_data = ref_data,
+#'   other_prior = list(group.condition = group_condition,
+#'                      dilution.factor = 50000,
+#'                      volume = 0.01),
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#' ## check spike-in parameters
+#' spikein_params <- estimate_result[["estimate_result"]][["SPARSim_spikein_parameter"]]
+#' ## simulate
+#' simulate_result <- simmethods::SPARSim_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(de.prob = 0.2,
+#'                      fc.group = 3),
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 SPARSim_simulation <- function(parameters,
                                other_prior = NULL,
                                return_format,
@@ -212,8 +265,9 @@ SPARSim_simulation <- function(parameters,
     cat("Installing SPARSim...\n")
     devtools::install_gitlab("sysbiobig/sparsim")
   }
-  other_prior[["dataset_parameter"]] <- parameters
-
+  other_prior[["dataset_parameter"]] <- parameters[["estimate_result"]]
+  other_prior[["spikein_parameter"]] <- parameters[["SPARSim_spikein_parameter"]]
+  parameters <- parameters[["estimate_result"]]
   ## Batch
   if(!is.null(other_prior[["batch.condition"]])){
     other_prior[["output_batch_matrix"]] <- TRUE
@@ -395,15 +449,22 @@ SPARSim_simulation <- function(parameters,
   ##############################################################################
   ## counts
   counts <- simulate_result[["count_matrix"]]
+  if(!is.null(other_prior[["spikein_parameter"]])){
+    spikein_index <- grep(rownames(counts), pattern = "^spikein")
+    filter_index <- (nrow(counts)-2*length(spikein_index)+1):(nrow(counts)-length(spikein_index))
+    counts <- counts[-filter_index, ]
+  }
 
-  group_name_tmp <- stringr::str_split(colnames(counts),
-                                       pattern = "_",
-                                       simplify = TRUE)[, 2]
-  group_name <- unique(group_name_tmp)
-  group <- rep("Group1", ncol(counts))
-  for(i in 1:length(group_name)){
-    index <- which(group_name[i] == group_name_tmp)
-    group[index] <- rep(paste0("Group", i), length(index))
+  if(length(parameters) != 1){
+    group_name_tmp <- stringr::str_split(colnames(counts),
+                                         pattern = "_",
+                                         simplify = TRUE)[, 2]
+    group_name <- unique(group_name_tmp)
+    group <- rep("Group1", ncol(counts))
+    for(i in 1:length(group_name)){
+      index <- which(group_name[i] == group_name_tmp)
+      group[index] <- rep(paste0("Group", i), length(index))
+    }
   }
 
   colnames(counts) <- paste0("Cell", 1:ncol(counts))
@@ -415,8 +476,7 @@ SPARSim_simulation <- function(parameters,
                            "group" = group,
                            "batch" = batch)
   }else{
-    col_data <- data.frame("cell_name" = colnames(counts),
-                           "group" = group)
+    col_data <- data.frame("cell_name" = colnames(counts))
   }
 
   ## row_data

@@ -57,7 +57,7 @@ estimate_result <- simmethods::SPARSim_estimation(
   verbose = TRUE,
   seed = 111
 )
-## Simulation (20\% proportion of DEGs, fold change 3)
+## 1) Simulation (20\% proportion of DEGs, fold change 3)
 simulate_result <- simmethods::SPARSim_simulation(
   parameters = estimate_result[["estimate_result"]],
   other_prior = list(de.prob = 0.2,
@@ -76,7 +76,7 @@ table(col_data$group)
 row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 table(row_data$de_genes)[2]/4000
 
-## In SPARSim, users can simulate batches when batch.condition parameter is available
+## 2) In SPARSim, users can simulate batches when batch.condition parameter is available
 simulate_result <- simmethods::SPARSim_simulation(
   parameters = estimate_result[["estimate_result"]],
   other_prior = list(de.prob = 0.2,
@@ -93,6 +93,32 @@ dim(counts)
 col_data <- simulate_result[["simulate_result"]][["col_meta"]]
 table(col_data$group)
 table(col_data$batch)
+
+## 3) Users can also utilize spike-in genes to simulate datasets. In this case, users
+## must input dilution.factor and volume (nanoliter) parameters. Note that the
+## reference matrix must contain spike-in gene counts.
+ref_data <- simmethods::data
+
+group_condition <- as.numeric(simmethods::group_condition)
+estimate_result <- simmethods::SPARSim_estimation(
+  ref_data = ref_data,
+  other_prior = list(group.condition = group_condition,
+                     dilution.factor = 50000,
+                     volume = 0.01),
+  verbose = TRUE,
+  seed = 111
+)
+## check spike-in parameters
+spikein_params <- estimate_result[["estimate_result"]][["SPARSim_spikein_parameter"]]
+## simulate
+simulate_result <- simmethods::SPARSim_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  other_prior = list(de.prob = 0.2,
+                     fc.group = 3),
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111
+)
 }
 \references{
 Baruzzo G, Patuzzi I, Di Camillo B. SPARSim single cell: a count data simulator for scRNA-seq data. Bioinformatics, 2020, 36(5): 1468-1475. \url{https://doi.org/10.1093/bioinformatics/btz752}
