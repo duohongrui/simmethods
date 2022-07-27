@@ -16,7 +16,7 @@ represents a cell.}
 extra parameters to execute the estimation step, so you must input them. In
 simulation step, the number of cells, genes, groups, batches, the percent of
 DEGs are usually customed, so before simulating a dataset you must point it out.
-See \code{Details} below for more information.}
+For more customed parameters, see \code{\link[hierarchicell:compute_data_summaries]{hierarchicell::compute_data_summaries()}}}
 
 \item{seed}{An integer of a random seed.}
 }
@@ -27,6 +27,16 @@ detection.
 \description{
 This function is used to estimate useful parameters from a real dataset by
 using \code{compute_data_summaries} function in hierarchicell package.
+}
+\examples{
+ref_data <- SingleCellExperiment::counts(scater::mockSCE())
+## estimation
+estimate_result <- simmethods::hierarchicell_estimation(
+  ref_data = ref_data,
+  other_prior = NULL,
+  verbose = TRUE,
+  seed = 111
+)
 }
 \references{
 Zimmerman K D, Langefeld C D. Hierarchicell: an R-package for estimating power for tests of differential expression with single-cell data. BMC genomics, 2021, 22(1): 1-8. \url{https://doi.org/10.1186/s12864-021-07635-w}
