@@ -22,6 +22,15 @@ detection.
 This function is used to estimate useful parameters from a real dataset by
 using \code{fit_parameters} function in hierarchicell package.
 }
+\examples{
+ref_data <- simmethods::data
+## estimation
+estimate_result <- simmethods::dropsim_estimation(
+  ref_data = ref_data,
+  verbose = TRUE,
+  seed = 111
+)
+}
 \references{
 Github URL: \url{https://github.com/marchinilab/dropsim}
 }
