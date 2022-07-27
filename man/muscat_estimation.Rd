@@ -28,6 +28,32 @@ detection.
 This function is used to estimate useful parameters from a real dataset by
 using \code{prepSim} function in muscat package.
 }
+\details{
+In muscat, cell group information is not neccessary but users can input it when
+it is available by \code{other_prior = list(group.condition = xxx)}.
+
+For more information, see \code{Examples} and \code{\link[muscat:prepSim]{muscat::prepSim()}}
+}
+\examples{
+ref_data <- simmethods::data
+## estimation
+estimate_result <- simmethods::muscat_estimation(
+  ref_data = ref_data,
+  other_prior = NULL,
+  verbose = TRUE,
+  seed = 111
+)
+
+## cell groups
+group_condition <- as.numeric(simmethods::group_condition)
+## estimation
+estimate_result <- simmethods::muscat_estimation(
+  ref_data = ref_data,
+  other_prior = list(group.condition = group_condition),
+  verbose = TRUE,
+  seed = 111
+)
+}
 \references{
 Crowell H L, Soneson C, Germain P L, et al. Muscat detects subpopulation-specific state transitions from multi-sample multi-condition single-cell transcriptomics data. Nature communications, 2020, 11(1): 1-12. \url{https://doi.org/10.1038/s41467-020-19894-4}
 

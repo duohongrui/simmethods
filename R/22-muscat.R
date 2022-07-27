@@ -17,10 +17,36 @@
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
+#' @details
+#' In muscat, cell group information is not neccessary but users can input it when
+#' it is available by `other_prior = list(group.condition = xxx)`.
+#'
+#' For more information, see `Examples` and [muscat::prepSim()]
+#'
 #' @references
 #' Crowell H L, Soneson C, Germain P L, et al. Muscat detects subpopulation-specific state transitions from multi-sample multi-condition single-cell transcriptomics data. Nature communications, 2020, 11(1): 1-12. <https://doi.org/10.1038/s41467-020-19894-4>
 #'
 #' Github URL: <https://github.com/HelenaLC/muscat>
+#'
+#' @examples
+#' ref_data <- simmethods::data
+#' ## estimation
+#' estimate_result <- simmethods::muscat_estimation(
+#'   ref_data = ref_data,
+#'   other_prior = NULL,
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#'
+#' ## cell groups
+#' group_condition <- as.numeric(simmethods::group_condition)
+#' ## estimation
+#' estimate_result <- simmethods::muscat_estimation(
+#'   ref_data = ref_data,
+#'   other_prior = list(group.condition = group_condition),
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 muscat_estimation <- function(ref_data,
                               verbose = FALSE,
                               other_prior = NULL,
@@ -120,11 +146,83 @@ muscat_estimation <- function(ref_data,
 #' @importFrom muscat simData
 #' @importFrom SummarizedExperiment rowData<-
 #' @export
+#' @details
+#' In addtion to simulate datasets with default parameters, users want to simulate
+#' other kinds of datasets, e.g. a counts matrix with 2 or more cell groups. In
+#' muscat, you can set extra parameters to simulate datasets.
+#'
+#' The customed parameters you can set are below:
+#' 1. nCells. In muscat, you can set nCells directly. For example, if you want to simulate 1000 cells, you can type `other_prior = list(nCells = 1000)`.
+#' 2. nGenes. You can directly set `other_prior = list(nGenes = 5000)` to simulate 5000 genes.
+#' 3. nGroups. In muscat, `nGroups` can be 1 or 2 because muscat can only simulate two cell groups.
+#' 4. de.prob. You can directly set `other_prior = list(de.prob = 0.2)` to simulate DEGs that account for 20 percent of all genes.
+#' 5. fc.group. You can directly set `other_prior = list(fc.group = 2)` to specify the minimum fold change of DEGs.
+#'
+#' For more customed parameters in muscat, please check [muscat::simData()].
 #'
 #' @references
 #' Crowell H L, Soneson C, Germain P L, et al. Muscat detects subpopulation-specific state transitions from multi-sample multi-condition single-cell transcriptomics data. Nature communications, 2020, 11(1): 1-12. <https://doi.org/10.1038/s41467-020-19894-4>
 #'
 #' Github URL: <https://github.com/HelenaLC/muscat>
+#'
+#' @examples
+#' ref_data <- simmethods::data
+#' ## cell groups
+#' group_condition <- as.numeric(simmethods::group_condition)
+#' ## estimation
+#' estimate_result <- simmethods::muscat_estimation(
+#'   ref_data = ref_data,
+#'   other_prior = list(group.condition = group_condition),
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#'
+#' # 1) Simulate with default parameters
+#' simulate_result <- simmethods::muscat_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = NULL,
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#' ## counts
+#' counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(counts)
+#'
+#'
+#' # 2) Simulate 1000 cells and 2000 genes
+#' simulate_result <- simmethods::muscat_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(nCells = 1000,
+#'                      nGenes = 2000),
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#'
+#' ## counts
+#' counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(counts)
+#'
+#'
+#' # 3) Simulate 2 groups (20% proportion of DEGs, 4 fold change)
+#' simulate_result <- simmethods::muscat_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(nCells = 1000,
+#'                      nGenes = 2000,
+#'                      nGroups = 2,
+#'                      de.prob = 0.2,
+#'                      fc.group = 4),
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#' ## cell information
+#' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+#' table(col_data$group)/1000
+#' ## gene information
+#' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+#' table(row_data$de_gene)[2]/2000
 muscat_simulation <- function(parameters,
                               other_prior = NULL,
                               return_format,
@@ -220,7 +318,7 @@ muscat_simulation <- function(parameters,
   ## gene information
   gene_info <- metadata(simulate_result)$gene_info
   row_data <- gene_info %>%
-    dplyr::transmute("gene_name" = rownames(simulate_result),
+    dplyr::transmute("gene_name" = rownames(counts),
                      "de_gene" = case_when(
                        gene_info$"category" == "ee" ~ "no",
                        gene_info$"category" == "de" ~ "yes"
@@ -233,7 +331,7 @@ muscat_simulation <- function(parameters,
   }else{
     group <- paste0("Group", as.numeric(simulate_result$group_id))
   }
-  col_data <- data.frame("cell_gene" = colnames(simulate_result),
+  col_data <- data.frame("cell_gene" = colnames(counts),
                          "group" = group)
   rownames(col_data) <- col_data$cell_gene
   # Establish SingleCellExperiment
