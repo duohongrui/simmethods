@@ -28,6 +28,35 @@ detection.
 This function is used to estimate useful parameters from a real dataset by
 using \code{sparseDCEstimate} function in Splatter package.
 }
+\details{
+In SparseDC, users must input cell group information to estimate parameters from
+real data. But SparseDC may fail to estimate parameters due to the unsuitable
+distribution fitting and users can set \code{nclusters} parameter to try again.
+
+For more information, see \code{Examples} and \code{\link[splatter:sparseDCEstimate]{splatter::sparseDCEstimate()}}
+}
+\examples{
+ref_data <- SingleCellExperiment::counts(scater::mockSCE())
+## cell groups
+set.seed(111)
+group_condition <- sample(1:2, ncol(ref_data), replace = TRUE)
+## estimation
+estimate_result <- simmethods::SparseDC_estimation(
+  ref_data = ref_data,
+  other_prior = list(group.condition = group_condition),
+  verbose = TRUE,
+  seed = 111
+)
+## Note that SparseDC defines 2 clusters present in the dataset by default. Users
+## can input other number if the estimation step failed.
+estimate_result <- simmethods::SparseDC_estimation(
+  ref_data = ref_data,
+  other_prior = list(group.condition = group_condition,
+                     nclusters = 3),
+  verbose = TRUE,
+  seed = 111
+)
+}
 \references{
 Barron M, Zhang S, Li J. A sparse differential clustering algorithm for tracing cell type changes via single-cell RNA-sequencing data. Nucleic acids research, 2018, 46(3): e14-e14. \url{https://doi.org/10.1093/nar/gkx1113}
 
