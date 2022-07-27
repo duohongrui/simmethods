@@ -43,6 +43,8 @@ muscat_estimation <- function(ref_data,
   ## group
   if(is.null(other_prior[["group.condition"]])){
     other_prior[["group_id"]] <- rep("A", ncol(ref_data))
+  }else{
+    other_prior[["group_id"]] <- other_prior[["group.condition"]]
   }
   ## cluster
   if(is.null(other_prior[["cluster_id"]])){
@@ -60,13 +62,13 @@ muscat_estimation <- function(ref_data,
 
   other_prior[["x"]] <- ref_data
   if(is.null(other_prior[["min_count"]])){
-    other_prior[["min_count"]] <- 1
+    other_prior[["min_count"]] <- 0
   }
   if(is.null(other_prior[["min_cells"]])){
-    other_prior[["min_cells"]] <- 10
+    other_prior[["min_cells"]] <- 0
   }
   if(is.null(other_prior[["min_genes"]])){
-    other_prior[["min_genes"]] <- 100
+    other_prior[["min_genes"]] <- 0
   }
   estimate_formals <- simutils::change_parameters(function_expr = "muscat::prepSim",
                                                   other_prior = other_prior,
@@ -75,7 +77,7 @@ muscat_estimation <- function(ref_data,
   ####                            Estimation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Estimating parameters using SparseDC\n")
+    cat("Estimating parameters using muscat\n")
   }
   # Seed
   set.seed(seed)
@@ -88,7 +90,7 @@ muscat_estimation <- function(ref_data,
                                          min_cells = estimate_formals[["min_cells"]],
                                          min_genes = estimate_formals[["min_genes"]],
                                          min_size = NULL,
-                                         group_keep = estimate_formals[["group_keep"]],
+                                         group_keep = as.character(unique(other_prior[["group_id"]])),
                                          verbose = estimate_formals[["verbose"]])
     )
   }, error = function(e){
@@ -153,16 +155,16 @@ muscat_simulation <- function(parameters,
   }
   ## fc.group
   if(!is.null(other_prior[["fc.group"]])){
-    other_prior[["lfc"]] <- other_prior[["fc.group"]]
+    other_prior[["lfc"]] <- log2(other_prior[["fc.group"]])
   }else{
-    other_prior[["lfc"]] <- 2
+    other_prior[["lfc"]] <- 1
   }
-  ## de.group
-  if(!is.null(other_prior[["de.group"]])){
-    other_prior[["p_dd"]] <- c(1-other_prior[["de.group"]],
-                               0, other_prior[["de.group"]], 0, 0, 0)
+  ## de.prob
+  if(!is.null(other_prior[["de.prob"]])){
+    other_prior[["p_dd"]] <- c(1-other_prior[["de.prob"]],
+                               0, other_prior[["de.prob"]], 0, 0, 0)
   }else{
-    other_prior[["p_dd"]] <- c(1,0,0,0,0,0)
+    other_prior[["p_dd"]] <- c(0.9, 0, 0.1, 0, 0, 0)
   }
   ## nGroups
   if(is.null(other_prior[["nGroups"]])){
@@ -191,7 +193,7 @@ muscat_simulation <- function(parameters,
   cat(glue::glue("nGenes: {simulate_formals[['ng']]}"), "\n")
   cat(glue::glue("nGroups: {nGroups}"), "\n")
   cat(glue::glue("de.group: {de.group}"), "\n")
-  cat(glue::glue("fc.group: {simulate_formals[['lfc']]}"), "\n")
+  cat(glue::glue("fc.group: {2^simulate_formals[['lfc']]}"), "\n")
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -211,16 +213,33 @@ muscat_simulation <- function(parameters,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
-  colnames(simulate_result) <- paste0("Cell", 1:ncol(simulate_result))
-  rownames(simulate_result) <- paste0("Gene", 1:nrow(simulate_result))
+  ## counts
+  counts <- SingleCellExperiment::counts(simulate_result)
+  colnames(counts) <- paste0("Cell", 1:ncol(counts))
+  rownames(counts) <- paste0("Gene", 1:nrow(counts))
+  ## gene information
   gene_info <- metadata(simulate_result)$gene_info
-  SummarizedExperiment::rowData(simulate_result) <- gene_info %>%
+  row_data <- gene_info %>%
     dplyr::transmute("gene_name" = rownames(simulate_result),
-                     "de_genes" = case_when(
-                       gene_info$"category" == "ee" ~ FALSE,
-                       gene_info$"category" == "de" ~ TRUE
+                     "de_gene" = case_when(
+                       gene_info$"category" == "ee" ~ "no",
+                       gene_info$"category" == "de" ~ "yes"
                      ),
-                     "fc" = gene_info$"logFC")
+                     "fc_gene" = 2^gene_info$"logFC")
+  rownames(row_data) <- row_data$gene_name
+  ## cell information
+  if(is.null(simulate_result$group_id)){
+    group <- rep("Group1", ncol(counts))
+  }else{
+    group <- paste0("Group", as.numeric(simulate_result$group_id))
+  }
+  col_data <- data.frame("cell_gene" = colnames(simulate_result),
+                         "group" = group)
+  rownames(col_data) <- col_data$cell_gene
+  # Establish SingleCellExperiment
+  simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
+                                                                colData = col_data,
+                                                                rowData = row_data)
   simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
                                                return_format = return_format)
 
