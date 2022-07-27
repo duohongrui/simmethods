@@ -125,7 +125,7 @@ row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 table(row_data$de_gene)[2]/2000
 }
 \references{
-Assefa A T, Vandesompele J, Thas O. SPsimSeq: semi-parametric simulation of bulk and single-cell RNA-sequencing data\link{J}. Bioinformatics, 2020, 36(10): 3276-3278. \url{https://doi.org/10.1093/bioinformatics/btaa105}
+Assefa A T, Vandesompele J, Thas O. SPsimSeq: semi-parametric simulation of bulk and single-cell RNA-sequencing data. Bioinformatics, 2020, 36(10): 3276-3278. \url{https://doi.org/10.1093/bioinformatics/btaa105}
 
 Bioconductor URL: \url{https://www.bioconductor.org/packages/release/bioc/html/SPsimSeq.html}
 
