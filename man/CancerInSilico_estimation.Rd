@@ -4,19 +4,13 @@
 \alias{CancerInSilico_estimation}
 \title{Estimate Parameters From Real Datasets by CancerInSilico}
 \usage{
-CancerInSilico_estimation(ref_data, verbose = FALSE, other_prior = NULL, seed)
+CancerInSilico_estimation(ref_data, verbose = FALSE, seed)
 }
 \arguments{
 \item{ref_data}{A count matrix. Each row represents a gene and each column
 represents a cell.}
 
 \item{verbose}{Logical.}
-
-\item{other_prior}{A list with names of certain parameters. Some methods need
-extra parameters to execute the estimation step, so you must input them. In
-simulation step, the number of cells, genes, groups, batches, the percent of
-DEGs and other variables are usually customed, so before simulating a dataset
-you must point it out. See \code{Details} below for more information.}
 
 \item{seed}{An integer of a random seed.}
 }
@@ -27,6 +21,15 @@ detection.
 \description{
 This function is used to estimate useful parameters from a real dataset by
 using \code{calibratePathway} function in CancerInSilico package.
+}
+\examples{
+ref_data <- simmethods::data
+## estimation
+estimate_result <- simmethods::CancerInSilico_estimation(
+  ref_data = ref_data,
+  verbose = TRUE,
+  seed = 111
+)
 }
 \references{
 Sherman T D, Kagohara L T, Cao R, et al. CancerInSilico: An R/Bioconductor package for combining mathematical and statistical modeling to simulate time course bulk and single cell gene expression data in cancer. PLoS computational biology, 2019, 14(4): e1006935. \url{https://doi.org/10.1371/journal.pcbi.1006935}
