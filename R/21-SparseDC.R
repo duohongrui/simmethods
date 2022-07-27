@@ -48,6 +48,7 @@ SparseDC_estimation <- function(ref_data,
   if(is.null(other_prior[["nclusters"]])){
     other_prior[["nclusters"]] <- 2
   }
+  other_prior[["params"]] <- splatter::newSparseDCParams()
   estimate_formals <- simutils::change_parameters(function_expr = "splatter::sparseDCEstimate",
                                                   other_prior = other_prior,
                                                   step = "estimation")
@@ -67,7 +68,7 @@ SparseDC_estimation <- function(ref_data,
                                                     conditions = estimate_formals[["conditions"]],
                                                     nclusters = estimate_formals[["nclusters"]],
                                                     norm = estimate_formals[["norm"]],
-                                                    params = splatter::newSparseDCParams())
+                                                    params = estimate_formals[["params"]])
     )
   }, error = function(e){
     as.character(e)
@@ -115,6 +116,15 @@ SparseDC_simulation <- function(parameters,
     cat("Installing splatter...\n")
     BiocManager::install("splatter")
   }
+  ##############################################################################
+  ####                               Check                                   ###
+  ##############################################################################
+  assertthat::assert_that(class(parameters) == "SparseDCParams")
+  if(!is.null(other_prior)){
+    parameters <- simutils::set_parameters(parameters = parameters,
+                                           other_prior = other_prior,
+                                           method = "SparseDC")
+  }
   ## nCells
   if(!is.null(other_prior[["nCells"]])){
     parameters <- splatter::setParam(parameters, "nCells", other_prior[["nCells"]])
@@ -123,16 +133,11 @@ SparseDC_simulation <- function(parameters,
   if(!is.null(other_prior[["nGenes"]])){
     parameters <- splatter::setParam(parameters, "nGenes", other_prior[["nGenes"]])
   }
-  ##############################################################################
-  ####                               Check                                   ###
-  ##############################################################################
-  assertthat::assert_that(class(parameters) == "SparseDCParams")
-
   # Get params to check
   params_check <- splatter::getParams(parameters, c("nCells",
                                                     "nGenes"))
   # Return to users
-  cat(glue::glue("nCells: {params_check[['nCells']]}"), "\n")
+  cat(glue::glue("nCells: {params_check[['nCells']] * length(parameters@clusts.c1)}"), "\n")
   cat(glue::glue("nGenes: {params_check[['nGenes']]}"), "\n")
   ##############################################################################
   ####                            Simulation                                 ###
@@ -153,6 +158,18 @@ SparseDC_simulation <- function(parameters,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
+  # counts
+  counts <- as.matrix(SingleCellExperiment::counts(simulate_result))
+  # col_data
+  col_data <- data.frame("cell_name" = colnames(counts))
+  rownames(col_data) <- col_data$cell_name
+  # row_data
+  row_data <- data.frame("gene_name" = rownames(counts))
+  rownames(row_data) <- row_data$gene_name
+  # Establish SingleCellExperiment
+  simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
+                                                                colData = col_data,
+                                                                rowData = row_data)
   simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
                                                return_format = return_format)
 

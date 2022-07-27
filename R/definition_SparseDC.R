@@ -83,7 +83,7 @@ SparseDC_method_definition <- function(...){
     param_integer(
       id = "seed",
       process = "simulation",
-      default = 431492L,
+      force = TRUE,
       function_name = "sparseDCSimulate"
     ),
     param_integer(
