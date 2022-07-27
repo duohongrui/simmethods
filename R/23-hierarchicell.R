@@ -99,11 +99,62 @@ hierarchicell_estimation <- function(ref_data,
 #' @param seed A random seed.
 #' @importFrom hierarchicell simulate_hierarchicell
 #' @export
+#' @details
+#' In hierarchicell, users can set `nCells`, `nGenes` and `fc.group` directly.
+#' There are some notes that users should know:
+#'
+#' 1. hierarchicell can only simulate **two** groups.
+#' 2. Some cells in the result may contain NA values across all genes due to the failing of GLM fitting.
+#' 3. hierarchicell does not return the information of DEGs and we can not know which genes are DEGs.
+#'
+#' For more information, see `Examples` and [hierarchicell::simulate_hierarchicell]
 #'
 #' @references
 #' Zimmerman K D, Langefeld C D. Hierarchicell: an R-package for estimating power for tests of differential expression with single-cell data. BMC genomics, 2021, 22(1): 1-8. <https://doi.org/10.1186/s12864-021-07635-w>
 #'
 #' Github URL: <https://github.com/kdzimm/hierarchicell>
+#'
+#' @examples
+#' ref_data <- SingleCellExperiment::counts(scater::mockSCE())
+#' ## estimation
+#' estimate_result <- simmethods::hierarchicell_estimation(
+#'   ref_data = ref_data,
+#'   other_prior = NULL,
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#'
+#' # 1) Simulate with default parameters
+#' simulate_result <- simmethods::hierarchicell_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = NULL,
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#' ## counts
+#' counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(counts)
+#'
+#' # 2) Customed parameters: cell and gene number, fold change of DEGs. (But hierarchicell
+#' # does not tell us which genes are DEGs). Note that some cells may contain NA values
+#' # across all genes due to the failing of GLM fitting.
+#' simulate_result <- simmethods::hierarchicell_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(nCells = 2000,
+#'                      nGenes = 4000,
+#'                      fc.group = 4),
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#'
+#' ## counts
+#' counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(counts)
+#' ## Remove NA cells
+#' filter_counts <- as.matrix(t(tidyr::drop_na(as.data.frame(t(counts)))))
+#' dim(filter_counts)
 hierarchicell_simulation <- function(parameters,
                                      other_prior = NULL,
                                      return_format,

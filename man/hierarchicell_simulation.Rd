@@ -31,6 +31,59 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \description{
 Simulate Datasets by hierarchicell
 }
+\details{
+In hierarchicell, users can set \code{nCells}, \code{nGenes} and \code{fc.group} directly.
+There are some notes that users should know:
+\enumerate{
+\item hierarchicell can only simulate \strong{two} groups.
+\item Some cells in the result may contain NA values across all genes due to the failing of GLM fitting.
+\item hierarchicell does not return the information of DEGs and we can not know which genes are DEGs.
+}
+
+For more information, see \code{Examples} and \link[hierarchicell:simulate_hierarchicell]{hierarchicell::simulate_hierarchicell}
+}
+\examples{
+ref_data <- SingleCellExperiment::counts(scater::mockSCE())
+## estimation
+estimate_result <- simmethods::hierarchicell_estimation(
+  ref_data = ref_data,
+  other_prior = NULL,
+  verbose = TRUE,
+  seed = 111
+)
+
+# 1) Simulate with default parameters
+simulate_result <- simmethods::hierarchicell_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  other_prior = NULL,
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111
+)
+## counts
+counts <- simulate_result[["simulate_result"]][["count_data"]]
+dim(counts)
+
+# 2) Customed parameters: cell and gene number, fold change of DEGs. (But hierarchicell
+# does not tell us which genes are DEGs). Note that some cells may contain NA values
+# across all genes due to the failing of GLM fitting.
+simulate_result <- simmethods::hierarchicell_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  other_prior = list(nCells = 2000,
+                     nGenes = 4000,
+                     fc.group = 4),
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111
+)
+
+## counts
+counts <- simulate_result[["simulate_result"]][["count_data"]]
+dim(counts)
+## Remove NA cells
+filter_counts <- as.matrix(t(tidyr::drop_na(as.data.frame(t(counts)))))
+dim(filter_counts)
+}
 \references{
 Zimmerman K D, Langefeld C D. Hierarchicell: an R-package for estimating power for tests of differential expression with single-cell data. BMC genomics, 2021, 22(1): 1-8. \url{https://doi.org/10.1186/s12864-021-07635-w}
 
