@@ -10,17 +10,44 @@
 #' @param other_prior A list with names of certain parameters. Some methods need
 #' extra parameters to execute the estimation step, so you must input them. In
 #' simulation step, the number of cells, genes, groups, batches, the percent of
-#' DEGs and other variables are usually customed, so before simulating a dataset
-#' you must point it out.
-#' @importFrom peakRAM peakRAM
+#' DEGs are usually customed, so before simulating a dataset you must point it out.
+#' See `Details` below for more information.
 #' @importFrom dynwrap infer_trajectory wrap_expression add_grouping
 #' @importFrom NbClust NbClust
 #' @importFrom tislingshot ti_slingshot
-#'
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
+#' @details
+#' In dyngen, users can input cell group information if it is available. If cell
+#' group information is not provided, the procedure will detect cell groups by
+#' kmeans automatically.
+#' See `Examples` for more instructions.
 #'
+#' @references
+#' Cannoodt R, Saelens W, Deconinck L, et al. Spearheading future omics analyses using dyngen, a multi-modal simulator of single cells. Nature Communications, 2021, 12(1): 1-9. <https://doi.org/10.1038/s41467-021-24152-2>
+#'
+#' CRAN URL: <https://cran.r-project.org/web/packages/dyngen/index.html>
+#'
+#' Github URL: <https://github.com/dynverse/dyngen>
+#' @examples
+#' ref_data <- simmethods::data
+#'
+#' estimate_result <- simmethods::dyngen_estimation(
+#'   ref_data = ref_data,
+#'   other_prior = NULL,
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#'
+#' ## estimation with cell group information
+#' group_condition <- paste0("Group", as.numeric(simmethods::group_condition))
+#' estimate_result <- simmethods::dyngen_estimation(
+#'   ref_data = ref_data,
+#'   other_prior = list(group.condition = group_condition),
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 dyngen_estimation <- function(ref_data,
                               verbose = FALSE,
                               other_prior,
@@ -87,20 +114,66 @@ dyngen_estimation <- function(ref_data,
 #' @param other_prior A list with names of certain parameters. Some methods need
 #' extra parameters to execute the estimation step, so you must input them. In
 #' simulation step, the number of cells, genes, groups, batches, the percent of
-#' DEGs and other variables are usually customed, so before simulating a dataset
-#' you must point it out.
-#' @param return_format A character. Alternatives choices: list, SingleCellExperiment,
-#' Seurat, h5ad
+#' DEGs are usually customed, so before simulating a dataset you must point it out.
+#' See `Details` below for more information.
+#' @param return_format A character. Alternative choices: list, SingleCellExperiment,
+#' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
+#' @param verbose Logical. Whether to return messages or not.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#'
 #' @import dyngen
 #' @importFrom tools R_user_dir
-#'
 #' @export
+#' @details
+#' In dyngen, users can only set `nCells` and `nGenes` to specify the number of genes in the
+#' simulated dataset. See `Examples` for instructions.
 #'
+#' @references
+#' Cannoodt R, Saelens W, Deconinck L, et al. Spearheading future omics analyses using dyngen, a multi-modal simulator of single cells. Nature Communications, 2021, 12(1): 1-9. <https://doi.org/10.1038/s41467-021-24152-2>
+#'
+#' CRAN URL: <https://cran.r-project.org/web/packages/dyngen/index.html>
+#'
+#' Github URL: <https://github.com/dynverse/dyngen>
+#'
+#' @examples
+#' ref_data <- simmethods::data
+#'
+#' ## estimation with cell group information
+#' group_condition <- paste0("Group", as.numeric(simmethods::group_condition))
+#' estimate_result <- simmethods::dyngen_estimation(
+#'   ref_data = ref_data,
+#'   other_prior = list(group.condition = group_condition),
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#'
+#' # # 1) Simulate with default parameters (need a lot of memory)
+#' # simulate_result <- simmethods::dyngen_simulation(
+#' #   parameters = estimate_result[["estimate_result"]],
+#' #   other_prior = NULL,
+#' #   return_format = "list",
+#' #   verbose = TRUE,
+#' #   seed = 111
+#' # )
+#' # ## counts
+#' # counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' # dim(counts)
+#'
+#' # 2) 100 cells and 100 genes
+#' simulate_result <- simmethods::dyngen_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(nCells = 100,
+#'                      nGenes = 100),
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#'
+#' ## counts
+#' counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(counts)
 dyngen_simulation <- function(parameters,
-                              other_prior,
+                              other_prior = NULL,
                               return_format,
                               verbose = FALSE,
                               seed
@@ -187,15 +260,15 @@ dyngen_simulation <- function(parameters,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
-  simulate_result <- t(as.matrix(simulate_result[["counts"]]))
-  colnames(simulate_result) <- paste0("Cell", 1:ncol(simulate_result))
-  rownames(simulate_result) <- paste0("Gene", 1:nrow(simulate_result))
+  counts <- t(as.matrix(simulate_result[["dataset"]][["counts"]]))
+  colnames(counts) <- paste0("Cell", 1:ncol(counts))
+  rownames(counts) <- paste0("Gene", 1:nrow(counts))
   ## col_data
-  col_data <- data.frame("cell_name" = colnames(simulate_result))
+  col_data <- data.frame("cell_name" = colnames(counts))
   ## row_data
-  row_data <- data.frame("gene_name" = rownames(simulate_result))
+  row_data <- data.frame("gene_name" = rownames(counts))
   # Establish SingleCellExperiment
-  simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = simulate_result),
+  simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
                                                                 colData = col_data,
                                                                 rowData = row_data)
   simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
