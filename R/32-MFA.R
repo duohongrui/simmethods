@@ -83,6 +83,13 @@ MFA_estimation <- function(ref_data,
 #' @param seed A random seed.
 #' @importFrom splatter mfaSimulate
 #' @export
+#' @details
+#' #' @details
+#' In MFA, users can only set `nCells` and `nGenes` to specify the number of genes in the
+#' simulated dataset. See `Examples` for instructions.
+#'
+#' For more customed parameters, see [splatter::MFAParams()] and [splatter::mfaSimulate()].
+#'
 #' @references
 #' Campbell K R, Yau C. Probabilistic modeling of bifurcations in single-cell gene expression data using a Bayesian mixture of factor analyzers. Wellcome open research, 2017, 2. <https://doi.org/10.12688/wellcomeopenres.11087.1>
 #'

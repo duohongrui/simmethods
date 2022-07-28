@@ -31,6 +31,13 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \description{
 Simulate Datasets by MFA
 }
+\details{
+#' @details
+In MFA, users can only set \code{nCells} and \code{nGenes} to specify the number of genes in the
+simulated dataset. See \code{Examples} for instructions.
+
+For more customed parameters, see \code{\link[splatter:MFAParams]{splatter::MFAParams()}} and \code{\link[splatter:mfaSimulate]{splatter::mfaSimulate()}}.
+}
 \examples{
 ref_data <- simmethods::data
 ## estimation
