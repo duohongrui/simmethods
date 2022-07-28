@@ -28,6 +28,36 @@ detection.
 This function is used to estimate useful parameters from a real dataset by
 using \code{TedSim_est} function in simmethods package.
 }
+\details{
+In TedSim, users can input cell group information if it is available. If cell
+group information is not provided, the procedure will detect cell groups by
+kmeans automatically.
+See \code{Examples} for more instructions.
+
+Note that TedSim can only simulate the dataset whose cell number is the power of 2
+so if the reference data does not meet the requirement, the procedure will
+synthesize extra fake cells to achive this goal. See \code{\link[simutils:synthesize_cells]{simutils::synthesize_cells()}}
+to learn about the process of synthesizing fake cells.
+}
+\examples{
+ref_data <- simmethods::data
+## estimation
+estimate_result <- simmethods::TedSim_estimation(
+  ref_data = ref_data,
+  other_prior = NULL,
+  verbose = TRUE,
+  seed = 111
+)
+
+## estimation with cell group information
+group_condition <- paste0("Group", as.numeric(simmethods::group_condition))
+estimate_result <- simmethods::TedSim_estimation(
+  ref_data = ref_data,
+  other_prior = list(group.condition = group_condition),
+  verbose = TRUE,
+  seed = 111
+)
+}
 \references{
 Pan X, Li H, Zhang X. TedSim: temporal dynamics simulation of single-cell RNA sequencing data and cell division history. Nucleic acids research, 2022, 50(8): 4272-4288. \url{https://doi.org/10.1093/nar/gkac235}
 
