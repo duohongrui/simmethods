@@ -4,7 +4,7 @@
 \alias{PROSSTT_estimation}
 \title{Estimate Parameters From Real Datasets by PROSSTT}
 \usage{
-PROSSTT_estimation(ref_data, other_prior, verbose = FALSE, seed)
+PROSSTT_estimation(ref_data, other_prior = NULL, verbose = FALSE, seed)
 }
 \arguments{
 \item{ref_data}{A count matrix. Each row represents a gene and each column
@@ -13,8 +13,8 @@ represents a cell.}
 \item{other_prior}{A list with names of certain parameters. Some methods need
 extra parameters to execute the estimation step, so you must input them. In
 simulation step, the number of cells, genes, groups, batches, the percent of
-DEGs and other variables are usually customed, so before simulating a dataset
-you must point it out.}
+DEGs are usually customed, so before simulating a dataset you must point it out.
+See \code{Details} below for more information.}
 
 \item{verbose}{Logical.}
 
@@ -27,4 +27,26 @@ detection.
 \description{
 This function is used to estimate useful parameters from a real dataset by
 using \code{make_trees} function in simutils package.
+}
+\details{
+In PROSSTT, users can input cell group information by \code{other_prior = list(group.condition = xxx)}.
+If this information is not available, we will detect the potential groups in reference data automatically.
+For more information about PROSSTT, see \code{Examples} and \code{References}.
+}
+\examples{
+ref_data <- simmethods::data
+## estimation
+estimate_result <- simmethods::PROSSTT_estimation(
+  ref_data = ref_data,
+  other_prior = NULL,
+  verbose = TRUE,
+  seed = 111
+)
+}
+\references{
+Papadopoulos N, Gonzalo P R, Söding J. PROSSTT: probabilistic simulation of single-cell RNA-seq data for complex differentiation processes. Bioinformatics, 2019, 35(18): 3517-3519. \url{https://doi.org/10.1093/bioinformatics/btz078}
+
+Github URL: \url{https://github.com/soedinglab/prosstt/}
+
+Document URL: \url{http://wwwuser.gwdg.de/~compbiol/prosstt/doc/}
 }
