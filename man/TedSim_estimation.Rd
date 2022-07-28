@@ -4,7 +4,7 @@
 \alias{TedSim_estimation}
 \title{Estimate Parameters From Real Datasets by TedSim}
 \usage{
-TedSim_estimation(ref_data, other_prior, verbose = FALSE, seed)
+TedSim_estimation(ref_data, other_prior = NULL, verbose = FALSE, seed)
 }
 \arguments{
 \item{ref_data}{A count matrix. Each row represents a gene and each column
@@ -13,8 +13,8 @@ represents a cell.}
 \item{other_prior}{A list with names of certain parameters. Some methods need
 extra parameters to execute the estimation step, so you must input them. In
 simulation step, the number of cells, genes, groups, batches, the percent of
-DEGs and other variables are usually customed, so before simulating a dataset
-you must point it out.}
+DEGs are usually customed, so before simulating a dataset you must point it out.
+See \code{Details} below for more information.}
 
 \item{verbose}{Logical.}
 
@@ -27,4 +27,9 @@ detection.
 \description{
 This function is used to estimate useful parameters from a real dataset by
 using \code{TedSim_est} function in simmethods package.
+}
+\references{
+Pan X, Li H, Zhang X. TedSim: temporal dynamics simulation of single-cell RNA sequencing data and cell division history. Nucleic acids research, 2022, 50(8): 4272-4288. \url{https://doi.org/10.1093/nar/gkac235}
+
+Github URL: \url{https://github.com/Galaxeee/TedSim}
 }
