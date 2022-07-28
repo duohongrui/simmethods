@@ -44,7 +44,7 @@ MFA_method_definition <- function(...){
     ),
     param_integer(
       id = "seed",
-      default = 955624L,
+      force = TRUE,
       description = "Seed to use for generating random numbers.",
       function_name = "mfaSimulate"
     ),
