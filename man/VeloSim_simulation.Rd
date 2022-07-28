@@ -32,7 +32,7 @@ Seurat, h5ad}
 Simulate Datasets by VeloSim
 }
 \details{
-In VeloSim, users can only set \code{nCells} and \code{nGenes} to specify the number of genes in the
+In VeloSim, users can only set \code{nCells} and \code{nGenes} to specify the number of cells and genes in the
 simulated dataset. See \code{Examples} for instructions.
 }
 \examples{

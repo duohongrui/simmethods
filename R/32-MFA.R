@@ -85,7 +85,7 @@ MFA_estimation <- function(ref_data,
 #' @export
 #' @details
 #' #' @details
-#' In MFA, users can only set `nCells` and `nGenes` to specify the number of genes in the
+#' In MFA, users can only set `nCells` and `nGenes` to specify the number of cells and genes in the
 #' simulated dataset. See `Examples` for instructions.
 #'
 #' For more customed parameters, see [splatter::MFAParams()] and [splatter::mfaSimulate()].

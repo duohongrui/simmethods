@@ -33,7 +33,7 @@ Simulate Datasets by MFA
 }
 \details{
 #' @details
-In MFA, users can only set \code{nCells} and \code{nGenes} to specify the number of genes in the
+In MFA, users can only set \code{nCells} and \code{nGenes} to specify the number of cells and genes in the
 simulated dataset. See \code{Examples} for instructions.
 
 For more customed parameters, see \code{\link[splatter:MFAParams]{splatter::MFAParams()}} and \code{\link[splatter:mfaSimulate]{splatter::mfaSimulate()}}.

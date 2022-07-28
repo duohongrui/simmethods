@@ -22,3 +22,19 @@ detection.
 This function is used to estimate useful parameters from a real dataset by
 using \code{phenoEstimate} function in Splatter package.
 }
+\examples{
+ref_data <- simmethods::data
+## estimation
+estimate_result <- simmethods::phenopath_estimation(
+  ref_data = ref_data,
+  verbose = TRUE,
+  seed = 111
+)
+}
+\references{
+Campbell K, Yau C. Uncovering genomic trajectories with heterogeneous genetic and environmental backgrounds across single-cells and populations. bioRxiv, 2017: 159913. \url{https://doi.org/10.1101/159913}
+
+Bioconductor URL: \url{https://bioconductor.org/packages/release/bioc/html/phenopath.html}
+
+Github URL: \url{https://github.com/kieranrcampbell/phenopath}
+}

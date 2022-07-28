@@ -32,7 +32,7 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 Simulate Datasets by SymSim
 }
 \details{
-In SymSim, users can only set \code{nCells} and \code{nGenes} to specify the number of genes in the
+In SymSim, users can only set \code{nCells} and \code{nGenes} to specify the number of cells and genes in the
 simulated dataset. See \code{Examples} for instructions.
 }
 \examples{

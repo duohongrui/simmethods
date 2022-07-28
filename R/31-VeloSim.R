@@ -113,7 +113,7 @@ VeloSim_estimation <- function(ref_data,
 #' @importFrom VeloSim SimulateVeloTree
 #' @export
 #' @details
-#' In VeloSim, users can only set `nCells` and `nGenes` to specify the number of genes in the
+#' In VeloSim, users can only set `nCells` and `nGenes` to specify the number of cells and genes in the
 #' simulated dataset. See `Examples` for instructions.
 #'
 #' @references

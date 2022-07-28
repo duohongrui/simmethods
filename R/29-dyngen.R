@@ -125,7 +125,7 @@ dyngen_estimation <- function(ref_data,
 #' @importFrom tools R_user_dir
 #' @export
 #' @details
-#' In dyngen, users can only set `nCells` and `nGenes` to specify the number of genes in the
+#' In dyngen, users can only set `nCells` and `nGenes` to specify the number of cells and genes in the
 #' simulated dataset. See `Examples` for instructions.
 #'
 #' @references

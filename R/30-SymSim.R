@@ -114,7 +114,7 @@ SymSim_estimation <- function(ref_data,
 #' @importFrom SymSim SimulateTrueCounts
 #' @export
 #' @details
-#' In SymSim, users can only set `nCells` and `nGenes` to specify the number of genes in the
+#' In SymSim, users can only set `nCells` and `nGenes` to specify the number of cells and genes in the
 #' simulated dataset. See `Examples` for instructions.
 #'
 #' @references

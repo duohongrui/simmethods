@@ -119,7 +119,7 @@ dyntoy_estimation <- function(ref_data,
 #' @importFrom dyntoy generate_dataset
 #' @export
 #' @details
-#' In dyntoy, users can only set `nCells` and `nGenes` to specify the number of genes in the
+#' In dyntoy, users can only set `nCells` and `nGenes` to specify the number of cells and genes in the
 #' simulated dataset. See `Examples` for instructions.
 #'
 #' @references
