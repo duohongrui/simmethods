@@ -58,10 +58,11 @@ simulate_result <- simmethods::phenopath_simulation(
 counts <- simulate_result[["simulate_result"]][["count_data"]]
 dim(counts)
 
-# 2) 5000 cells
+# 2) 5000 cells and 6000 genes
 simulate_result <- simmethods::phenopath_simulation(
   parameters = estimate_result[["estimate_result"]],
-  other_prior = list(nCells = 5000),
+  other_prior = list(nCells = 5000,
+                     nGenes = 6000),
   return_format = "list",
   verbose = TRUE,
   seed = 111

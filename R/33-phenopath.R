@@ -119,10 +119,11 @@ phenopath_estimation <- function(ref_data,
 #' counts <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(counts)
 #'
-#' # 2) 5000 cells
+#' # 2) 5000 cells and 6000 genes
 #' simulate_result <- simmethods::phenopath_simulation(
 #'   parameters = estimate_result[["estimate_result"]],
-#'   other_prior = list(nCells = 5000),
+#'   other_prior = list(nCells = 5000,
+#'                      nGenes = 6000),
 #'   return_format = "list",
 #'   verbose = TRUE,
 #'   seed = 111
@@ -150,14 +151,21 @@ phenopath_simulation <- function(parameters,
   ####                               Check                                   ###
   ##############################################################################
   assertthat::assert_that(class(parameters) == "PhenoParams")
-  if(!is.null(other_prior)){
-    parameters <- simutils::set_parameters(parameters = parameters,
-                                           other_prior = other_prior,
-                                           method = "phenopath")
-  }
   # nCells
   if(!is.null(other_prior[["nCells"]])){
     parameters <- splatter::setParam(parameters, name = "nCells", value = other_prior[["nCells"]])
+  }
+  # nGenes
+  if(!is.null(other_prior[["nGenes"]])){
+    gene_assign <- simutils::proportionate(number = other_prior[["nGenes"]],
+                                           result_sum_strict = other_prior[["nGenes"]],
+                                           prop = rep(0.25, 4),
+                                           prop_sum_strict = 1,
+                                           digits = 0)
+    parameters <- splatter::setParam(parameters, name = "n.de", value = gene_assign[1])
+    parameters <- splatter::setParam(parameters, name = "n.pst", value = gene_assign[2])
+    parameters <- splatter::setParam(parameters, name = "n.pst.beta", value = gene_assign[3])
+    parameters <- splatter::setParam(parameters, name = "n.de.pst.beta", value = gene_assign[4])
   }
 
   # Get params to check
