@@ -19,7 +19,9 @@
 #' @details
 #' In ESCO, users can input cell group information when it is available but in this case
 #' ESCO is not stable and may fail to estimate suitable distribution parameters
-#' from real data. See `Examples`.
+#' from real data.
+#' If users want to estimate tree structured parameters, set `other_prior = list(tree = TRUE)`.
+#' For more instructions, see `Examples`.
 #' @references
 #' Tian J, Wang J, Roeder K. ESCO: single cell expression simulation incorporating gene co-expression. Bioinformatics, 2021, 37(16): 2374-2381. <https://doi.org/10.1093/bioinformatics/btab116>
 #'
@@ -42,6 +44,15 @@
 #' #   verbose = TRUE,
 #' #   seed = 111
 #' # )
+#'
+#' ------------------ Estimate tree or trajectory structured data --------------
+#' # Load data
+#' ref_data <- simmethods::data
+#' # Estimate parameters
+#' estimate_result <- simmethods::ESCO_estimation(ref_data = ref_data,
+#'                                                other_prior = list(tree = TRUE),
+#'                                                verbose = TRUE,
+#'                                                seed = 10)
 ESCO_estimation <- function(ref_data,
                             other_prior = NULL,
                             verbose = FALSE,
@@ -72,7 +83,7 @@ ESCO_estimation <- function(ref_data,
   other_prior[["params"]] <- ESCO::newescoParams()
   other_prior[["dirname"]] <- tempdir()
   ## tree
-  if(!is.null(other_prior[["tree"]]) | !is.null(other_prior[["paths"]])){
+  if(!is.null(other_prior[["tree"]])){
     tree <- simutils::make_trees(ref_data = ref_data,
                                  group = other_prior[["cellinfo"]],
                                  is_Newick = FALSE,
@@ -142,6 +153,7 @@ ESCO_estimation <- function(ref_data,
 #' 3. nGroups. You can not directly set `other_prior = list(nGroups = 3)` to simulate 3 groups. Instead, you should set `other_prior = list(prob.group = c(0.2, 0.3, 0.5))` where the sum of group probabilities must equal to 1.
 #' 4. de.prob. You can directly set `other_prior = list(de.prob = 0.2)` to simulate DEGs that account for 20 percent of all genes.
 #' 5. prob.group. You can directly set `other_prior = list(prob.group = c(0.2, 0.3, 0.5))` to assign three proportions of cell groups. Note that the number of groups always equals to the length of the vector.
+#' 6. If users want to simulate tree or trajectory structured data, set `other_prior = list(type = "tree")` or `other_prior = list(type = "traj")`. See `Examples`.
 #'
 #' For more customed parameters in ESCO, please check [ESCO::escoParams()].
 #' @references
@@ -201,6 +213,62 @@ ESCO_estimation <- function(ref_data,
 #' ### is 2/1=2 or 1/2=0.5.
 #' fc_group1_to_group2 <- row_data$DEFacGroup2/row_data$DEFacGroup1
 #' table(fc_group1_to_group2 != 1)[2]/2000 ## de.prob = 0.2
+#'
+#' ------------------ Simulate tree or trajectory structured data --------------
+#' # Load data
+#' ref_data <- simmethods::data
+#' # Estimate parameters
+#' estimate_result <- simmethods::ESCO_estimation(ref_data = ref_data,
+#'                                                other_prior = list(tree = TRUE),
+#'                                                verbose = TRUE,
+#'                                                seed = 10)
+#'
+#' # (1) Simulate tree structured cell groups
+#' simulate_result <- simmethods::ESCO_simulation(parameters = estimate_result[["estimate_result"]],
+#'                                                other_prior = list(batchCells = 1000,
+#'                                                                   nGenes = 1000,
+#'                                                                   type = "tree"),
+#'                                                return_format = "SingleCellExperiment",
+#'                                                verbose = TRUE,
+#'                                                seed = 111)
+#' ## plot
+#' result <- scater::logNormCounts(simulate_result[["simulate_result"]])
+#' result <- scater::runPCA(result)
+#' plotPCA(result, colour_by = "group")
+#'
+#'
+#' # (2) Simulate tree structured cell groups (specify de.prob and group.prob)
+#' simulate_result <- simmethods::ESCO_simulation(parameters = estimate_result[["estimate_result"]],
+#'                                                other_prior = list(batchCells = 1000,
+#'                                                                   nGenes = 1000,
+#'                                                                   type = "tree",
+#'                                                                   group.prob = c(0.4, 0.3, 0.3),
+#'                                                                   de.prob = 0.5,
+#'                                                                   de.center = 2),
+#'                                                return_format = "SingleCellExperiment",
+#'                                                verbose = TRUE,
+#'                                                seed = 111)
+#' ## plot
+#' result <- scater::logNormCounts(simulate_result[["simulate_result"]])
+#' result <- scater::runPCA(result)
+#' plotPCA(result, colour_by = "group")
+#'
+#'
+#' # (3) Simulate continous cell trajectory
+#' simulate_result <- simmethods::ESCO_simulation(parameters = estimate_result[["estimate_result"]],
+#'                                                other_prior = list(batchCells = 1000,
+#'                                                                   nGenes = 1000,
+#'                                                                   type = "traj",
+#'                                                                   group.prob = c(0.4, 0.3, 0.3),
+#'                                                                   de.prob = 0.5,
+#'                                                                   de.center = 2),
+#'                                                return_format = "SingleCellExperiment",
+#'                                                verbose = TRUE,
+#'                                                seed = 111)
+#' ## plot
+#' result <- scater::logNormCounts(simulate_result[["simulate_result"]])
+#' result <- scater::runPCA(result)
+#' plotPCA(result, colour_by = "group")
 ESCO_simulation <- function(parameters,
                             return_format,
                             other_prior = NULL,
@@ -223,9 +291,14 @@ ESCO_simulation <- function(parameters,
     tree <- parameters[["tree"]]
     group <- parameters[["group"]]
     parameters <- parameters[["estimate_result"]]
+    type <- other_prior[["type"]]
+    if(is.null(type)){
+      stop("Please input the type ('tree' or 'traj') when you want to simulate dataset with tree format information.")
+    }
   }else{
     group <- NULL
     tree <- NULL
+    type <- NULL
   }
   assertthat::assert_that(class(parameters) == "escoParams")
   if(!is.null(other_prior)){
@@ -251,7 +324,7 @@ ESCO_simulation <- function(parameters,
                                      value = other_prior[["prob.group"]])
 
   }else{
-    if(!is.null(tree)){
+    if(!is.null(type)){
       nGroups <- splatter::getParam(parameters, name = "nGroups")
       prob.group <- c(rep(1/nGroups, nGroups-1),
                       1 - c(1/nGroups * c(nGroups-1)))
@@ -285,13 +358,15 @@ ESCO_simulation <- function(parameters,
                                    value = params_check[['de.prob']])
   # Estimation
   tryCatch({
-    if(!is.null(other_prior[["tree"]])){
-      cat("Simulating trajectory of trees datasets by ESCO \n")
-      submethod <- "tree"
-      parameters <- splatter::setParam(parameters, name = "tree", value = tree)
-    }else if(!is.null(other_prior[["paths"]])){
-      cat("Simulating trajectory datasets by ESCO")
-      submethod <- "traj"
+    if(!is.null(type)){
+      if(type == "tree"){
+        cat("Simulating trajectory of trees datasets by ESCO \n")
+        submethod <- "tree"
+      }
+      if(type == "traj"){
+        cat("Simulating trajectory datasets by ESCO \n")
+        submethod <- "traj"
+      }
       parameters <- splatter::setParam(parameters, name = "tree", value = tree)
     }else{
       if(params_check[["nGroups"]] == 1){
@@ -318,13 +393,18 @@ ESCO_simulation <- function(parameters,
     col_data <- data.frame("cell_name" = colnames(counts),
                            "group" = rep("Group1", ncol(counts)))
   }else{
-    col_data <- data.frame("cell_name" = colnames(counts),
-                           "group" = col_data$Group)
+    if(type == "traj"){
+      col_data <- data.frame("cell_name" = colnames(counts),
+                             "group" = paste0("Group", col_data$Path))
+    }else{
+      col_data <- data.frame("cell_name" = colnames(counts),
+                             "group" = col_data$Group)
+    }
   }
   rownames(col_data) <- col_data$cell_name
   # row_data
   row_data <- as.data.frame(SummarizedExperiment::rowData(simulate_result))
-  if(params_check[['nGroups']] == 1){
+  if(params_check[['nGroups']] == 1 | !is.null(parameters@tree)){
     row_data <- data.frame("gene_name" = rownames(counts))
     rownames(row_data) <- row_data$gene_name
   }else{

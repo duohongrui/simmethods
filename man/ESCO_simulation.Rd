@@ -43,6 +43,7 @@ The customed parameters you can set are below:
 \item nGroups. You can not directly set \code{other_prior = list(nGroups = 3)} to simulate 3 groups. Instead, you should set \code{other_prior = list(prob.group = c(0.2, 0.3, 0.5))} where the sum of group probabilities must equal to 1.
 \item de.prob. You can directly set \code{other_prior = list(de.prob = 0.2)} to simulate DEGs that account for 20 percent of all genes.
 \item prob.group. You can directly set \code{other_prior = list(prob.group = c(0.2, 0.3, 0.5))} to assign three proportions of cell groups. Note that the number of groups always equals to the length of the vector.
+\item If users want to simulate tree or trajectory structured data, set \code{other_prior = list(type = "tree")} or \code{other_prior = list(type = "traj")}. See \code{Examples}.
 }
 
 For more customed parameters in ESCO, please check \code{\link[ESCO:escoParams]{ESCO::escoParams()}}.
@@ -99,6 +100,62 @@ table(row_data$de_gene)[2]/2000
 ### is 2/1=2 or 1/2=0.5.
 fc_group1_to_group2 <- row_data$DEFacGroup2/row_data$DEFacGroup1
 table(fc_group1_to_group2 != 1)[2]/2000 ## de.prob = 0.2
+
+------------------ Simulate tree or trajectory structured data --------------
+# Load data
+ref_data <- simmethods::data
+# Estimate parameters
+estimate_result <- simmethods::ESCO_estimation(ref_data = ref_data,
+                                               other_prior = list(tree = TRUE),
+                                               verbose = TRUE,
+                                               seed = 10)
+
+# (1) Simulate tree structured cell groups
+simulate_result <- simmethods::ESCO_simulation(parameters = estimate_result[["estimate_result"]],
+                                               other_prior = list(batchCells = 1000,
+                                                                  nGenes = 1000,
+                                                                  type = "tree"),
+                                               return_format = "SingleCellExperiment",
+                                               verbose = TRUE,
+                                               seed = 111)
+## plot
+result <- scater::logNormCounts(simulate_result[["simulate_result"]])
+result <- scater::runPCA(result)
+plotPCA(result, colour_by = "group")
+
+
+# (2) Simulate tree structured cell groups (specify de.prob and group.prob)
+simulate_result <- simmethods::ESCO_simulation(parameters = estimate_result[["estimate_result"]],
+                                               other_prior = list(batchCells = 1000,
+                                                                  nGenes = 1000,
+                                                                  type = "tree",
+                                                                  group.prob = c(0.4, 0.3, 0.3),
+                                                                  de.prob = 0.5,
+                                                                  de.center = 2),
+                                               return_format = "SingleCellExperiment",
+                                               verbose = TRUE,
+                                               seed = 111)
+## plot
+result <- scater::logNormCounts(simulate_result[["simulate_result"]])
+result <- scater::runPCA(result)
+plotPCA(result, colour_by = "group")
+
+
+# (3) Simulate continous cell trajectory
+simulate_result <- simmethods::ESCO_simulation(parameters = estimate_result[["estimate_result"]],
+                                               other_prior = list(batchCells = 1000,
+                                                                  nGenes = 1000,
+                                                                  type = "traj",
+                                                                  group.prob = c(0.4, 0.3, 0.3),
+                                                                  de.prob = 0.5,
+                                                                  de.center = 2),
+                                               return_format = "SingleCellExperiment",
+                                               verbose = TRUE,
+                                               seed = 111)
+## plot
+result <- scater::logNormCounts(simulate_result[["simulate_result"]])
+result <- scater::runPCA(result)
+plotPCA(result, colour_by = "group")
 }
 \references{
 Tian J, Wang J, Roeder K. ESCO: single cell expression simulation incorporating gene co-expression. Bioinformatics, 2021, 37(16): 2374-2381. \url{https://doi.org/10.1093/bioinformatics/btab116}
