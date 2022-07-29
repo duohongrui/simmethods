@@ -95,8 +95,10 @@ Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #' 4. de.prob. You can directly set `other_prior = list(de.prob = 0.2)` to simulate DEGs that account for 20 percent of all genes.
 #' 5. prob.group. You can directly set `other_prior = list(prob.group = c(0.2, 0.3, 0.5))` to assign three proportions of cell groups. Note that the number of groups always equals to the length of the vector.
 #' 6. nBatches. You can not directly set `other_prior = list(nBatches = 3)` to simulate 3 batches. Instead, you should set `other_prior = list(batchCells = c(500, 500, 500))` to reach the goal and the total cells are 1500.
+#' 7. If users want to simulate datasets for trajectory inference, just set `other_prior = list(paths = TRUE)`. Simulating trajectory datasets can also specify the parameters of group and batch. See `Examples`.
 #'
 #' For more customed parameters in Splat, please check [splatter::SplatParams()].
+#' For detailed information about Splat, go to <https://www.bioconductor.org/packages/release/bioc/vignettes/splatter/inst/doc/splat_params.html>.
 #'
 #' @importFrom splatter getParams setParam splatSimulate
 #' @importFrom assertthat assert_that
@@ -210,7 +212,35 @@ Splat_estimation <- function(ref_data, verbose = FALSE, seed){
 #' ### fold change of Group2 to Group3
 #' fc_group2_to_group3 <- row_data$DEFacGroup3/row_data$DEFacGroup2
 #' table(fc_group2_to_group3 > 1)[2]/4000
-
+#'
+#' # 6) Simulate trajectory (only one group is simulated by default)
+#' simulate_result <- simmethods::Splat_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(paths = TRUE),
+#'   return_format = "SingleCellExperiment",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#' ## plot
+#' result <- scater::logNormCounts(simulate_result[["simulate_result"]])
+#' result <- scater::runPCA(result)
+#' plotPCA(result, colour_by = "group")
+#'
+#' # 7) Simulate trajectory (three groups)
+#' simulate_result <- simmethods::Splat_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(paths = TRUE,
+#'                      group.prob = c(0.3, 0.4, 0.3),
+#'                      de.facLoc = 0.5,
+#'                      de.prob = 0.5),
+#'   return_format = "SingleCellExperiment",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#' ## plot
+#' result <- scater::logNormCounts(simulate_result[["simulate_result"]])
+#' result <- scater::runPCA(result)
+#' plotPCA(result, colour_by = "group")
 Splat_simulation <- function(parameters,
                              other_prior = NULL,
                              return_format,
@@ -285,11 +315,17 @@ Splat_simulation <- function(parameters,
   # Estimation
   tryCatch({
     if(!is.null(other_prior[["paths"]])){
-      cat("Simulating trajectory datasets by Splat")
+      cat("Simulating trajectory datasets by Splat \n")
       submethod <- "paths"
-      parameters <- splatter::setParam(parameters,
-                                       name = "path.from",
-                                       value = seq(1:params_check[['nGroups']])-1)
+      if(!is.null(other_prior[["path.from"]])){
+        parameters <- splatter::setParam(parameters,
+                                         name = "path.from",
+                                         value = other_prior[["path.from"]])
+      }else{
+        parameters <- splatter::setParam(parameters,
+                                         name = "path.from",
+                                         value = seq(1:params_check[['nGroups']])-1)
+      }
     }else{
       if(params_check[["nGroups"]] == 1){
         submethod <- "single"
