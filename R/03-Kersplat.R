@@ -79,8 +79,8 @@ Kersplat_estimation <- function(ref_data, verbose = FALSE, seed){
 #' simulation step, the number of cells, genes, groups, batches, the percent of
 #' DEGs and other variables are usually customed, so before simulating a dataset
 #' you must point it out. See `Details` below for more information.
-#' @param return_format A character. Alternatives choices: list, SingleCellExperiment,
-#' Seurat, h5ad
+#' @param return_format A character. Alternative choices: list, SingleCellExperiment,
+#' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
 #' @importFrom splatter kersplatSimulate
@@ -166,9 +166,6 @@ Kersplat_simulation <- function(parameters,
   parameters <- splatter::setParam(parameters, name = "seed", value = seed)
   # Estimation
   tryCatch({
-    if(!is.null(other_prior[["trajectory"]])){
-      cat("Simulating trajectory datasets by Kersplat")
-    }
     simulate_detection <- peakRAM::peakRAM(
       simulate_result <- splatter::kersplatSimulate(parameters,
                                                     verbose = verbose)
@@ -182,8 +179,8 @@ Kersplat_simulation <- function(parameters,
   ## counts
   counts <- as.matrix(SingleCellExperiment::counts(simulate_result))
   ## col_data
-  col_data <- as.data.frame(SingleCellExperiment::colData(simulate_result))[, -(2:4)]
-  colnames(col_data) <- c("cell_name", "path", "step")
+  col_data <- data.frame("cell_name" = colnames(counts))
+  rownames(col_data) <- col_data$cell_name
   ## row_data
   row_data <- as.data.frame(SingleCellExperiment::rowData(simulate_result)[, 1])
   rownames(row_data) <- row_data[, 1]

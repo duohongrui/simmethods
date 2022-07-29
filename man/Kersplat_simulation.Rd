@@ -21,8 +21,8 @@ simulation step, the number of cells, genes, groups, batches, the percent of
 DEGs and other variables are usually customed, so before simulating a dataset
 you must point it out. See \code{Details} below for more information.}
 
-\item{return_format}{A character. Alternatives choices: list, SingleCellExperiment,
-Seurat, h5ad}
+\item{return_format}{A character. Alternative choices: list, SingleCellExperiment,
+Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad file saves to.}
 
 \item{verbose}{Logical. Whether to return messages or not.}
 
