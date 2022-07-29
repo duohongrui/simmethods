@@ -165,6 +165,36 @@ table(fc_group1_to_group3 != 1)[2]/4000
 ### fold change of Group2 to Group3
 fc_group2_to_group3 <- row_data$DEFacGroup3/row_data$DEFacGroup2
 table(fc_group2_to_group3 != 1)[2]/4000
+
+# (6) Simulate continous cell trajectory
+simulate_result <- simmethods::SCRIP_simulation(ref_data = ref_data,
+                                                parameters = estimate_result[["estimate_result"]],
+                                                other_prior = list(batchCells = 1000,
+                                                                   nGenes = 1000,
+                                                                   paths = TRUE),
+                                                return_format = "SingleCellExperiment",
+                                                verbose = TRUE,
+                                                seed = 111)
+## plot
+result <- scater::logNormCounts(simulate_result[["simulate_result"]])
+result <- scater::runPCA(result)
+plotPCA(result, colour_by = "group")
+
+# (7) Simulate continous cell trajectory (three groups)
+simulate_result <- simmethods::SCRIP_simulation(ref_data = ref_data,
+                                                parameters = estimate_result[["estimate_result"]],
+                                                other_prior = list(batchCells = 1000,
+                                                                   nGenes = 1000,
+                                                                   paths = TRUE,
+                                                                   prob.group = c(0.2, 0.4, 0.4),
+                                                                   de.prob = 0.4),
+                                                return_format = "SingleCellExperiment",
+                                                verbose = TRUE,
+                                                seed = 111)
+## plot
+result <- scater::logNormCounts(simulate_result[["simulate_result"]])
+result <- scater::runPCA(result)
+plotPCA(result, colour_by = "group")
 }
 \references{
 Qin F, Luo X, Xiao F, et al. SCRIP: an accurate simulator for single-cell RNA sequencing data. Bioinformatics, 2022, 38(5): 1304-1311. \url{https://doi.org/10.1093/bioinformatics/btab824}

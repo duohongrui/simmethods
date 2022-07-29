@@ -219,6 +219,36 @@ SCRIP_estimation <- function(ref_data, verbose = FALSE, seed){
 #' ### fold change of Group2 to Group3
 #' fc_group2_to_group3 <- row_data$DEFacGroup3/row_data$DEFacGroup2
 #' table(fc_group2_to_group3 != 1)[2]/4000
+#'
+#' # (6) Simulate continous cell trajectory
+#' simulate_result <- simmethods::SCRIP_simulation(ref_data = ref_data,
+#'                                                 parameters = estimate_result[["estimate_result"]],
+#'                                                 other_prior = list(batchCells = 1000,
+#'                                                                    nGenes = 1000,
+#'                                                                    paths = TRUE),
+#'                                                 return_format = "SingleCellExperiment",
+#'                                                 verbose = TRUE,
+#'                                                 seed = 111)
+#' ## plot
+#' result <- scater::logNormCounts(simulate_result[["simulate_result"]])
+#' result <- scater::runPCA(result)
+#' plotPCA(result, colour_by = "group")
+#'
+#' # (7) Simulate continous cell trajectory (three groups)
+#' simulate_result <- simmethods::SCRIP_simulation(ref_data = ref_data,
+#'                                                 parameters = estimate_result[["estimate_result"]],
+#'                                                 other_prior = list(batchCells = 1000,
+#'                                                                    nGenes = 1000,
+#'                                                                    paths = TRUE,
+#'                                                                    prob.group = c(0.2, 0.4, 0.4),
+#'                                                                    de.prob = 0.4),
+#'                                                 return_format = "SingleCellExperiment",
+#'                                                 verbose = TRUE,
+#'                                                 seed = 111)
+#' ## plot
+#' result <- scater::logNormCounts(simulate_result[["simulate_result"]])
+#' result <- scater::runPCA(result)
+#' plotPCA(result, colour_by = "group")
 SCRIP_simulation <- function(parameters,
                              ref_data,
                              other_prior = NULL,
@@ -306,9 +336,18 @@ SCRIP_simulation <- function(parameters,
   }
   # Estimation
   tryCatch({
-    if(!is.null(other_prior[["trajectory"]])){
+    if(!is.null(other_prior[["paths"]])){
       cat("Simulating trajectory datasets by SCRIP")
       submethod <- "paths"
+      if(!is.null(other_prior[["path.from"]])){
+        parameters <- splatter::setParam(parameters,
+                                         name = "path.from",
+                                         value = other_prior[["path.from"]])
+      }else{
+        parameters <- splatter::setParam(parameters,
+                                         name = "path.from",
+                                         value = seq(1:params_check[['nGroups']])-1)
+      }
     }else{
       if(params_check[["nGroups"]] == 1){
         submethod <- "single"
@@ -336,7 +375,14 @@ SCRIP_simulation <- function(parameters,
   if(params_check[['nGroups']] == 1){
     col_data[, 3] <- rep("Group1", ncol(simulate_result))
   }else{
-    col_data <- col_data[, -4]
+    if(!is.null(other_prior[["paths"]])){
+      col_data$Group <- stringr::str_replace_all(col_data$Group,
+                                                 pattern = "Path",
+                                                 replacement = "Group")
+      col_data <- col_data[, -c(4, 5)]
+    }else{
+      col_data <- col_data[, -4]
+    }
   }
   colnames(col_data) <- c("cell_name", "batch", "group")
   # row_data
@@ -350,8 +396,13 @@ SCRIP_simulation <- function(parameters,
     total_sum <- rowSums(group_fac)
     de_gene <- ifelse(total_sum == params_check[['nGroups']], "no", "yes")
     row_data[, 2] <- de_gene
-    row_data <- row_data[, -c(3:4)]
-    colnames(row_data) <- c("gene_name", "de_gene", colnames(batch_fac), colnames(group_fac))
+    if(!is.null(other_prior[["paths"]])){
+      row_data <- row_data[, -c(3:4, (ncol(row_data)-ncol(group_fac)+1):ncol(row_data))]
+      colnames(row_data) <- c("gene_name", "de_gene", colnames(batch_fac), paste0("DEFacGroup", 1:ncol(group_fac)))
+    }else{
+      row_data <- row_data[, -c(3:4)]
+      colnames(row_data) <- c("gene_name", "de_gene", colnames(batch_fac), colnames(group_fac))
+    }
   }
   # Establish SingleCellExperiment
   simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
