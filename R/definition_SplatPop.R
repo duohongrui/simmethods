@@ -495,7 +495,7 @@ SplatPop_method_definition <- function(...){
     ),
     param_integer(
       id = "seed",
-      force = TRUE,,
+      force = TRUE,
       description = "Seed to use for generating random numbers.",
       function_name = "splatPopSimulate"
     )
@@ -513,10 +513,10 @@ SplatPop_method_definition <- function(...){
       orcid = "0000-0001-7744-8565"
     ),
     manuscript = manuscript_definition(
-      title = "Splatter: simulation of single-cell RNA sequencing data",
-      doi = "10.1186/s13059-017-1305-0",
+      title = "splatPop: simulating population scale single-cell RNA sequencing data",
+      doi = "10.1186/s13059-021-02546-1",
       journal = "Genome Biology",
-      date = "2017",
+      date = "2021",
       peer_review = TRUE
     ),
     description = "Splatter is a package for the simulation of single-cell RNA sequencing count data")

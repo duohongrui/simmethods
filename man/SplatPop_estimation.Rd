@@ -29,8 +29,7 @@ This function is used to estimate useful parameters from a real dataset by
 using \code{splatPopEstimate} function in Splatter package.
 }
 \details{
-When estimating parameters with SplatPop, users can input some extra information
-(but it is rarely used):
+When estimating parameters with SplatPop, users can input some extra information (but it is rarely used):
 \enumerate{
 \item means. Matrix of real gene means across a population, where each row is a gene and each column is an individual in the population.
 \item eqtl. A data.frame with all or top eQTL pairs from a real eQTL analysis. Must include columns: 'gene_id', 'pval_nominal', and 'slope'.

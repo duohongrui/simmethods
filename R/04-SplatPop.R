@@ -13,13 +13,13 @@
 #' DEGs and other variables are usually customed, so before simulating a dataset
 #' you must point it out. See `Details` below for more information.
 #' @importFrom splatter splatPopEstimate
+#' @importFrom dplyr mutate group_by slice_sample
 #'
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
 #' @details
-#' When estimating parameters with SplatPop, users can input some extra information
-#' (but it is rarely used):
+#' When estimating parameters with SplatPop, users can input some extra information (but it is rarely used):
 #' 1. means. Matrix of real gene means across a population, where each row is a gene and each column is an individual in the population.
 #' 2. eqtl. A data.frame with all or top eQTL pairs from a real eQTL analysis. Must include columns: 'gene_id', 'pval_nominal', and 'slope'.
 #' For more information, please check [splatter::splatPopEstimate] or <https://www.bioconductor.org/packages/release/bioc/vignettes/splatter/inst/doc/splatPop.html>
@@ -110,16 +110,151 @@ SplatPop_estimation <- function(ref_data,
 #' 4. de.prob. You can directly set `other_prior = list(de.prob = 0.2)` to simulate DEGs that account for 20 percent of all genes.
 #' 5. prob.group. You can directly set `other_prior = list(prob.group = c(0.2, 0.3, 0.5))` to assign three proportions of cell groups. Note that the number of groups always equals to the length of the vector.
 #' 6. nBatches. You can not directly set `other_prior = list(nBatches = 3)` to simulate 3 batches. Instead, you should set `other_prior = list(batchCells = c(500, 500, 500))` to reach the goal and the total cells are 1500.
+#' 7. If users want to simulate datasets for trajectory inference, just set `other_prior = list(paths = TRUE)`. Simulating trajectory datasets can also specify the parameters of group and batch. See `Examples`.
 #'
 #' For more customed parameters in SplatPop, please check [splatter::SplatPopParams()].
+#' For detailed information about SplatPop, go to <https://www.bioconductor.org/packages/release/bioc/vignettes/splatter/inst/doc/splatPop.html>.
 #'
 #' @export
 #' @references
-#' Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. <https://doi.org/10.1186/s13059-017-1305-0>
+#' Azodi C B, Zappia L, Oshlack A, et al. splatPop: simulating population scale single-cell RNA sequencing data. Genome biology, 2021, 22(1): 1-16. <https://doi.org/10.1186/s13059-021-02546-1>
 #'
 #' Bioconductor URL: <https://bioconductor.org/packages/release/bioc/html/splatter.html>
 #'
 #' Github URL: <https://github.com/Oshlack/splatter>
+#'
+#' @examples
+#' # Load data
+#' ref_data <- simmethods::data
+#' # Estimate parameters
+#' estimate_result <- simmethods::SplatPop_estimation(ref_data = ref_data,
+#'                                                    verbose = TRUE,
+#'                                                    seed = 10)
+#'
+#' # (1) Simulate 500 cells (Since we can not set nCells directly, so we can set
+#' # batchCells (a numeric vector)) and 500 genes
+#' simulate_result <- simmethods::SplatPop_simulation(parameters = estimate_result[["estimate_result"]],
+#'                                                    other_prior = list(batchCells = 500,
+#'                                                                       nGenes = 500),
+#'                                                    return_format = "list",
+#'                                                    verbose = TRUE,
+#'                                                    seed = 111)
+#' count_data <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(count_data)
+#'
+#'
+#' # (2) Simulate one group and one batch
+#' simulate_result <- simmethods::SplatPop_simulation(parameters = estimate_result[["estimate_result"]],
+#'                                                    other_prior = NULL,
+#'                                                    return_format = "list",
+#'                                                    verbose = TRUE,
+#'                                                    seed = 111)
+#' count_data <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(count_data)
+#'
+#'
+#' # (3) Simulate two groups (de.prob = 0.1) and one batch
+#' simulate_result <- simmethods::SplatPop_simulation(parameters = estimate_result[["estimate_result"]],
+#'                                                    other_prior = list(nGenes = 500,
+#'                                                                       prob.group = c(0.4, 0.6)),
+#'                                                    return_format = "list",
+#'                                                    verbose = TRUE,
+#'                                                    seed = 111)
+#' count_data <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(count_data)
+#' ## cell information
+#' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+#' table(col_data$group)
+#' ## gene information
+#' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+#' ### The result of Splat contains the factors of different groups and uses can
+#' ### calculate the fold change by division. For example, the DEFactors of A gene
+#' ### in Group1 and Group2 are respectively 2 and 1, and the fold change of A gene
+#' ### is 2/1=2 or 1/2=0.5.
+#' fc_group1_to_group2 <- row_data$DEFacGroup2/row_data$DEFacGroup1
+#' table(fc_group1_to_group2 != 1)[2]/500 ## de.prob = 0.1
+#' ### number of all DEGs
+#' table(row_data$de_gene)
+#'
+#'
+#' # (4) Simulate two groups (de.prob = 0.2) and two batches
+#' ## Since we can not set nBatches directly, so we can set batchCells (a numeric vector)
+#' ## to determin the number of batches and cells simutaniously.
+#' simulate_result <- simmethods::SplatPop_simulation(parameters = estimate_result[["estimate_result"]],
+#'                                                    other_prior = list(prob.group = c(0.4, 0.6),
+#'                                                                       batchCells = c(80, 80),
+#'                                                                       nGenes = 500,
+#'                                                                       de.prob = 0.2),
+#'                                                    return_format = "list",
+#'                                                    verbose = TRUE,
+#'                                                    seed = 111)
+#' count_data <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(count_data)
+#' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+#' table(col_data$group)
+#' table(col_data$batch)
+#'
+#'
+#' # (5) Simulate three groups (de.prob = 0.2) and two batches
+#' ## Since we can not set nBatches directly, so we can set batchCells (a numeric vector)
+#' ## to determin the number of batches and cells simutaniously.
+#' simulate_result <- simmethods::SplatPop_simulation(parameters = estimate_result[["estimate_result"]],
+#'                                                    other_prior = list(prob.group = c(0.4, 0.3, 0.3),
+#'                                                                       batchCells = c(80, 80),
+#'                                                                       nGenes = 500,
+#'                                                                       de.prob = 0.2),
+#'                                                    return_format = "list",
+#'                                                    verbose = TRUE,
+#'                                                    seed = 111)
+#' count_data <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(count_data)
+#' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+#' table(col_data$group)
+#' table(col_data$batch)
+#' ## row data
+#' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+#' ### DEGs
+#' table(row_data$de_gene)
+#' ### fold change of Group1 to Group2
+#' fc_group1_to_group2 <- row_data$DEFacGroup2/row_data$DEFacGroup1
+#' table(fc_group1_to_group2 > 1)[2]/500
+#' ### fold change of Group1 to Group3
+#' fc_group1_to_group3 <- row_data$DEFacGroup3/row_data$DEFacGroup1
+#' table(fc_group1_to_group3 > 1)[2]/500
+#' ### fold change of Group2 to Group3
+#' fc_group2_to_group3 <- row_data$DEFacGroup3/row_data$DEFacGroup2
+#' table(fc_group2_to_group3 > 1)[2]/500
+#'
+#' # 6) Simulate trajectory (only one group is simulated by default)
+#' simulate_result <- simmethods::SplatPop_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(nGenes = 500,
+#'                      paths = TRUE),
+#'   return_format = "SingleCellExperiment",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#' ## plot
+#' result <- scater::logNormCounts(simulate_result[["simulate_result"]])
+#' result <- scater::runPCA(result)
+#' plotPCA(result, colour_by = "group")
+#'
+#' # 7) Simulate trajectory (three groups)
+#' simulate_result <- simmethods::SplatPop_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(paths = TRUE,
+#'                      nGenes = 500,
+#'                      group.prob = c(0.3, 0.4, 0.3),
+#'                      de.facLoc = 0.5,
+#'                      de.prob = 0.5),
+#'   return_format = "SingleCellExperiment",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#' ## plot
+#' result <- scater::logNormCounts(simulate_result[["simulate_result"]])
+#' result <- scater::runPCA(result)
+#' plotPCA(result, colour_by = "group")
 SplatPop_simulation <- function(parameters,
                                 other_prior,
                                 return_format,
@@ -187,10 +322,19 @@ SplatPop_simulation <- function(parameters,
   }
   # Seed
   parameters <- splatter::setParam(parameters, name = "seed", value = seed)
+  # de.prob
+  parameters <- splatter::setParam(parameters,
+                                   name = "de.prob",
+                                   value = de.prob/params_check[['nGroups']])
   # vcf
   if(is.null(other_prior[["vcf"]])){
-    vcf <- splatter::mockVCF(n.samples = 1,
-                             seed = seed)
+    if(params_check[['nBatches']] == 1){
+      vcf <- splatter::mockVCF(n.samples = 1,
+                               seed = seed)
+    }else{
+      vcf <- splatter::mockVCF(n.samples = 10,
+                               seed = seed)
+    }
   }else vcf <- other_prior[["vcf"]]
   # gff
   if(is.null(other_prior[["gff"]])){
@@ -200,8 +344,17 @@ SplatPop_simulation <- function(parameters,
   # Estimation
   tryCatch({
     if(!is.null(other_prior[["paths"]])){
-      cat("Simulating trajectory datasets by SplatPop")
+      cat("Simulating trajectory datasets by SplatPop \n")
       submethod <- "paths"
+      if(!is.null(other_prior[["path.from"]])){
+        parameters <- splatter::setParam(parameters,
+                                         name = "path.from",
+                                         value = other_prior[["path.from"]])
+      }else{
+        parameters <- splatter::setParam(parameters,
+                                         name = "path.from",
+                                         value = seq(1:params_check[['nGroups']])-1)
+      }
     }else{
       if(params_check[["nGroups"]] == 1){
         submethod <- "single"
@@ -225,21 +378,33 @@ SplatPop_simulation <- function(parameters,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
-  # counts
-  counts <- SingleCellExperiment::counts(simulate_result)
-  colnames(counts) <- paste0("Cell", 1:ncol(counts))
-  rownames(counts) <- paste0("Gene", as.numeric(stringr::str_split(rownames(counts), "_", simplify = TRUE)[, 2]))
   # col_data
   col_data <- as.data.frame(SummarizedExperiment::colData(simulate_result))
+  if(params_check[['nBatches']] != 1){
+    col_data <- col_data %>%
+      dplyr::mutate("n" = 1:nrow(col_data)) %>%
+      dplyr::group_by("Group") %>%
+      dplyr::slice_sample(prop = 0.1) %>%
+      as.data.frame()
+    cell_index <- col_data$n
+  }
   col_data <- col_data[, c("Cell", "Batch", "Group")]
   colnames(col_data) <- c("cell_name", "batch", "group")
-  col_data$cell_name <- paste0("Cell", 1:ncol(counts))
+  col_data$cell_name <- paste0("Cell", 1:nrow(col_data))
   rownames(col_data) <- col_data$cell_name
+  # counts
+  counts <- SingleCellExperiment::counts(simulate_result)
+  if(params_check[['nBatches']] != 1){
+    counts <- counts[, cell_index]
+  }
+  colnames(counts) <- paste0("Cell", 1:ncol(counts))
+  rownames(counts) <- paste0("Gene", as.numeric(stringr::str_split(rownames(counts), "_", simplify = TRUE)[, 2]))
+  counts <- counts[paste0("Gene", 1:nrow(counts)), ]
   # row_data
   row_data <- as.data.frame(SummarizedExperiment::rowData(simulate_result))
-
   if(params_check[['nGroups']] == 1){
     row_data <- data.frame("gene_name" = paste0("Gene", 1:nrow(counts)))
+    rownames(row_data) <- row_data$gene_name
   }else{
     group_fac <- row_data[, grep(colnames(row_data), pattern = "^GroupDE")]
     total_sum <- rowSums(group_fac)
@@ -250,6 +415,10 @@ SplatPop_simulation <- function(parameters,
     colnames(row_data) <- c("gene_name", "de_gene", paste0("DEFacGroup", 1:params_check[['nGroups']]))
     rownames(row_data) <- row_data$gene_name
   }
+  # Establish SingleCellExperiment
+  simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
+                                                                colData = col_data,
+                                                                rowData = row_data)
   simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
                                                return_format = return_format)
 
