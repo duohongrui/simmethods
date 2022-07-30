@@ -401,12 +401,15 @@ ESCO_simulation <- function(parameters,
         col_data <- data.frame("cell_name" = colnames(counts),
                                "group" = col_data$Group)
       }
+    }else{
+      col_data <- data.frame("cell_name" = colnames(counts),
+                             "group" = col_data$Group)
     }
   }
   rownames(col_data) <- col_data$cell_name
   # row_data
   row_data <- as.data.frame(SummarizedExperiment::rowData(simulate_result))
-  if(params_check[['nGroups']] == 1 | !is.null(parameters@tree)){
+  if(params_check[['nGroups']] == 1 | !is.null(type)){
     row_data <- data.frame("gene_name" = rownames(counts))
     rownames(row_data) <- row_data$gene_name
   }else{
