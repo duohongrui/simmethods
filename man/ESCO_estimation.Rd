@@ -53,7 +53,7 @@ estimate_result <- simmethods::ESCO_estimation(ref_data = ref_data,
 #   seed = 111
 # )
 
------------------- Estimate tree or trajectory structured data --------------
+# ----------------- Estimate tree or trajectory structured data -------------
 # Load data
 ref_data <- simmethods::data
 # Estimate parameters

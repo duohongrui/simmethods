@@ -45,7 +45,7 @@
 #' #   seed = 111
 #' # )
 #'
-#' ------------------ Estimate tree or trajectory structured data --------------
+#' # ----------------- Estimate tree or trajectory structured data -------------
 #' # Load data
 #' ref_data <- simmethods::data
 #' # Estimate parameters
