@@ -55,7 +55,8 @@ Imports: simutils (>= 0.0.0.9000),
          dynwrap,
          dyntoy,
          dyngen,
-         phenopath
+         phenopath,
+         tidyr
 Suggests: edgeR,
           mgcv,
           knitr
