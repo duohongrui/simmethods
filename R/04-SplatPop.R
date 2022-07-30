@@ -133,33 +133,39 @@ SplatPop_estimation <- function(ref_data,
 #'
 #' # (1) Simulate 500 cells (Since we can not set nCells directly, so we can set
 #' # batchCells (a numeric vector)) and 500 genes
-#' simulate_result <- simmethods::SplatPop_simulation(parameters = estimate_result[["estimate_result"]],
-#'                                                    other_prior = list(batchCells = 500,
-#'                                                                       nGenes = 500),
-#'                                                    return_format = "list",
-#'                                                    verbose = TRUE,
-#'                                                    seed = 111)
+#' simulate_result <- simmethods::SplatPop_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(batchCells = 500,
+#'                      nGenes = 500),
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 #' count_data <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(count_data)
 #'
 #'
 #' # (2) Simulate one group and one batch
-#' simulate_result <- simmethods::SplatPop_simulation(parameters = estimate_result[["estimate_result"]],
-#'                                                    other_prior = NULL,
-#'                                                    return_format = "list",
-#'                                                    verbose = TRUE,
-#'                                                    seed = 111)
+#' simulate_result <- simmethods::SplatPop_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = NULL,
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 #' count_data <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(count_data)
 #'
 #'
 #' # (3) Simulate two groups (de.prob = 0.1) and one batch
-#' simulate_result <- simmethods::SplatPop_simulation(parameters = estimate_result[["estimate_result"]],
-#'                                                    other_prior = list(nGenes = 500,
-#'                                                                       prob.group = c(0.4, 0.6)),
-#'                                                    return_format = "list",
-#'                                                    verbose = TRUE,
-#'                                                    seed = 111)
+#' simulate_result <- simmethods::SplatPop_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(nGenes = 500,
+#'                      prob.group = c(0.4, 0.6)),
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 #' count_data <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(count_data)
 #' ## cell information
@@ -180,14 +186,16 @@ SplatPop_estimation <- function(ref_data,
 #' # (4) Simulate two groups (de.prob = 0.2) and two batches
 #' ## Since we can not set nBatches directly, so we can set batchCells (a numeric vector)
 #' ## to determin the number of batches and cells simutaniously.
-#' simulate_result <- simmethods::SplatPop_simulation(parameters = estimate_result[["estimate_result"]],
-#'                                                    other_prior = list(prob.group = c(0.4, 0.6),
-#'                                                                       batchCells = c(80, 80),
-#'                                                                       nGenes = 500,
-#'                                                                       de.prob = 0.2),
-#'                                                    return_format = "list",
-#'                                                    verbose = TRUE,
-#'                                                    seed = 111)
+#' simulate_result <- simmethods::SplatPop_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(prob.group = c(0.4, 0.6),
+#'                      batchCells = c(80, 80),
+#'                      nGenes = 500,
+#'                      de.prob = 0.2),
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 #' count_data <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(count_data)
 #' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
@@ -198,14 +206,16 @@ SplatPop_estimation <- function(ref_data,
 #' # (5) Simulate three groups (de.prob = 0.2) and two batches
 #' ## Since we can not set nBatches directly, so we can set batchCells (a numeric vector)
 #' ## to determin the number of batches and cells simutaniously.
-#' simulate_result <- simmethods::SplatPop_simulation(parameters = estimate_result[["estimate_result"]],
-#'                                                    other_prior = list(prob.group = c(0.4, 0.3, 0.3),
-#'                                                                       batchCells = c(80, 80),
-#'                                                                       nGenes = 500,
-#'                                                                       de.prob = 0.2),
-#'                                                    return_format = "list",
-#'                                                    verbose = TRUE,
-#'                                                    seed = 111)
+#' simulate_result <- simmethods::SplatPop_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(prob.group = c(0.4, 0.3, 0.3),
+#'                      batchCells = c(80, 80),
+#'                      nGenes = 500,
+#'                      de.prob = 0.2),
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 #' count_data <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(count_data)
 #' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
