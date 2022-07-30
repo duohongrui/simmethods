@@ -101,7 +101,7 @@ table(row_data$de_gene)[2]/2000
 fc_group1_to_group2 <- row_data$DEFacGroup2/row_data$DEFacGroup1
 table(fc_group1_to_group2 != 1)[2]/2000 ## de.prob = 0.2
 
------------------- Simulate tree or trajectory structured data --------------
+# ----------------- Simulate tree or trajectory structured data -------------
 # Load data
 ref_data <- simmethods::data
 # Estimate parameters
