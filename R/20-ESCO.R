@@ -393,12 +393,14 @@ ESCO_simulation <- function(parameters,
     col_data <- data.frame("cell_name" = colnames(counts),
                            "group" = rep("Group1", ncol(counts)))
   }else{
-    if(type == "traj"){
-      col_data <- data.frame("cell_name" = colnames(counts),
-                             "group" = paste0("Group", col_data$Path))
-    }else{
-      col_data <- data.frame("cell_name" = colnames(counts),
-                             "group" = col_data$Group)
+    if(!is.null(type)){
+      if(type == "traj"){
+        col_data <- data.frame("cell_name" = colnames(counts),
+                               "group" = paste0("Group", col_data$Path))
+      }else{
+        col_data <- data.frame("cell_name" = colnames(counts),
+                               "group" = col_data$Group)
+      }
     }
   }
   rownames(col_data) <- col_data$cell_name
