@@ -60,18 +60,18 @@ estimate_result <- simmethods::dyngen_estimation(
 # dim(counts)
 
 # 2) 100 cells and 100 genes
-simulate_result <- simmethods::dyngen_simulation(
-  parameters = estimate_result[["estimate_result"]],
-  other_prior = list(nCells = 100,
-                     nGenes = 100),
-  return_format = "list",
-  verbose = TRUE,
-  seed = 111
-)
+# simulate_result <- simmethods::dyngen_simulation(
+#   parameters = estimate_result[["estimate_result"]],
+#   other_prior = list(nCells = 100,
+#                      nGenes = 100),
+#   return_format = "list",
+#   verbose = TRUE,
+#   seed = 111
+# )
 
 ## counts
-counts <- simulate_result[["simulate_result"]][["count_data"]]
-dim(counts)
+# counts <- simulate_result[["simulate_result"]][["count_data"]]
+# dim(counts)
 }
 \references{
 Cannoodt R, Saelens W, Deconinck L, et al. Spearheading future omics analyses using dyngen, a multi-modal simulator of single cells. Nature Communications, 2021, 12(1): 1-9. \url{https://doi.org/10.1038/s41467-021-24152-2}

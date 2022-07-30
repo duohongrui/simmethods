@@ -160,18 +160,18 @@ dyngen_estimation <- function(ref_data,
 #' # dim(counts)
 #'
 #' # 2) 100 cells and 100 genes
-#' simulate_result <- simmethods::dyngen_simulation(
-#'   parameters = estimate_result[["estimate_result"]],
-#'   other_prior = list(nCells = 100,
-#'                      nGenes = 100),
-#'   return_format = "list",
-#'   verbose = TRUE,
-#'   seed = 111
-#' )
+#' # simulate_result <- simmethods::dyngen_simulation(
+#' #   parameters = estimate_result[["estimate_result"]],
+#' #   other_prior = list(nCells = 100,
+#' #                      nGenes = 100),
+#' #   return_format = "list",
+#' #   verbose = TRUE,
+#' #   seed = 111
+#' # )
 #'
 #' ## counts
-#' counts <- simulate_result[["simulate_result"]][["count_data"]]
-#' dim(counts)
+#' # counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' # dim(counts)
 dyngen_simulation <- function(parameters,
                               other_prior = NULL,
                               return_format,

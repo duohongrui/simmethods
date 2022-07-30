@@ -98,6 +98,7 @@ hierarchicell_estimation <- function(ref_data,
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
 #' @importFrom hierarchicell simulate_hierarchicell
+#' @importFrom tidyr drop_na
 #' @export
 #' @details
 #' In hierarchicell, users can set `nCells`, `nGenes` and `fc.group` directly.
