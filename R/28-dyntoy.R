@@ -116,7 +116,7 @@ dyntoy_estimation <- function(ref_data,
 #' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#' @importFrom dyntoy generate_dataset
+#' @import dyntoy
 #' @export
 #' @details
 #' In dyntoy, users can only set `nCells` and `nGenes` to specify the number of cells and genes in the

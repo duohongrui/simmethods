@@ -121,7 +121,8 @@ dyngen_estimation <- function(ref_data,
 #' @param verbose Logical. Whether to return messages or not.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#' @import dyngen
+#' @importFrom dyngen backbone_linear backbone_bifurcating backbone_cycle backbone_trifurcating
+#' initialise_model simulation_type_wild_type simulation_default
 #' @importFrom tools R_user_dir
 #' @export
 #' @details
@@ -229,18 +230,28 @@ dyngen_simulation <- function(parameters,
   # Seed
   set.seed(seed)
   # Preparation
-  init <- dyngen::initialise_model(backbone = backbone,
-                                   num_cells = nCells,
-                                   num_tfs = num_tfs,
-                                   num_targets = num_targets,
-                                   num_hks = num_hks,
-                                   download_cache_dir = tools::R_user_dir("dyngen", "data"),
-                                   simulation_params = dyngen::simulation_default(
-                                     census_interval = 0.01,
-                                     experiment_params = dyngen::simulation_type_wild_type(num_simulations = 1)
-                                     ),
-                                   verbose = TRUE)
-
+  init <- dyngen::initialise_model(
+    backbone = backbone,
+    num_cells = nCells,
+    num_tfs = num_tfs,
+    num_targets = num_targets,
+    num_hks = num_hks,
+    download_cache_dir = tools::R_user_dir("dyngen", "data"),
+    simulation_params = dyngen::simulation_default(
+      census_interval = 0.01,
+      experiment_params = dyngen::simulation_type_wild_type(num_simulations = 1)
+    ),
+    verbose = TRUE)
+  simulate_formals <- simutils::change_parameters(
+    function_expr = "dyngen::generate_dataset",
+    other_prior = list(model = init,
+                       format = "dyno",
+                       store_dimred = FALSE,
+                       store_cellwise_grn = FALSE,
+                       store_rna_velocity = FALSE),
+    step = "simulation"
+  )
+  env <- asNamespace("dyngen")
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -252,7 +263,7 @@ dyngen_simulation <- function(parameters,
   # Estimation
   tryCatch({
     simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- dyngen::generate_dataset(init, make_plots = FALSE)
+      simulate_result <- do.call(env[["generate_dataset"]], simulate_formals)
     )
   }, error = function(e){
     as.character(e)
