@@ -22,95 +22,129 @@
 #' detection.
 #' @export
 #'
-# scGAN_estimation <- function(
-#     ref_data,
-#     other_prior,
-#     verbose = FALSE,
-#     seed,
-#     ...
-# ){
-#
-#   ##############################################################################
-#   ####                            Environment                                ###
-#   ##############################################################################
-#   ### (1. Check docker installation
-#   docker_install <- dynwrap::test_docker_installation()
-#   if(!docker_install){
-#     stop("Docker has not been installed or started! Please check it!")
-#   }
-#   ### (2. Check the installation of simpipe docker image
-#   images <- babelwhale::list_docker_images() %>%
-#     tidyr::unite("Repository", "Tag", sep = ":", col = "Image") %>%
-#     dplyr::pull("Image")
-#
-#   if(!"fhausmann/scgan:latest" %in% images){
-#     # If not, pull fhausmann/scgan:latest
-#     babelwhale::pull_container(container_id = "fhausmann/scgan:latest")
-#   }
-#
-#   ## Local file to store .h5ad file
-#   local_path <- system.file("scGAN", package = "simmethods")
-#   tmp_path <- tempdir() %>% simutils::fix_path()
-#   ## Move /scGAN to a tmp dir
-#   file.copy(from = local_path,
-#             to = tmp_path,
-#             overwrite = TRUE,
-#             recursive = TRUE)
-#   ## Docker file path
-#   docker_path <- "/scGAN"
-#   ## change parameters in .json file
-#   parameters <- simutils::change_scGAN_parameters("use_scGAN", ...)
-#   ## Save to /scGAN
-#   param_json <- jsonlite::toJSON(parameters,
-#                                  pretty = 4,
-#                                  dataframe = "values",
-#                                  null = "null",
-#                                  auto_unbox = TRUE)
-#   write(param_json, file = file.path(tmp_path, "scGAN", "parameters.json"))
-#
-#   ## convert data to .h5ad and save to /scGAN
-#   input_data <- SingleCellExperiment::SingleCellExperiment(list(counts = ref_data),
-#                                                            colData = colnames(ref_data),
-#                                                            rowData = rownames(ref_data))
-#   save_path <- simutils::data_conversion(SCE_object = input_data,
-#                                          return_format = "h5ad",
-#                                          local_path = file.path(tmp_path, "scGAN"))
-#   ## Delete .h5Seurat
-#   files_h5seurat <- list.files(path = file.path(tmp_path, "scGAN"), pattern = ".h5Seurat")
-#   file.remove(file.path(tmp_path, "scGAN", files_h5seurat))
-#   ## Rename .h5ad file
-#   files_h5ad <- list.files(path = file.path(tmp_path, "scGAN"), pattern = ".h5ad")
-#   file.rename(file.path(tmp_path, "scGAN", files_h5ad),
-#               file.path(tmp_path, "scGAN", "input_data.h5ad"))
-#
-#   ##############################################################################
-#   ####                            Estimation                                 ###
-#   ##############################################################################
-#   if(verbose){
-#     cat("Estimating parameters using scGAN\n")
-#   }
-#   # Seed
-#   set.seed(seed)
-#   # Estimation
-#   tryCatch({
-#     # Estimate parameters from real data and return parameters and detection results
-#     estimate_detection <- peakRAM::peakRAM(
-#       estimate_result <- simutils::make_trees(ref_data,
-#                                               group = group,
-#                                               is_Newick = TRUE)
-#     )
-#   }, error = function(e){
-#     as.character(e)
-#   })
-#   estimate_result <- list(newick_tree = estimate_result,
-#                           data_dim = dim(ref_data))
-#   ##############################################################################
-#   ####                           Ouput                                       ###
-#   ##############################################################################
-#   estimate_output <- list(estimate_result = estimate_result,
-#                           estimate_detection = estimate_detection)
-#   return(estimate_output)
-# }
+scGAN_estimation <- function(
+    ref_data,
+    other_prior,
+    verbose = FALSE,
+    seed
+){
+
+  ##############################################################################
+  ####                            Environment                                ###
+  ##############################################################################
+  ### (1. Check docker installation
+  docker_install <- dynwrap::test_docker_installation()
+  if(!docker_install){
+    stop("Docker has not been installed or started! Please check it!")
+  }
+  ### (2. Check the installation of simpipe docker image
+  images <- babelwhale::list_docker_images() %>%
+    tidyr::unite("Repository", "Tag", sep = ":", col = "Image") %>%
+    dplyr::pull("Image")
+
+  if(!"fhausmann/scgan:latest" %in% images){
+    # If not, pull fhausmann/scgan:latest
+    babelwhale::pull_container(container_id = "fhausmann/scgan:latest")
+  }
+
+  ## Local file to store .h5ad file
+  local_path <- system.file("scGAN", package = "simmethods")
+  tmp_path <- tempdir() %>% simutils::fix_path()
+  ## Move /scGAN to a tmp dir
+  file.copy(from = local_path,
+            to = tmp_path,
+            overwrite = TRUE,
+            recursive = TRUE)
+  ## Docker file path
+  docker_path <- "/scGAN"
+  ## change parameters in .json file
+  parameters <- simutils::change_scGAN_parameters("use_scGAN",
+                                                  "GPU" = 1,
+                                                  "min_cells" = 0,
+                                                  "min_genes" = 0,
+                                                  "experiments_dir" = "/scGAN",
+                                                  "raw_input" = "/scGAN/input_data.h5ad",
+                                                  "max_steps" = 100000)
+  ## Save to /scGAN
+  param_json <- jsonlite::toJSON(parameters,
+                                 pretty = 4,
+                                 dataframe = "values",
+                                 null = "null",
+                                 auto_unbox = TRUE)
+  write(param_json, file = file.path(tmp_path, "scGAN", "parameters.json"))
+
+  ## convert data to .h5ad and save to tmp_path
+  new_data <- simutils::scgan_data_conversion(data = data,
+                                              data_id = "input_data",
+                                              save_to_path = file.path(tmp_path, "scGAN"),
+                                              verbose = verbose)
+  # Prepare the input parameters-----------------------------------------------
+  ## 1. docker image working directory
+  wd <- c("--workdir", "/scGAN")
+  ## 2. docker image directory of the mount point
+  docker_path <- "/scGAN"
+  ## 3. volumes
+  volumes <- paste0(file.path(tmp_path, "scGAN"), ":", docker_path)
+  volumes_command <- c("-v", volumes)
+  ## 4. verbose
+  verbose <- verbose
+  ## 5. args
+  args <- c("python", "main.py", "--param parameters.json", "--process")
+  ## container name
+  name <- simutils::time_string()
+  container_name <- c("--name", name)
+  ## 7. container id
+  container_id <- "fhausmann/scgan"
+  ## 8. docker command
+  config <- babelwhale::get_default_config()
+  processx_command <- Sys.which(config$backend) %>% unname()
+  ## 9. processx arguments
+  processx_args <- c("run",
+                     container_name,
+                     wd,
+                     volumes_command,
+                     c("--gpus", "all"),
+                     container_id,
+                     args)
+  ## run
+  process <- processx::run(
+    command = processx_command,
+    args = processx_args,
+    echo_cmd = verbose,
+    echo = verbose,
+    spinner = TRUE,
+    error_on_status = FALSE,
+    cleanup_tree = TRUE
+  )
+
+  ##############################################################################
+  ####                            Estimation                                 ###
+  ##############################################################################
+  if(verbose){
+    cat("Estimating parameters using scGAN\n")
+  }
+  # Seed
+  set.seed(seed)
+  # Estimation
+  tryCatch({
+    # Estimate parameters from real data and return parameters and detection results
+    estimate_detection <- peakRAM::peakRAM(
+      estimate_result <- simutils::make_trees(ref_data,
+                                              group = group,
+                                              is_Newick = TRUE)
+    )
+  }, error = function(e){
+    as.character(e)
+  })
+  estimate_result <- list(newick_tree = estimate_result,
+                          data_dim = dim(ref_data))
+  ##############################################################################
+  ####                           Ouput                                       ###
+  ##############################################################################
+  estimate_output <- list(estimate_result = estimate_result,
+                          estimate_detection = estimate_detection)
+  return(estimate_output)
+}
 
 
 #' Simulate Datasets by PROSSTT
