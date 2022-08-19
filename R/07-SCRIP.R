@@ -81,7 +81,6 @@ SCRIP_estimation <- function(ref_data,
 #' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#' @importFrom simutils default_datasets
 #' @importFrom devtools install_github
 #' @export
 #' @details
