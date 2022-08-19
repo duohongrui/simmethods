@@ -89,7 +89,7 @@ scGAN_estimation <- function(
   ## 4. verbose
   verbose <- verbose
   ## 5. args
-  args <- c("python", "main.py", "--param parameters.json", "--process")
+  args <- c("python", "main.py", "--param", "parameters.json","--process")
   ## container name
   name <- simutils::time_string()
   container_name <- c("--name", name)
@@ -120,8 +120,21 @@ scGAN_estimation <- function(
   ##############################################################################
   ####                            Estimation                                 ###
   ##############################################################################
+  args_train <- c("python", "main.py", "--param", "parameters.json", "--train")
+  ## train container name
+  train_name <- simutils::time_string()
+  container_train_name <- c("--name", train_name)
+  ## processx args
+  processx_args_train <- c("run",
+                           container_train_name,
+                           wd,
+                           volumes_command,
+                           c("--gpus", "all"),
+                           container_id,
+                           args_train)
+
   if(verbose){
-    cat("Estimating parameters using scGAN\n")
+    message("Estimating parameters using scGAN, This step may be long...")
   }
   # Seed
   set.seed(seed)
@@ -129,10 +142,14 @@ scGAN_estimation <- function(
   tryCatch({
     # Estimate parameters from real data and return parameters and detection results
     estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- simutils::make_trees(ref_data,
-                                              group = group,
-                                              is_Newick = TRUE)
-    )
+      estimate_result <- process <- processx::run(
+        command = processx_command,
+        args = processx_args_train,
+        echo_cmd = verbose,
+        echo = verbose,
+        spinner = TRUE,
+        error_on_status = FALSE,
+        cleanup_tree = TRUE))
   }, error = function(e){
     as.character(e)
   })
