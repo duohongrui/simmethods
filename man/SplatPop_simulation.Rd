@@ -29,7 +29,8 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \item{seed}{A random seed.}
 }
 \description{
-Simulate Datasets by SplatPop
+This function is used to simulate datasets from learned parameters by \code{splatPopSimulate}
+function in Splatter package.
 }
 \details{
 In addtion to simulate datasets with default parameters, users want to simulate
@@ -38,7 +39,7 @@ SplatPop, you can set extra parameters to simulate datasets.
 
 The customed parameters you can set are below:
 \enumerate{
-\item nCells. In Splat, you can not set nCells directly and should set batchCells instead. For example, if you want to simulate 1000 cells, you can type \code{other_prior = list(batchCells = 1000)}. If you type \code{other_prior = list(batchCells = c(500, 500))}, the simulated data will have two batches.
+\item nCells. In SplatPop, you can not set nCells directly and should set batchCells instead. For example, if you want to simulate 1000 cells, you can type \code{other_prior = list(batchCells = 1000)}. If you type \code{other_prior = list(batchCells = c(500, 500))}, the simulated data will have two batches.
 \item nGenes. You can directly set \code{other_prior = list(nGenes = 5000)} to simulate 5000 genes.
 \item nGroups. You can not directly set \code{other_prior = list(nGroups = 3)} to simulate 3 groups. Instead, you should set \code{other_prior = list(prob.group = c(0.2, 0.3, 0.5))} where the sum of group probabilities must equal to 1.
 \item de.prob. You can directly set \code{other_prior = list(de.prob = 0.2)} to simulate DEGs that account for 20 percent of all genes.
