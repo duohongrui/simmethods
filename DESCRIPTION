@@ -31,7 +31,6 @@ Imports:
     NbClust,
     BiocGenerics,
     biomaRt,
-    powsimR,
     S4Vectors,
     splatter (>= 1.14.1),
     BiocParallel,
@@ -75,7 +74,8 @@ Suggests:
     jsonlite,
     processx,
     babelwhale,
-    SCRIP
+    SCRIP,
+    powsimR
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,

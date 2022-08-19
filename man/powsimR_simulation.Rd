@@ -29,7 +29,8 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \item{seed}{A random seed.}
 }
 \description{
-Simulate Datasets by powsimR
+This function is used to simulate datasets from learned parameters by \code{simulateDE}
+function in powsimR package.
 }
 \details{
 powsimR provides some choices for users to select suitable parameters according
@@ -63,22 +64,24 @@ ref_data <- simmethods::data
 ### Make sure there are ERCC names in reference data
 rownames(ref_data)[grep(rownames(ref_data), pattern = "^ERCC")]
 ### Users must input the dilution.factor and volume (nanoliter) to determine the ERCC molecules
-estimate_result <- powsimR_estimation(ref_data = ref_data,
-                                      other_prior = list(RNAseq = "singlecell",
-                                                         Protocol = "UMI",
-                                                         Normalisation = "scran",
-                                                         dilution.factor = 50000,
-                                                         volume = 1),
-                                      verbose = TRUE,
-                                      seed = 111)
+estimate_result <- powsimR_estimation(
+  ref_data = ref_data,
+  other_prior = list(RNAseq = "singlecell",
+                     Protocol = "UMI",
+                     Normalisation = "scran",
+                     dilution.factor = 50000,
+                     volume = 1),
+  verbose = TRUE,
+  seed = 111)
 
 # (1) Simulate 500 cells and 2000 genes
-simulate_result <- simmethods::powsimR_simulation(parameters = estimate_result[["estimate_result"]],
-                                                  other_prior = list(nCells = 500,
-                                                                     nGenes = 2000),
-                                                  return_format = "list",
-                                                  verbose = TRUE,
-                                                  seed = 111)
+simulate_result <- simmethods::powsimR_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  other_prior = list(nCells = 500,
+                     nGenes = 2000),
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111)
 count_data <- simulate_result[["simulate_result"]][["count_data"]]
 dim(count_data)
 ## In powsimR, users always get two groups of cells, and the numbers of cells in
@@ -90,13 +93,14 @@ row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 table(row_data$de_genes)[2]/2000
 
 # (2) Simulate two groups with 20\% of DEGs and 4 fold change.
-simulate_result <- simmethods::powsimR_simulation(parameters = estimate_result[["estimate_result"]],
-                                                  other_prior = list(prob.group = c(0.3, 0.7),
-                                                                     de.prob = 0.2,
-                                                                     fc.group = 4),
-                                                  return_format = "list",
-                                                  verbose = TRUE,
-                                                  seed = 111)
+simulate_result <- simmethods::powsimR_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  other_prior = list(prob.group = c(0.3, 0.7),
+                     de.prob = 0.2,
+                     fc.group = 4),
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111)
 count_data <- simulate_result[["simulate_result"]][["count_data"]]
 dim(count_data)
 ## cell information
@@ -108,12 +112,13 @@ table(row_data$de_genes)[2]/4000
 
 
 # (3) Simulate two batches (2 fold change)
-simulate_result <- simmethods::powsimR_simulation(parameters = estimate_result[["estimate_result"]],
-                                                  other_prior = list(prob.batch = c(0.4, 0.6),
-                                                                     fc.batch = 2),
-                                                  return_format = "list",
-                                                  verbose = TRUE,
-                                                  seed = 111)
+simulate_result <- simmethods::powsimR_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  other_prior = list(prob.batch = c(0.4, 0.6),
+                     fc.batch = 2),
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111)
 count_data <- simulate_result[["simulate_result"]][["count_data"]]
 dim(count_data)
 ## cell information

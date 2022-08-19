@@ -49,25 +49,27 @@ For more instructions, see \code{Examples}.
 ref_data <- simmethods::data
 
 ## Estimate parameters without ERCC spike-in
-estimate_result <- powsimR_estimation(ref_data = ref_data,
-                                      other_prior = list(RNAseq = "singlecell",
-                                                         Protocol = "UMI",
-                                                         Normalisation = "scran"),
-                                      verbose = TRUE,
-                                      seed = 111)
+estimate_result <- powsimR_estimation(
+  ref_data = ref_data,
+  other_prior = list(RNAseq = "singlecell",
+                     Protocol = "UMI",
+                     Normalisation = "scran"),
+  verbose = TRUE,
+  seed = 111)
 
 ## Estimate parameters with ERCC spike-in
 ### Make sure there are ERCC names in reference data
 rownames(ref_data)[grep(rownames(ref_data), pattern = "^ERCC")]
-### Users must input the dilution.factor and volume (nanoliter) to determine the ERCC molecules
-estimate_result <- powsimR_estimation(ref_data = ref_data,
-                                      other_prior = list(RNAseq = "singlecell",
-                                                         Protocol = "UMI",
-                                                         Normalisation = "scran",
-                                                         dilution.factor = 50000,
-                                                         volume = 1),
-                                      verbose = TRUE,
-                                      seed = 111)
+### Users must input the dilution.factor and volume (microliter) to determine the ERCC molecules
+estimate_result <- powsimR_estimation(
+  ref_data = ref_data,
+  other_prior = list(RNAseq = "singlecell",
+                     Protocol = "UMI",
+                     Normalisation = "scran",
+                     dilution.factor = 50000,
+                     volume = 1),
+  verbose = TRUE,
+  seed = 111)
 }
 \references{
 Vieth B, Ziegenhain C, Parekh S, et al. powsimR: power analysis for bulk and single cell RNA-seq experiments. Bioinformatics, 2017, 33(21): 3486-3488. \url{https://doi.org/10.1093/bioinformatics/btx435}
