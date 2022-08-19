@@ -52,7 +52,6 @@ Imports:
     BEARscc,
     zinbwaveZingercollected,
     zingeR,
-    SPARSim,
     SPsimSeq,
     ESCO,
     muscat,
@@ -67,10 +66,12 @@ Imports:
     lifecycle,
     cli,
     withr
-Suggests: edgeR,
-          mgcv,
-          knitr,
-          CancerInSilico
+Suggests: 
+    edgeR,
+    mgcv,
+    knitr,
+    CancerInSilico,
+    SPARSim
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,

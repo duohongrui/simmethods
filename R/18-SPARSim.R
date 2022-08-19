@@ -12,7 +12,6 @@
 #' DEGs are usually customed, so before simulating a dataset you must point it out.
 #' See `Details` below for more information.
 #' @param seed An integer of a random seed.
-#' @importFrom SPARSim SPARSim_estimate_parameter_from_data scran_normalization
 #' @importFrom stats model.matrix
 #' @importFrom scater normalizeCounts
 #' @return A list contains the estimated parameters and the results of execution
@@ -76,9 +75,7 @@ SPARSim_estimation <- function(ref_data,
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("SPARSim", quietly = TRUE)){
-    cat("SPARSim is not installed on your device\n")
-    cat("Installing SPARSim...\n")
-    devtools::install_gitlab("sysbiobig/sparsim")
+    stop("Please install \"SPARSim\" by \"devtools::install_gitlab('sysbiobig/sparsim')\" command.")
   }
   ##############################################################################
   ####                               Check                                   ###
@@ -172,7 +169,6 @@ SPARSim_estimation <- function(ref_data,
 #' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#' @import SPARSim
 #' @importFrom stats runif
 #' @importFrom BiocGenerics get
 #' @export
@@ -278,9 +274,7 @@ SPARSim_simulation <- function(parameters,
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("SPARSim", quietly = TRUE)){
-    cat("SPARSim is not installed on your device\n")
-    cat("Installing SPARSim...\n")
-    devtools::install_gitlab("sysbiobig/sparsim")
+    stop("Please install \"SPARSim\" by \"devtools::install_gitlab('sysbiobig/sparsim')\" command.")
   }
   other_prior[["dataset_parameter"]] <- parameters[["estimate_result"]]
   other_prior[["spikein_parameter"]] <- parameters[["SPARSim_spikein_parameter"]]

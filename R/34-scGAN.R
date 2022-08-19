@@ -106,7 +106,7 @@ scGAN_estimation <- function(
                      c("--gpus", "all"),
                      container_id,
                      args)
-  ## run
+  ## run preprocessing
   process <- processx::run(
     command = processx_command,
     args = processx_args,
@@ -153,8 +153,9 @@ scGAN_estimation <- function(
   }, error = function(e){
     as.character(e)
   })
-  estimate_result <- list(newick_tree = estimate_result,
-                          data_dim = dim(ref_data))
+  estimate_result <- list(local_path = file.path(tmp_path, "scGAN"),
+                          cluster_number = new_data$cluster_number,
+                          gpu = "all")
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
