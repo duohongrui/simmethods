@@ -44,7 +44,6 @@ Imports:
     assertthat,
     SeuratDisk,
     Seurat,
-    SCRIP,
     devtools,
     POWSC,
     scDesign,
@@ -75,7 +74,8 @@ Suggests:
     sceasy,
     jsonlite,
     processx,
-    babelwhale
+    babelwhale,
+    SCRIP
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,

@@ -6,7 +6,7 @@
 \usage{
 SCRIP_simulation(
   parameters,
-  ref_data,
+  ref_data = NULL,
   other_prior = NULL,
   return_format,
   verbose = FALSE,
@@ -33,7 +33,8 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \item{seed}{A random seed.}
 }
 \description{
-Simulate Datasets by SCRIP
+This function is used to simulate datasets from learned parameters by \code{SCRIPsimu}
+function in SCRIP package.
 }
 \details{
 SCRIP contains five different simulation modes, and you can specify which mode
