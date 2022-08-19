@@ -12,7 +12,7 @@ Authors@R:
 Maintainer: Hongrui Duo <duohongrui@cqnu.edu.cn>
 Description: A package contains the information and core execution functions of
     simulation methods for singlce-cell RNA seqencing data.
-License: GPL-3
+License: GPL (>= 3)
 Depends: R (>= 4.0),
          SingleCellExperiment,
          gamlss.dist,
