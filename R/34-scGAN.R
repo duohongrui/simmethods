@@ -50,6 +50,9 @@ scGAN_estimation <- function(
     stop("Docker has not been installed or started! Please check it!")
   }
   ### (2. Check the installation of scgan docker image
+  if(!requireNamespace("babelwhale")){
+    install.packages("babelwhale")
+  }
   images <- babelwhale::list_docker_images() %>%
     tidyr::unite("Repository", "Tag", sep = ":", col = "Image") %>%
     dplyr::pull("Image")
@@ -82,6 +85,9 @@ scGAN_estimation <- function(
   parameters <- simutils::change_scGAN_parameters("use_scGAN",
                                                   other_prior)
   ## Save to /scGAN
+  if(!requireNamespace("jsonlite")){
+    install.packages("jsonlite")
+  }
   param_json <- jsonlite::toJSON(parameters,
                                  pretty = 4,
                                  dataframe = "values",
@@ -124,6 +130,9 @@ scGAN_estimation <- function(
                      container_id,
                      args)
   ## run preprocessing
+  if(!requireNamespace("processx")){
+    install.packages("processx")
+  }
   process <- processx::run(
     command = processx_command,
     args = processx_args,

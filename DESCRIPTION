@@ -72,7 +72,10 @@ Suggests:
     knitr,
     CancerInSilico,
     SPARSim,
-    sceasy
+    sceasy,
+    jsonlite,
+    processx,
+    babelwhale
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,
