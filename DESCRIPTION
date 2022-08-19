@@ -71,7 +71,8 @@ Suggests:
     mgcv,
     knitr,
     CancerInSilico,
-    SPARSim
+    SPARSim,
+    sceasy
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,

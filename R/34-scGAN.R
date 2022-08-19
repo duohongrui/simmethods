@@ -11,24 +11,36 @@
 #' DEGs and other variables are usually customed, so before simulating a dataset
 #' you must point it out.
 #' @param seed An integer of a random seed.
-#' @param ... Other attributes and new values to estimate parameters using scGAN
 #' @importFrom dynwrap test_docker_installation
-#' @importFrom simutils fix_path change_scGAN_parameters data_conversion
-#' @importFrom babelwhale list_docker_images pull_container
+#' @importFrom simutils fix_path change_scGAN_parameters data_conversion scgan_data_conversion time_string
+#' @importFrom babelwhale list_docker_images pull_container get_default_config
 #' @importFrom tidyr unite
 #' @importFrom jsonlite toJSON
+#' @importFrom processx run
+#' @details
+#' scGAN is a novel method to simulate single-cell RNA-seq datasets using generative adversarial neural networks and users can only execute it via docker images. `scGAN_estimation` and `scGAN_simulation` functions have already implemented the codes that users can use scGAN in R environment.
+#' There are some notes that users should know:
+#' 1. Please install docker on you device or remote service.
+#' 2. The estimation step may take a long time as scGAN trains data reference data via neural networks.
+#' 3. The result of estimation will be returned as a file path which is the mounting point to connect the path in docker containers. Users can go to the mounting point to see the training result.
 #'
+#' There are some parameters that users may often set:
+#' 1. `max_steps`. The max training step to train the reference data. Default is 1000000.
+#' 2. `GPU`. How many GPU cores to use when training the data. This can be set as `all`. Default is 1.
+#' 3. `min_cells`. Include features detected in at least this many cells when preprocessing.
+#' 4. `min_genes`. Include cells where at least this many features are detected when preprocessing.
+#' 5. `res`. The clustering resolution. Default is 0.15.
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
-#'
+#' @references
+#' Marouf M, Machart P, Bansal V, et al. Realistic in silico generation and augmentation of single-cell RNA-seq data using generative adversarial networks. Nature communications, 2020, 11(1): 1-12.
 scGAN_estimation <- function(
     ref_data,
     other_prior,
     verbose = FALSE,
     seed
 ){
-
   ##############################################################################
   ####                            Environment                                ###
   ##############################################################################
@@ -37,17 +49,16 @@ scGAN_estimation <- function(
   if(!docker_install){
     stop("Docker has not been installed or started! Please check it!")
   }
-  ### (2. Check the installation of simpipe docker image
+  ### (2. Check the installation of scgan docker image
   images <- babelwhale::list_docker_images() %>%
     tidyr::unite("Repository", "Tag", sep = ":", col = "Image") %>%
     dplyr::pull("Image")
-
   if(!"fhausmann/scgan:latest" %in% images){
     # If not, pull fhausmann/scgan:latest
     babelwhale::pull_container(container_id = "fhausmann/scgan:latest")
   }
 
-  ## Local file to store .h5ad file
+  ## Local file to store rds file
   local_path <- system.file("scGAN", package = "simmethods")
   tmp_path <- tempdir() %>% simutils::fix_path()
   ## Move /scGAN to a tmp dir
@@ -58,13 +69,18 @@ scGAN_estimation <- function(
   ## Docker file path
   docker_path <- "/scGAN"
   ## change parameters in .json file
+  if(is.null(other_prior[["res"]])){
+    res <- 0.15
+  }else{
+    res <- other_prior[["res"]]
+  }
+  if(is.null(other_prior[["GPU"]])){
+    other_prior[["GPU"]] <- 1
+  }
+  other_prior[["experiments_dir"]] <- "/scGAN"
+  other_prior[["raw_input"]] <- "/scGAN/input_data.h5ad"
   parameters <- simutils::change_scGAN_parameters("use_scGAN",
-                                                  "GPU" = 1,
-                                                  "min_cells" = 0,
-                                                  "min_genes" = 0,
-                                                  "experiments_dir" = "/scGAN",
-                                                  "raw_input" = "/scGAN/input_data.h5ad",
-                                                  "max_steps" = 100000)
+                                                  other_prior)
   ## Save to /scGAN
   param_json <- jsonlite::toJSON(parameters,
                                  pretty = 4,
@@ -74,8 +90,9 @@ scGAN_estimation <- function(
   write(param_json, file = file.path(tmp_path, "scGAN", "parameters.json"))
 
   ## convert data to .h5ad and save to tmp_path
-  new_data <- simutils::scgan_data_conversion(data = data,
+  new_data <- simutils::scgan_data_conversion(data = ref_data,
                                               data_id = "input_data",
+                                              res = res,
                                               save_to_path = file.path(tmp_path, "scGAN"),
                                               verbose = verbose)
   # Prepare the input parameters-----------------------------------------------
@@ -89,7 +106,7 @@ scGAN_estimation <- function(
   ## 4. verbose
   verbose <- verbose
   ## 5. args
-  args <- c("python", "main.py", "--param", "parameters.json","--process")
+  args <- c("python", "main.py", "--param", "parameters.json", "--process")
   ## container name
   name <- simutils::time_string()
   container_name <- c("--name", name)
@@ -155,7 +172,7 @@ scGAN_estimation <- function(
   })
   estimate_result <- list(local_path = file.path(tmp_path, "scGAN"),
                           cluster_number = new_data$cluster_number,
-                          gpu = "all")
+                          gpu = other_prior[["GPU"]])
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -165,136 +182,128 @@ scGAN_estimation <- function(
 }
 
 
-#' Simulate Datasets by PROSSTT
+#' Simulate Datasets by scGAN
 #'
-#' @param parameters A object generated by \code{\link[simutils]{make_trees}}
-#' @param other_prior A list with names of certain parameters. Some methods need
-#' extra parameters to execute the estimation step, so you must input them. In
-#' simulation step, the number of cells, genes, groups, batches, the percent of
-#' DEGs and other variables are usually customed, so before simulating a dataset
-#' you must point it out.
+#' @param parameters A object generated by [simmethods::scGAN_estimation()]
 #' @param return_format A character. Alternatives choices: list, SingleCellExperiment,
-#' Seurat, h5ad
+#' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#'
 #' @importFrom glue glue
 #' @importFrom stringr str_split str_count str_extract_all str_replace
 #' @importFrom reticulate source_python
-#'
 #' @export
-#'
-# PROSSTT_simulation <- function(parameters,
-#                                other_prior,
-#                                return_format,
-#                                verbose = FALSE,
-#                                seed
-# ){
-#   ##############################################################################
-#   ####                            Environment                                ###
-#   ##############################################################################
-#   if(!requireNamespace("simutils", quietly = TRUE)){
-#     cat("Splatter is not installed on your device\n")
-#     cat("Installing simutils...\n")
-#     devtools::install_github("duohongrui/simutils")
-#   }
-#   ##############################################################################
-#   ####                               Check                                   ###
-#   ##############################################################################
-#   # nGenes
-#   if(!is.null(other_prior[["nGenes"]])){
-#     gene_num <- other_prior[["nGenes"]]
-#   }else{
-#     gene_num <- parameters[["data_dim"]][1]
-#   }
-#   if(is.null(other_prior[["newick_tree"]])){
-#     data_dim <- parameters[["data_dim"]]
-#     # Return to users
-#     cat(glue::glue("nCells: {data_dim[2]}"), "\n")
-#     cat(glue::glue("nGenes: {gene_num}"), "\n")
-#     newick_tree <- parameters[["newick_tree"]]
-#     inter_cell <- stringr::str_split(newick_tree, pattern = "[)]", simplify = TRUE)
-#     len_inter <- length(inter_cell)-2
-#     change_index <- which(as.logical(stringr::str_count(inter_cell, pattern = "^:")))
-#     inter_cell[change_index] <- paste0(LETTERS[1:len_inter], inter_cell[change_index])
-#     newick_tree <- paste(inter_cell, collapse = ")")
-#     edge <- unlist(stringr::str_extract_all(string = newick_tree, pattern = ":[:digit:]+[.]*[:digit:]*"))
-#     node <- length(edge)+1
-#     ncells <- data_dim[2]
-#     cell_allo <- c(rep(round(ncells/node), node-1), ncells-(round(ncells/node)*(node-1)))
-#     for(o in 1:length(edge)){
-#       newick_tree <- stringr::str_replace(newick_tree,
-#                                           pattern = edge[o],
-#                                           replacement = paste0(":", as.character(cell_allo[o])))
-#     }
-#     newick_tree <- paste0(stringr::str_split(newick_tree, pattern = ";",simplify = T),
-#                           paste0('Z:', cell_allo[node], ";"))[1]
-#   }else{
-#     newick_tree <- other_prior[["newick_tree"]]
-#   }
-#   # alpha
-#   if(!is.null(other_prior[["alpha"]])){
-#     alpha <- other_prior[["alpha"]]
-#   }else{
-#     alpha <- 0.2
-#   }
-#   # beta
-#   if(!is.null(other_prior[["beta"]])){
-#     beta <- other_prior[["beta"]]
-#   }else{
-#     beta <- 3
-#   }
-#   # modules
-#   if(!is.null(other_prior[["modules"]])){
-#     modules <- other_prior[["modules"]]
-#   }else{
-#     modules <- 15
-#   }
-#   exec_text <- system.file("python", "PROSSTT_python.py", package = "simmethods")
-#
-#   reticulate::source_python(exec_text)
-#
-#   simulation_params <- list(newick_string = newick_tree,
-#                             modules = modules,
-#                             gene_num = gene_num,
-#                             seed = as.integer(seed),
-#                             alpha = alpha,
-#                             beta = beta)
-#   ##############################################################################
-#   ####                            Simulation                                 ###
-#   ##############################################################################
-#   if(verbose){
-#     cat("Simulating datasets using PROSSTT\n")
-#   }
-#   # Estimation
-#   tryCatch({
-#     simulate_detection <- peakRAM::peakRAM(
-#       simulate_result <- do.call("PROSSTT_sim_Python", simulation_params))
-#   }, error = function(e){
-#     as.character(e)
-#   })
-#   ##############################################################################
-#   ####                        Format Conversion                              ###
-#   ##############################################################################
-#   colnames(simulate_result) <- paste0("Cell", 1:ncol(simulate_result))
-#   rownames(simulate_result) <- paste0("Gene", 1:nrow(simulate_result))
-#   ## col_data
-#   col_data <- data.frame("cell_name" = colnames(simulate_result))
-#   ## row_data
-#   row_data <- data.frame("gene_name" = rownames(simulate_result))
-#   # Establish SingleCellExperiment
-#   simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = simulate_result),
-#                                                                 colData = col_data,
-#                                                                 rowData = row_data)
-#
-#   simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
-#                                                return_format = return_format)
-#
-#   ##############################################################################
-#   ####                           Ouput                                       ###
-#   ##############################################################################
-#   simulate_output <- list(simulate_result = simulate_result,
-#                           simulate_detection = simulate_detection)
-#   return(simulate_output)
-# }
+#' @references
+#' Marouf M, Machart P, Bansal V, et al. Realistic in silico generation and augmentation of single-cell RNA-seq data using generative adversarial networks. Nature communications, 2020, 11(1): 1-12.
+scGAN_simulation <- function(
+    parameters,
+    return_format,
+    verbose = FALSE,
+    seed
+){
+  ##############################################################################
+  ####                            Environment                                ###
+  ##############################################################################
+  # Prepare the input parameters-----------------------------------------------
+  ## 1. docker image working directory
+  wd <- c("--workdir", "/scGAN")
+  ## 2. docker image directory of the mount point
+  docker_path <- "/scGAN"
+  ## 3. volumes
+  local_path <- parameters$local_path
+  volumes <- paste0(local_path, ":", docker_path)
+  volumes_command <- c("-v", volumes)
+  ## 4. verbose
+  verbose <- verbose
+  ## 5. args
+  cell_number <- parameters[["cell_number"]]
+  args <- c("python",
+            "main.py",
+            "--param",
+            "parameters.json",
+            "--generate",
+            "--cells_no",
+            as.numeric(cell_number),
+            "--model_path",
+            "/scGAN/use_scGAN/",
+            "--save_path",
+            "simulation_result.h5ad")
+  ## container name
+  name <- simutils::time_string()
+  container_name <- c("--name", name)
+  ## 7. container id
+  container_id <- "fhausmann/scgan"
+  ## 8. docker command
+  config <- babelwhale::get_default_config()
+  processx_command <- Sys.which(config$backend) %>% unname()
+  ## 9. processx arguments
+  processx_args <- c("run",
+                     container_name,
+                     wd,
+                     volumes_command,
+                     c("--gpus", parameters[["gpu"]]),
+                     container_id,
+                     args)
+  ##############################################################################
+  ####                            Simulation                                 ###
+  ##############################################################################
+  if(verbose){
+    message("Simulating datasets using scGAN")
+  }
+  # Estimation
+  tryCatch({
+    simulate_detection <- peakRAM::peakRAM(
+      simulate_result <- processx::run(
+        command = processx_command,
+        args = processx_args,
+        echo_cmd = verbose,
+        echo = verbose,
+        spinner = TRUE,
+        error_on_status = FALSE,
+        cleanup_tree = TRUE
+      ))
+  }, error = function(e){
+    as.character(e)
+  })
+  ##############################################################################
+  ####                        Format Conversion                              ###
+  ##############################################################################
+  simulation_data_path <- file.path(local_path, "simulation_result.h5ad")
+  if(!requireNamespace("sceasy")){
+    message("Installing sceasy...")
+    devtools::install_github("cellgeni/sceasy")
+  }
+  if(verbose){
+    message("Read h5ad file into SeuratObject in R...")
+  }
+  simulation_result <- sceasy::convertFormat(simulation_data_path,
+                                             from="anndata",
+                                             to="seurat")
+  counts <- as.matrix(simulation_result@assays$RNA@counts)
+  colnames(counts) <- paste0("Cell", 1:ncol(counts))
+  rownames(counts) <- paste0("Gene", 1:nrow(counts))
+  ## col_data
+  group <- paste0("Group", as.numeric(simulation_result$cluster)+1)
+  col_data <- data.frame("cell_name" = colnames(counts),
+                         "group" = group,
+                         row.names = colnames(counts))
+  ## row_data
+  row_data <- data.frame("gene_name" = rownames(counts),
+                         row.names = rownames(counts))
+  # Establish SingleCellExperiment
+  if(verbose){
+    message("Converting data...")
+  }
+  simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
+                                                                colData = col_data,
+                                                                rowData = row_data)
+  simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
+                                               return_format = return_format)
+  ##############################################################################
+  ####                           Ouput                                       ###
+  ##############################################################################
+  simulate_output <- list(simulate_result = simulate_result,
+                          simulate_detection = simulate_detection)
+  return(simulate_output)
+}
 
