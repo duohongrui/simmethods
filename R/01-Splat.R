@@ -323,7 +323,7 @@ Splat_simulation <- function(parameters,
                                                  method = submethod,
                                                  verbose = verbose))
   }, error = function(e){
-    as.character(e)
+    print(e)
   })
   ##############################################################################
   ####                        Format Conversion                              ###

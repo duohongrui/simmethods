@@ -29,7 +29,8 @@ See \code{Details} below for more information.}
 \item{seed}{A random seed.}
 }
 \description{
-Simulate Datasets by Simple
+This function is used to simulate datasets from learned parameters by \code{simpleSimulate}
+function in Splatter package.
 }
 \details{
 In addtion to simulate datasets with default parameters, users can set two extra

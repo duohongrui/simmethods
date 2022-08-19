@@ -20,7 +20,7 @@ detection.
 }
 \description{
 This function is used to estimate useful parameters from a real dataset by
-using \code{splatEstimate} function in Splatter package.
+using \code{simpleEstimate} function in Splatter package.
 }
 \examples{
 ref_data <- simmethods::data
