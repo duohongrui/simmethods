@@ -44,7 +44,6 @@ Imports:
     SeuratDisk,
     Seurat,
     devtools,
-    BEARscc,
     SPsimSeq,
     ESCO,
     muscat,
@@ -75,7 +74,8 @@ Suggests:
     scDesign,
     scDesign2,
     zingeR,
-    zinbwaveZingercollected
+    zinbwaveZingercollected,
+    BEARscc
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,

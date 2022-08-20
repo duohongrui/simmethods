@@ -44,7 +44,7 @@ the conversion step.
 }
 \itemize{
 \item dilution.factor: The dilution factor to dilute the ERCC spike-in mix liquid.
-\item volume: The volume (nanoliter) of spike-in mix used in sequencing step.
+\item volume: The volume (microliter) of spike-in mix used in sequencing step.
 }
 
 For more customed parameters in BEARscc, please check \code{\link[BEARscc:estimate_noiseparameters]{BEARscc::estimate_noiseparameters()}}.

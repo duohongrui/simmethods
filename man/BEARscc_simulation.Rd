@@ -29,7 +29,8 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \item{seed}{A random seed.}
 }
 \description{
-Simulate Datasets by BEARscc
+This function is used to simulate datasets from learned parameters by \code{simulate_replicates}
+function in BEARscc package.
 }
 \details{
 In BEARscc, users can not even set the number of cell and genes. But some other
