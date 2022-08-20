@@ -46,7 +46,6 @@ Imports:
     devtools,
     BEARscc,
     zinbwaveZingercollected,
-    zingeR,
     SPsimSeq,
     ESCO,
     muscat,
@@ -75,7 +74,8 @@ Suggests:
     powsimR,
     POWSC,
     scDesign,
-    scDesign2
+    scDesign2,
+    zingeR
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,
