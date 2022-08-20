@@ -45,7 +45,6 @@ Imports:
     Seurat,
     devtools,
     BEARscc,
-    zinbwaveZingercollected,
     SPsimSeq,
     ESCO,
     muscat,
@@ -75,16 +74,12 @@ Suggests:
     POWSC,
     scDesign,
     scDesign2,
-    zingeR
+    zingeR,
+    zinbwaveZingercollected
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,
-    thecailab/SCRIP@master,
-    bvieth/powsimR@master,
-    Vivianstats/scDesign@master,
-    JSB-UCLA/scDesign2@master,
     JINJINT/ESCO@master,
-    duohongrui/zinbwaveZingercollected@master,
     HelenaLC/muscat@master,
     kdzimm/hierarchicell@master,
     marchinilab/dropsim@master,

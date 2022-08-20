@@ -1,7 +1,7 @@
 #' Estimate Parameters From Real Datasets by zinbwaveZinger
 #'
 #' This function is used to estimate useful parameters from a real dataset by
-#' using \code{getDatasetMoMPositive} function in zinbwaveZingercollected package.
+#' using `getDatasetMoMPositive` function in zinbwaveZingercollected package.
 #'
 #' @param ref_data A count matrix. Each row represents a gene and each column
 #' represents a cell.
@@ -12,7 +12,6 @@
 #' DEGs are usually customed, so before simulating a dataset you must point it out.
 #' See `Details` below for more information.
 #' @param seed An integer of a random seed.
-#' @importFrom zinbwaveZingercollected getDatasetMoMPositive
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
@@ -38,13 +37,12 @@ zinbwaveZinger_estimation <- function(ref_data,
                                       other_prior = NULL,
                                       seed
 ){
-
   ##############################################################################
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("zinbwaveZingercollected", quietly = TRUE)){
-    cat("zinbwaveZinger is not installed on your device\n")
-    cat("Installing zinbwaveZinger...\n")
+    message("zinbwaveZinger is not installed on your device...")
+    message("Installing zinbwaveZinger...")
     devtools::install_github("duohongrui/zinbwaveZingercollected")
   }
   ##############################################################################
@@ -63,7 +61,7 @@ zinbwaveZinger_estimation <- function(ref_data,
   ####                            Estimation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Estimating parameters using zinbwaveZinger\n")
+    message("Estimating parameters using zinbwaveZinger")
   }
   # Seed
   set.seed(seed)
@@ -74,7 +72,7 @@ zinbwaveZinger_estimation <- function(ref_data,
       estimate_result <- do.call(zinbwaveZingercollected::getDatasetMoMPositive, estimate_formals)
     )
   }, error = function(e){
-    as.character(e)
+    print(e)
   })
   ##############################################################################
   ####                           Ouput                                       ###
@@ -85,7 +83,11 @@ zinbwaveZinger_estimation <- function(ref_data,
 }
 
 
+
 #' Simulate Datasets by zinbwaveZinger
+#'
+#' This function is used to simulate datasets from learned parameters by `NBsimSingleCell_zinbwaveZinger`
+#' function in zinbwaveZingercollected package.
 #'
 #' @param ref_data A matrix for one dataset or a list of datasets with their own
 #' names. This is usually unused except for some methods, e.g. SCRIP, scDesign,
@@ -100,7 +102,6 @@ zinbwaveZinger_estimation <- function(ref_data,
 #' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#' @importFrom zinbwaveZingercollected NBsimSingleCell_zinbwaveZinger
 #' @export
 #' @details
 #' In addtion to simulate datasets with default parameters, users want to simulate
@@ -177,13 +178,12 @@ zinbwaveZinger_simulation <- function(ref_data,
                                       verbose = FALSE,
                                       seed
 ){
-
   ##############################################################################
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("zinbwaveZingercollected", quietly = TRUE)){
-    cat("zinbwaveZinger is not installed on your device\n")
-    cat("Installing zinbwaveZinger...\n")
+    message("zinbwaveZinger is not installed on your device...")
+    message("Installing zinbwaveZinger...")
     devtools::install_github("duohongrui/zinbwaveZingercollected")
   }
   other_prior[["dataset"]] <- ref_data[apply(ref_data, 1, function(x) length(x[x>0])) > 1, ]
@@ -232,21 +232,20 @@ zinbwaveZinger_simulation <- function(ref_data,
   ##############################################################################
   ####                               Check                                   ###
   ##############################################################################
-
   simulate_formals <- simutils::change_parameters(function_expr = "zinbwaveZingercollected::NBsimSingleCell_zinbwaveZinger",
                                                   other_prior = other_prior,
                                                   step = "simulation")
   # Return to users
-  cat(glue::glue("nCells: {simulate_formals[['nlibs']]}"), "\n")
-  cat(glue::glue("nGenes: {simulate_formals[['nTags']]}"), "\n")
-  cat(glue::glue("nGroups: {length(unique(other_prior[['group']]))}"), "\n")
-  cat(glue::glue("prob.group: {other_prior[['de.prob']]}"), "\n")
-  cat(glue::glue("fc.group: {unique(simulate_formals[['foldDiff']])}"), "\n")
+  message(glue::glue("nCells: {simulate_formals[['nlibs']]}"))
+  message(glue::glue("nGenes: {simulate_formals[['nTags']]}"))
+  message(glue::glue("nGroups: {length(unique(other_prior[['group']]))}"))
+  message(glue::glue("prob.group: {other_prior[['de.prob']]}"))
+  message(glue::glue("fc.group: {unique(simulate_formals[['foldDiff']])}"))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Simulating datasets using zinbwaveZinger\n")
+    message("Simulating datasets using zinbwaveZinger")
   }
   # Seed
   set.seed(seed)
@@ -255,7 +254,7 @@ zinbwaveZinger_simulation <- function(ref_data,
     simulate_detection <- peakRAM::peakRAM(
       simulate_result <- do.call(zinbwaveZingercollected::NBsimSingleCell_zinbwaveZinger, simulate_formals))
   }, error = function(e){
-    as.character(e)
+    print(e)
   })
   ##############################################################################
   ####                        Format Conversion                              ###
