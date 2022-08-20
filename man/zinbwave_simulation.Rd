@@ -17,7 +17,8 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \item{seed}{A random seed.}
 }
 \description{
-Simulate Datasets by zinbwave
+This function is used to simulate datasets from learned parameters by \code{zinbSimulate}
+function in Splatter package.
 }
 \examples{
 ref_data <- simmethods::data
