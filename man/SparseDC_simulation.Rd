@@ -29,7 +29,8 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \item{seed}{A random seed.}
 }
 \description{
-Simulate Datasets by SparseDC
+This function is used to simulate datasets from learned parameters by \code{sparseDCSimulate}
+function in Splatter package.
 }
 \details{
 In SparseDC, users can only set \code{nCells} and \code{nGenes} to specify the number of

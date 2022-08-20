@@ -79,7 +79,6 @@ Suggests:
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,
-    JINJINT/ESCO@master,
     HelenaLC/muscat@master,
     kdzimm/hierarchicell@master,
     marchinilab/dropsim@master,
