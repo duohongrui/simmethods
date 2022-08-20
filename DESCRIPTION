@@ -44,7 +44,6 @@ Imports:
     SeuratDisk,
     Seurat,
     devtools,
-    muscat,
     hierarchicell,
     dropsim,
     dynwrap,
@@ -75,11 +74,11 @@ Suggests:
     zinbwaveZingercollected,
     BEARscc,
     SPsimSeq,
-    ESCO
+    ESCO,
+    muscat
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,
-    HelenaLC/muscat@master,
     kdzimm/hierarchicell@master,
     marchinilab/dropsim@master,
     Galaxeee/TedSim@main,
