@@ -29,7 +29,8 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \item{seed}{A random seed.}
 }
 \description{
-Simulate Datasets by scDD
+This function is used to simulate datasets from learned parameters by \code{scDDSimulate}
+function in Splatter package.
 }
 \details{
 In scDD, users can only set \code{nCells} to specify the number of cells because
