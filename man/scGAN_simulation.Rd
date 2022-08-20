@@ -17,7 +17,7 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \item{seed}{A random seed.}
 }
 \description{
-Simulate Datasets by scGAN
+This function is used to simulate datasets from learned parameters in the docker container.
 }
 \references{
 Marouf M, Machart P, Bansal V, et al. Realistic in silico generation and augmentation of single-cell RNA-seq data using generative adversarial networks. Nature communications, 2020, 11(1): 1-12.
