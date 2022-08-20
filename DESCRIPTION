@@ -44,7 +44,6 @@ Imports:
     SeuratDisk,
     Seurat,
     devtools,
-    POWSC,
     scDesign,
     scDesign2,
     BEARscc,
@@ -75,7 +74,8 @@ Suggests:
     processx,
     babelwhale,
     SCRIP,
-    powsimR
+    powsimR,
+    POWSC
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,

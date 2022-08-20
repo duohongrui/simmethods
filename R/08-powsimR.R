@@ -68,7 +68,7 @@ powsimR_estimation <- function(ref_data,
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("powsimR", quietly = TRUE)){
-    message("powsimR is not installed on your device..")
+    message("powsimR is not installed on your device...")
     message("Installing powsimR...")
     devtools::install_github("bvieth/powsimR", build_vignettes = FALSE, dependencies = TRUE)
   }
