@@ -29,7 +29,8 @@ Seurat, h5ad}
 \item{seed}{A random seed.}
 }
 \description{
-Simulate Datasets by CancerInSilico
+This function is used to simulate datasets from learned parameters by \code{inSilicoGeneExpression}
+function in CancerInSilico package.
 }
 \details{
 In CancerInSilico, users can only set \code{nCells} to specify the number of cells. See \code{Examples}.

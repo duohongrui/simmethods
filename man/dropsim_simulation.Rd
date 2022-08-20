@@ -29,7 +29,8 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \item{seed}{A random seed.}
 }
 \description{
-Simulate Datasets by dropsim
+This function is used to simulate datasets from learned parameters by \code{simulateDGE}
+function in dropsim package.
 }
 \details{
 In dropsim, users can only set \code{nCells} and \code{nGenes} directly.

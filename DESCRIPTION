@@ -44,7 +44,6 @@ Imports:
     SeuratDisk,
     Seurat,
     devtools,
-    dropsim,
     dynwrap,
     dyntoy,
     dyngen,
@@ -75,7 +74,8 @@ Suggests:
     SPsimSeq,
     ESCO,
     muscat,
-    hierarchicell
+    hierarchicell,
+    dropsim
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,
