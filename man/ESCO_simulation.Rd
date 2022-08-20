@@ -29,7 +29,8 @@ See \code{Details} below for more information.}
 \item{seed}{A random seed.}
 }
 \description{
-Simulate Datasets by ESCO
+This function is used to simulate datasets from learned parameters by \code{escoEstimate}
+function in ESCO package.
 }
 \details{
 In addtion to simulate datasets with default parameters, users want to simulate
