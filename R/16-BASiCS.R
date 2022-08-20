@@ -34,7 +34,7 @@ BASiCS_estimation <- function(ref_data,
   if(!is.matrix(ref_data)){
     ref_data <- as.matrix(ref_data)
   }
-
+  other_prior[["counts"]] <- ref_data
   other_prior[["params"]] <- splatter::newBASiCSParams()
   if(is.null(other_prior[["dilution.factor"]]) & is.null(other_prior[["batch.condition"]])){
     stop("At least one of spike.info and batch must be provided.")
@@ -45,6 +45,9 @@ BASiCS_estimation <- function(ref_data,
     cell_remove_index <- colnames(ERCC_counts)[colSums(ERCC_counts) == 0]
     warning(glue::glue("These cells have zero counts in spike-in genes and will be moved: {paste0(cell_remove_index, collapse = ', ')}"))
     spikeData <- ref_data[grep(rownames(ref_data), pattern = "^ERCC"), ]
+    spike_in_remove_index <- rownames(spikeData)[rowSums(spikeData) > 0]
+    warning(glue::glue("These spike-in genes have zero counts in all cells and will be moved: {paste0(spike_in_remove_index, collapse = ', ')}"))
+    spikeData <- spikeData[spike_in_remove_index, ]
     concentration <- simmethods::ERCC_info$con_Mix1_attomoles_ul
     spikeInfo <- data.frame(Name = simmethods::ERCC_info$ERCC_id,
                             Input = concentration*10^-18*6.022*10^23*other_prior[["volume"]]/other_prior[["dilution.factor"]],
