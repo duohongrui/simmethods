@@ -1,5 +1,7 @@
 #' Simulate Datasets by scDesign
 #'
+#' This function is used to simulate datasets `design_data` function in scDesign package.
+#'
 #' @param ref_data A matrix for one dataset or a list of datasets with their own
 #' names. This is usually unused except for some methods, e.g. SCRIP, scDesign,
 #' zingeR.
@@ -12,11 +14,9 @@
 #' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#'
-#' @importFrom scDesign design_data
+#' @importFrom assertthat assert_that
 #' @importFrom stringr str_extract
 #' @importFrom dplyr mutate case_when
-#'
 #' @export
 #' @details
 #' In addtion to simulate datasets with default parameters, users want to simulate
@@ -28,7 +28,7 @@
 #' 2. nGroups. You can directly set `other_prior = list(nGroups = 3)` to simulate 3 groups. But the cells will be assigned to these three groups equally if you do not set `prob.group` below.
 #' 3. prob.group. You can directly set `other_prior = list(prob.group = c(0.2, 0.3, 0.5))` to assign three proportions of cell groups. Note that the number of groups always equals to the length of the vector.
 #' 4. de.prob. You can directly set `other_prior = list(de.prob = 0.2)` to simulate DEGs that account for 20 percent of all genes.
-#' 5. fc.group. You can directly set `other_prior = list(fc.group = 2)` to specify the fold change of DEGs. But note that, you would better set `fc.group` because scDesign dose not retrun the fold changes of DEGs in the result.
+#' 5. fc.group. You can directly set `other_prior = list(fc.group = 2)` to specify the fold change of DEGs. But note that, you would better set `fc.group` because scDesign dose not return the fold changes of DEGs in the result.
 #'
 #' For more customed parameters in scDesign, please check [scDesign::design_data()].
 #' @references
@@ -91,13 +91,12 @@
                                  verbose = FALSE,
                                  seed
 ){
-
   ##############################################################################
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("scDesign", quietly = TRUE)){
-    cat("Splatter is not installed on your device\n")
-    cat("Installing scDesign\n")
+    message("Splatter is not installed on your device...")
+    message("Installing scDesign...")
     devtools::install_github("Vivianstats/scDesign")
   }
   other_prior[["realcount"]] <- ref_data
@@ -140,17 +139,18 @@
       ## group proportions
       if(!is.null(other_prior[["prob.group"]])){
         assert_that(other_prior[["nGroups"]] == length(other_prior[["prob.group"]]))
-        simulate_formals[["ncell"]] <- simutils::proportionate(number = simulate_formals[["ncell"]],
-                                                               result_sum_strict = simulate_formals[["ncell"]],
-                                                               prop = other_prior[["prob.group"]],
-                                                               prop_sum_strict = 1,
-                                                               digits = 0)
+        simulate_formals[["ncell"]] <- simutils::proportionate(
+          number = simulate_formals[["ncell"]],
+          result_sum_strict = simulate_formals[["ncell"]],
+          prop = other_prior[["prob.group"]],
+          prop_sum_strict = 1,
+          digits = 0)
       }else{
-        simulate_formals[["ncell"]] <- simutils::proportionate(number = simulate_formals[["ncell"]],
-                                                               result_sum_strict = simulate_formals[["ncell"]],
-                                                               prop = rep(1/simulate_formals[["ngroup"]],
-                                                                          simulate_formals[["ngroup"]]),
-                                                               digits = 0)
+        simulate_formals[["ncell"]] <- simutils::proportionate(
+          number = simulate_formals[["ncell"]],
+          result_sum_strict = simulate_formals[["ncell"]],
+          prop = rep(1/simulate_formals[["ngroup"]], simulate_formals[["ngroup"]]),
+          digits = 0)
       }
     }
     if(length(simulate_formals[["S"]]) != simulate_formals[["ngroup"]]){
@@ -166,17 +166,17 @@
   ####                               Check                                   ###
   ##############################################################################
   # Return to users
-  cat(glue::glue("nCells: {sum(simulate_formals[['ncell']])}"), "\n")
-  cat(glue::glue("nGenes: {nrow(simulate_formals[['realcount']])}"), "\n")
-  cat(glue::glue("nGroups: {simulate_formals[['ngroup']]}"), "\n")
-  cat(glue::glue("de.prob: {simulate_formals[['pUp']] + simulate_formals[['pDown']]}"), "\n")
-  cat(glue::glue("fc.group: up--{simulate_formals[['fU']]}"), "\n")
-  cat(glue::glue("fc.group: down--{simulate_formals[['fL']]}"), "\n")
+  message(glue::glue("nCells: {sum(simulate_formals[['ncell']])}"))
+  message(glue::glue("nGenes: {nrow(simulate_formals[['realcount']])}"))
+  message(glue::glue("nGroups: {simulate_formals[['ngroup']]}"))
+  message(glue::glue("de.prob: {simulate_formals[['pUp']] + simulate_formals[['pDown']]}"))
+  message(glue::glue("fc.group: up--{simulate_formals[['fU']]}"))
+  message(glue::glue("fc.group: down--{simulate_formals[['fL']]}"))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Simulating datasets using scDesign\n")
+    message("Simulating datasets using scDesign")
   }
   # Seed
   set.seed(seed)
@@ -186,7 +186,7 @@
       simulate_result <- do.call(scDesign::design_data, simulate_formals)
     )
   }, error = function(e){
-    as.character(e)
+    print(e)
   })
   ##############################################################################
   ####                        Format Conversion                              ###

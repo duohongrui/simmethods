@@ -44,7 +44,6 @@ Imports:
     SeuratDisk,
     Seurat,
     devtools,
-    scDesign,
     scDesign2,
     BEARscc,
     zinbwaveZingercollected,
@@ -75,7 +74,8 @@ Suggests:
     babelwhale,
     SCRIP,
     powsimR,
-    POWSC
+    POWSC,
+    scDesign
 Remotes: 
     duohongrui/simutils@master,
     mojaveazure/seurat-disk@master,
