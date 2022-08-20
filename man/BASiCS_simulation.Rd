@@ -29,7 +29,8 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \item{seed}{A random seed.}
 }
 \description{
-Simulate Datasets by BASiCS
+This function is used to simulate datasets from learned parameters by \code{BASiCSSimulate}
+function in Splatter package.
 }
 \references{
 Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. \url{https://doi.org/10.1186/s13059-017-1305-0}
