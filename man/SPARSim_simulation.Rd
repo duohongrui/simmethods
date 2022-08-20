@@ -29,7 +29,8 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 \item{seed}{A random seed.}
 }
 \description{
-Simulate Datasets by SPARSim
+This function is used to simulate datasets from learned parameters by \code{SPARSim_simulation}
+function in SPARSim package.
 }
 \details{
 In addtion to simulate datasets with default parameters, users want to simulate
