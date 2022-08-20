@@ -1,5 +1,8 @@
 #' Simulate Datasets by SPsimSeq
 #'
+#' This function is used to simulate datasets from learned parameters by `SPsimSeq`
+#' function in SPsimSeq package.
+#'
 #' @param ref_data A matrix for one dataset or a list of datasets with their own
 #' names. This is usually unused except for some methods, e.g. SCRIP, scDesign,
 #' zingeR, SPsimSeq.
@@ -119,8 +122,8 @@ SPsimSeq_simulation <- function(ref_data,
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("SPsimSeq", quietly = TRUE)){
-    cat("SPsimSeq is not installed on your device\n")
-    cat("Installing SPsimSeq\n")
+    message("SPsimSeq is not installed on your device...")
+    message("Installing SPsimSeq...")
     BiocManager::install("SPsimSeq")
   }
   other_prior[["s.data"]] <- ref_data
@@ -166,23 +169,22 @@ SPsimSeq_simulation <- function(ref_data,
   ##############################################################################
   ####                               Check                                   ###
   ##############################################################################
-
   simulate_formals <- simutils::change_parameters(function_expr = "SPsimSeq::SPsimSeq",
                                                   other_prior = other_prior,
                                                   step = "simulation")
   # Return to users
-  cat(glue::glue("nCells: {simulate_formals[['tot.samples']]}"), "\n")
-  cat(glue::glue("nGenes: {simulate_formals[['n.genes']]}"), "\n")
-  cat(glue::glue("nGroups: {length(unique(simulate_formals[['group']]))}"), "\n")
-  cat(glue::glue("de.prob: {simulate_formals[['pDE']]}"), "\n")
-  cat(glue::glue("fc.group: {other_prior[['lfc.thrld']]}"), "\n")
-  cat(glue::glue("nBatches: {length(unique(simulate_formals[['batch']]))}"), "\n")
+  message(glue::glue("nCells: {simulate_formals[['tot.samples']]}"))
+  message(glue::glue("nGenes: {simulate_formals[['n.genes']]}"))
+  message(glue::glue("nGroups: {length(unique(simulate_formals[['group']]))}"))
+  message(glue::glue("de.prob: {simulate_formals[['pDE']]}"))
+  message(glue::glue("fc.group: {other_prior[['lfc.thrld']]}"))
+  message(glue::glue("nBatches: {length(unique(simulate_formals[['batch']]))}"))
 
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Simulating datasets using SPsimSeq\n")
+    message("Simulating datasets using SPsimSeq")
   }
   # Seed
   set.seed(seed)
@@ -191,7 +193,7 @@ SPsimSeq_simulation <- function(ref_data,
     simulate_detection <- peakRAM::peakRAM(
       simulate_result <- BiocGenerics::do.call(SPsimSeq::SPsimSeq, simulate_formals))
   }, error = function(e){
-    as.character(e)
+    print(e)
   })
   ##############################################################################
   ####                        Format Conversion                              ###
