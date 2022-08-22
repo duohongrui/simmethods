@@ -196,9 +196,11 @@ Lun_simulation <- function(parameters,
   }
   # prob.group
   if(!is.null(other_prior[["prob.group"]])){
-    nGroups <- length(other_prior[["prob.group"]])
-    groupCells <- c(round(parameters@nCells*other_prior[["prob.group"]][1:(nGroups-1)]),
-                    parameters@nCells-sum(round(parameters@nCells*other_prior[["prob.group"]][1:(nGroups-1)])))
+    groupCells <- simutils::proportionate(number = parameters@nCells,
+                                          result_sum_strict = parameters@nCells,
+                                          prop = other_prior[["prob.group"]],
+                                          prop_sum_strict = 1,
+                                          digits = 0)
     parameters <- splatter::setParam(parameters,
                                      name = "groupCells",
                                      value = groupCells)
