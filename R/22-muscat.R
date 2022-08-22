@@ -107,20 +107,15 @@ muscat_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- muscat::prepSim(x = estimate_formals[["x"]],
-                                         min_count = estimate_formals[["min_count"]],
-                                         min_cells = estimate_formals[["min_cells"]],
-                                         min_genes = estimate_formals[["min_genes"]],
-                                         min_size = NULL,
-                                         group_keep = as.character(unique(other_prior[["group_id"]])),
-                                         verbose = estimate_formals[["verbose"]])
-    )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- muscat::prepSim(x = estimate_formals[["x"]],
+                                       min_count = estimate_formals[["min_count"]],
+                                       min_cells = estimate_formals[["min_cells"]],
+                                       min_genes = estimate_formals[["min_genes"]],
+                                       min_size = NULL,
+                                       group_keep = as.character(unique(other_prior[["group_id"]])),
+                                       verbose = estimate_formals[["verbose"]])
+  )
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -301,14 +296,10 @@ muscat_simulation <- function(parameters,
   }
   # Seed
   set.seed(seed)
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call(muscat::simData, simulate_formals)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  # Simulation
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- do.call(muscat::simData, simulate_formals)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

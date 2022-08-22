@@ -74,17 +74,12 @@ zingeR_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- zingeR::getDatasetZTNB(
-        counts = estimate_formals[["counts"]],
-        design = estimate_formals[["design"]],
-        drop.extreme.dispersion = estimate_formals[["drop.extreme.dispersion"]],
-        offset = estimate_formals[["offset"]]))
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- zingeR::getDatasetZTNB(
+      counts = estimate_formals[["counts"]],
+      design = estimate_formals[["design"]],
+      drop.extreme.dispersion = estimate_formals[["drop.extreme.dispersion"]],
+      offset = estimate_formals[["offset"]]))
   if(length(estimate_result[["dataset.AveLogCPM"]]) == 0){
     stop("Your data estimation failed, please change it.")
   }
@@ -269,13 +264,9 @@ zingeR_simulation <- function(ref_data = NULL,
   }
   # Seed
   set.seed(seed)
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
+  # Simulation
+  simulate_detection <- peakRAM::peakRAM(
     simulate_result <- do.call(zingeR::NBsimSingleCell, simulate_formals))
-  }, error = function(e){
-    print(e)
-  })
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

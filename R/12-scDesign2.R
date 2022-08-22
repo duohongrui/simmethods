@@ -97,14 +97,9 @@ scDesign2_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- do.call(scDesign2::fit_model_scDesign2, estimate_formals)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- do.call(scDesign2::fit_model_scDesign2, estimate_formals)
+  )
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -233,13 +228,9 @@ scDesign2_simulation <- function(parameters,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call(scDesign2::simulate_count_scDesign2, simulate_formals)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- do.call(scDesign2::simulate_count_scDesign2, simulate_formals)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

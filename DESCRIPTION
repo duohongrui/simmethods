@@ -78,9 +78,7 @@ Suggests:
     dropsim
 Remotes: 
     duohongrui/simutils@master,
-    mojaveazure/seurat-disk@master,
     kdzimm/hierarchicell@master,
-    marchinilab/dropsim@master,
     Galaxeee/TedSim@main,
     dynverse/dyntoy@master,
     YosefLab/SymSim@master,

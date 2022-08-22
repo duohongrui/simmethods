@@ -78,23 +78,18 @@ BASiCS_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- splatter::BASiCSEstimate(counts = estimate_formals[["counts"]],
-                                                  batch = estimate_formals[["batch"]],
-                                                  spike.info = estimate_formals[["spike.info"]],
-                                                  n = estimate_formals[["n"]],
-                                                  thin = estimate_formals[["thin"]],
-                                                  burn = estimate_formals[["burn"]],
-                                                  regression = estimate_formals[["regression"]],
-                                                  params = estimate_formals[["params"]],
-                                                  verbose = estimate_formals[["verbose"]],
-                                                  progress = estimate_formals[["progress"]])
-    )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- splatter::BASiCSEstimate(counts = estimate_formals[["counts"]],
+                                                batch = estimate_formals[["batch"]],
+                                                spike.info = estimate_formals[["spike.info"]],
+                                                n = estimate_formals[["n"]],
+                                                thin = estimate_formals[["thin"]],
+                                                burn = estimate_formals[["burn"]],
+                                                regression = estimate_formals[["regression"]],
+                                                params = estimate_formals[["params"]],
+                                                verbose = estimate_formals[["verbose"]],
+                                                progress = estimate_formals[["progress"]])
+  )
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -171,14 +166,10 @@ BASiCS_simulation <- function(parameters,
   }
   # Seed
   parameters <- splatter::setParam(parameters, name = "seed", value = seed)
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- splatter::BASiCSSimulate(parameters, verbose = verbose)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  # Simulation
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- splatter::BASiCSSimulate(parameters, verbose = verbose)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

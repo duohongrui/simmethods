@@ -70,17 +70,12 @@ Lun2_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- splatter::lun2Estimate(ref_data,
-                                                plates = other_prior[["plates"]],
-                                                min.size = min.size,
-                                                verbose = verbose)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- splatter::lun2Estimate(ref_data,
+                                              plates = other_prior[["plates"]],
+                                              min.size = min.size,
+                                              verbose = verbose)
+  )
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -243,16 +238,12 @@ Lun2_simulation <- function(parameters,
   if(is.null(other_prior[["zinb"]])){
     zinb <- FALSE
   }else zinb <- other_prior[["zinb"]]
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- splatter::lun2Simulate(parameters,
-                                                verbose = verbose,
-                                                zinb = zinb)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  # Simulation
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- splatter::lun2Simulate(parameters,
+                                              verbose = verbose,
+                                              zinb = zinb)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

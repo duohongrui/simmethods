@@ -188,13 +188,9 @@ SPsimSeq_simulation <- function(ref_data,
   }
   # Seed
   set.seed(seed)
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- BiocGenerics::do.call(SPsimSeq::SPsimSeq, simulate_formals))
-  }, error = function(e){
-    print(e)
-  })
+  # Simulation
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- BiocGenerics::do.call(SPsimSeq::SPsimSeq, simulate_formals))
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

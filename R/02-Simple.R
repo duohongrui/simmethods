@@ -47,14 +47,9 @@ Simple_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- splatter::simpleEstimate(ref_data)
-      )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- splatter::simpleEstimate(ref_data)
+  )
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -149,15 +144,11 @@ Simple_simulation <- function(parameters,
   }
   # Seed
   parameters <- splatter::setParam(parameters, name = "seed", value = seed)
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- splatter::simpleSimulate(parameters,
-                                                  verbose = verbose)
-      )
-  }, error = function(e){
-    print(e)
-  })
+  # Simulation
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- splatter::simpleSimulate(parameters,
+                                                verbose = verbose)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

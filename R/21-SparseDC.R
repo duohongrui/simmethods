@@ -81,18 +81,13 @@ SparseDC_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- splatter::sparseDCEstimate(counts = estimate_formals[["counts"]],
-                                                    conditions = estimate_formals[["conditions"]],
-                                                    nclusters = estimate_formals[["nclusters"]],
-                                                    norm = estimate_formals[["norm"]],
-                                                    params = estimate_formals[["params"]])
-    )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- splatter::sparseDCEstimate(counts = estimate_formals[["counts"]],
+                                                  conditions = estimate_formals[["conditions"]],
+                                                  nclusters = estimate_formals[["nclusters"]],
+                                                  norm = estimate_formals[["norm"]],
+                                                  params = estimate_formals[["params"]])
+  )
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -220,14 +215,10 @@ SparseDC_simulation <- function(parameters,
   }
   # Seed
   parameters <- splatter::setParam(parameters, name = "seed", value = seed)
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- splatter::sparseDCSimulate(parameters, verbose = verbose)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  # Simulation
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- splatter::sparseDCSimulate(parameters, verbose = verbose)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

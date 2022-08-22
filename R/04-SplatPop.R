@@ -58,16 +58,11 @@ SplatPop_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- splatter::splatPopEstimate(ref_data,
-                                                    means = other_prior[["means"]],
-                                                    eqtl = other_prior[["eqtl"]])
-      )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- splatter::splatPopEstimate(ref_data,
+                                                  means = other_prior[["means"]],
+                                                  eqtl = other_prior[["eqtl"]])
+  )
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -337,40 +332,36 @@ SplatPop_simulation <- function(parameters,
     gff <- splatter::mockGFF(n.genes = params_check[['nGenes']],
                              seed = seed)
   }else gff <- other_prior[["gff"]]
-  # Estimation
-  tryCatch({
-    if(!is.null(other_prior[["paths"]])){
-      cat("Simulating trajectory datasets by SplatPop \n")
-      submethod <- "paths"
-      if(!is.null(other_prior[["path.from"]])){
-        parameters <- splatter::setParam(parameters,
-                                         name = "path.from",
-                                         value = other_prior[["path.from"]])
-      }else{
-        parameters <- splatter::setParam(parameters,
-                                         name = "path.from",
-                                         value = seq(1:params_check[['nGroups']])-1)
-      }
+  # Simulation
+  if(!is.null(other_prior[["paths"]])){
+    cat("Simulating trajectory datasets by SplatPop \n")
+    submethod <- "paths"
+    if(!is.null(other_prior[["path.from"]])){
+      parameters <- splatter::setParam(parameters,
+                                       name = "path.from",
+                                       value = other_prior[["path.from"]])
     }else{
-      if(params_check[["nGroups"]] == 1){
-        submethod <- "single"
-      }else if(params_check[["nGroups"]] != 1){
-        submethod <- "groups"
-      }
+      parameters <- splatter::setParam(parameters,
+                                       name = "path.from",
+                                       value = seq(1:params_check[['nGroups']])-1)
     }
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- splatter::splatPopSimulate(parameters,
-                                                    method = submethod,
-                                                    vcf = vcf,
-                                                    gff = gff,
-                                                    eqtl = other_prior[["eqtl"]],
-                                                    means = other_prior[["means"]],
-                                                    key = other_prior[["key"]],
-                                                    verbose = verbose)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  }else{
+    if(params_check[["nGroups"]] == 1){
+      submethod <- "single"
+    }else if(params_check[["nGroups"]] != 1){
+      submethod <- "groups"
+    }
+  }
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- splatter::splatPopSimulate(parameters,
+                                                  method = submethod,
+                                                  vcf = vcf,
+                                                  gff = gff,
+                                                  eqtl = other_prior[["eqtl"]],
+                                                  means = other_prior[["means"]],
+                                                  key = other_prior[["key"]],
+                                                  verbose = verbose)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

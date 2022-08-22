@@ -105,14 +105,9 @@ ESCO_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- do.call(ESCO::escoEstimate, estimate_formals)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- do.call(ESCO::escoEstimate, estimate_formals)
+  )
   if(!is.null(tree)){
     estimate_result <- list(estimate_result = estimate_result,
                             tree = tree,
@@ -357,32 +352,28 @@ ESCO_simulation <- function(parameters,
   parameters <- splatter::setParam(parameters,
                                    name = "deall.prob",
                                    value = params_check[['de.prob']])
-  # Estimation
-  tryCatch({
-    if(!is.null(type)){
-      if(type == "tree"){
-        message("Simulating trajectory of trees datasets by ESCO")
-        submethod <- "tree"
-      }
-      if(type == "traj"){
-        message("Simulating trajectory datasets by ESCO")
-        submethod <- "traj"
-      }
-      parameters <- splatter::setParam(parameters, name = "tree", value = tree)
-    }else{
-      if(params_check[["nGroups"]] == 1){
-        submethod <- "single"
-      }else if(params_check[["nGroups"]] != 1){
-        submethod <- "group"
-      }
+  # Simulation
+  if(!is.null(type)){
+    if(type == "tree"){
+      message("Simulating trajectory of trees datasets by ESCO")
+      submethod <- "tree"
     }
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- ESCO::escoSimulate(parameters,
-                                            type = submethod,
-                                            verbose = verbose))
-  }, error = function(e){
-    print(e)
-  })
+    if(type == "traj"){
+      message("Simulating trajectory datasets by ESCO")
+      submethod <- "traj"
+    }
+    parameters <- splatter::setParam(parameters, name = "tree", value = tree)
+  }else{
+    if(params_check[["nGroups"]] == 1){
+      submethod <- "single"
+    }else if(params_check[["nGroups"]] != 1){
+      submethod <- "group"
+    }
+  }
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- ESCO::escoSimulate(parameters,
+                                          type = submethod,
+                                          verbose = verbose))
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

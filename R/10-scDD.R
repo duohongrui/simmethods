@@ -61,16 +61,11 @@ scDD_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- splatter::scDDEstimate(ref_data,
-                                                condition = other_prior[["group.condition"]],
-                                                verbose = verbose)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- splatter::scDDEstimate(ref_data,
+                                              condition = other_prior[["group.condition"]],
+                                              verbose = verbose)
+  )
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -173,13 +168,9 @@ scDD_simulation <- function(parameters,
   # Seed
   parameters <- splatter::setParam(parameters, name = "seed", value = seed)
   # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- splatter::scDDSimulate(parameters, verbose = verbose)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- splatter::scDDSimulate(parameters, verbose = verbose)
+  )
   ## counts
   counts <- SingleCellExperiment::counts(simulate_result)
   ## col_data

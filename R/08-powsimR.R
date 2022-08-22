@@ -124,18 +124,14 @@ powsimR_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    cat("Estimating parameters using estimateParam function\n")
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- do.call(powsimR::estimateParam, estimate_formals)
-    )
-    if(!is.null(spike_in_formals)){
-      estSpikeRes <- do.call(powsimR::estimateSpike, spike_in_formals)
-    }else estSpikeRes <- NULL
-  }, error = function(e){
-    print(e)
-  })
+  # Estimate parameters from real data and return parameters and detection results
+  cat("Estimating parameters using estimateParam function\n")
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- do.call(powsimR::estimateParam, estimate_formals)
+  )
+  if(!is.null(spike_in_formals)){
+    estSpikeRes <- do.call(powsimR::estimateSpike, spike_in_formals)
+  }else estSpikeRes <- NULL
   estimate_result <- list(estimate_result = estimate_result,
                           estSpikeRes = estSpikeRes)
   ##############################################################################
@@ -406,14 +402,10 @@ powsimR_simulation <- function(parameters,
   if(verbose){
     message("Simulating datasets using powsimR")
   }
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call(powsimR::simulateDE, simulate_formals)
-      )
-  }, error = function(e){
-    print(e)
-  })
+  # Simulation
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- do.call(powsimR::simulateDE, simulate_formals)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

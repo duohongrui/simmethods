@@ -65,15 +65,10 @@ hierarchicell_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- hierarchicell::compute_data_summaries(expr = ref_data,
-                                                               type = other_prior[["type"]])
-    )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- hierarchicell::compute_data_summaries(expr = ref_data,
+                                                             type = other_prior[["type"]])
+  )
   estimate_result[["hierarchicell_data_dim"]] <- dim(ref_data)
   ##############################################################################
   ####                           Ouput                                       ###
@@ -230,14 +225,10 @@ hierarchicell_simulation <- function(parameters,
   }
   # Seed
   set.seed(seed)
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call(hierarchicell::simulate_hierarchicell, simulate_formals)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  # Simulation
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- do.call(hierarchicell::simulate_hierarchicell, simulate_formals)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

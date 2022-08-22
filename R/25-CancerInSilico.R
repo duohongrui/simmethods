@@ -71,16 +71,11 @@ CancerInSilico_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- purrr::map(gene_pwy, function(pwy){
-        CancerInSilico::calibratePathway(pwy, ref_data)
-      }) %>% setNames(names(gene_pwy))
-    )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- purrr::map(gene_pwy, function(pwy){
+      CancerInSilico::calibratePathway(pwy, ref_data)
+    }) %>% setNames(names(gene_pwy))
+  )
   estimate_result[["data_dim"]] <- dim(ref_data)
   ##############################################################################
   ####                           Ouput                                       ###
@@ -221,13 +216,9 @@ CancerInSilico_simulation <- function(parameters,
   }
   # Seed
   set.seed(seed)
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call(CancerInSilico::inSilicoGeneExpression , simulate_formals))
-  }, error = function(e){
-    print(e)
-  })
+  # Simulation
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- do.call(CancerInSilico::inSilicoGeneExpression , simulate_formals))
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

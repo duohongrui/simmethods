@@ -148,14 +148,9 @@ BEARscc_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- BiocGenerics::do.call(BEARscc::estimate_noiseparameters, estimate_formals)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- BiocGenerics::do.call(BEARscc::estimate_noiseparameters, estimate_formals)
+  )
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -247,14 +242,10 @@ BEARscc_simulation <- function(parameters,
   }
   # Seed
   set.seed(seed)
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call(BEARscc::simulate_replicates, simulate_formals)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  # Simulation
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- do.call(BEARscc::simulate_replicates, simulate_formals)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

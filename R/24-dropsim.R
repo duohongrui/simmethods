@@ -48,14 +48,9 @@ dropsim_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- dropsim::fit_parameters(ref_data, plot = FALSE)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- dropsim::fit_parameters(ref_data, plot = FALSE)
+  )
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -164,14 +159,10 @@ dropsim_simulation <- function(parameters,
   }
   # Seed
   simulate_formals[["seed"]] <- seed
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call(dropsim::simulateDGE, simulate_formals)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  # Simulation
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- do.call(dropsim::simulateDGE, simulate_formals)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

@@ -58,22 +58,17 @@ zinbwave_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- splatter::zinbEstimate(counts = estimate_formals[["counts"]],
-                                                design.samples = estimate_formals[["design.samples"]],
-                                                design.genes = estimate_formals[["design.genes"]],
-                                                common.disp = estimate_formals[["common.disp"]],
-                                                iter.init = estimate_formals[["iter.init"]],
-                                                iter.opt = estimate_formals[["iter.opt"]],
-                                                params = splatter::newZINBParams(),
-                                                verbose = verbose,
-                                                BPPARAM = BiocParallel::SerialParam())
-    )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- splatter::zinbEstimate(counts = estimate_formals[["counts"]],
+                                              design.samples = estimate_formals[["design.samples"]],
+                                              design.genes = estimate_formals[["design.genes"]],
+                                              common.disp = estimate_formals[["common.disp"]],
+                                              iter.init = estimate_formals[["iter.init"]],
+                                              iter.opt = estimate_formals[["iter.opt"]],
+                                              params = splatter::newZINBParams(),
+                                              verbose = verbose,
+                                              BPPARAM = BiocParallel::SerialParam())
+  )
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -141,14 +136,10 @@ zinbwave_simulation <- function(parameters,
   }
   # Seed
   parameters <- splatter::setParam(parameters, name = "seed", value = seed)
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- splatter::zinbSimulate(parameters,
-                                                verbose = verbose))
-  }, error = function(e){
-    print(e)
-  })
+  # Simulation
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- splatter::zinbSimulate(parameters,
+                                              verbose = verbose))
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

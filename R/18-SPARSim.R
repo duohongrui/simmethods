@@ -141,14 +141,9 @@ SPARSim_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- do.call(SPARSim::SPARSim_estimate_parameter_from_data, estimate_formals)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- do.call(SPARSim::SPARSim_estimate_parameter_from_data, estimate_formals)
+  )
   estimate_result <- list(estimate_result = estimate_result,
                           SPARSim_spikein_parameter = SPARSim_spikein_parameter)
   ##############################################################################
@@ -457,13 +452,9 @@ SPARSim_simulation <- function(parameters,
   }
   # Seed
   set.seed(seed)
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call(SPARSim::SPARSim_simulation, simulate_formals))
-  }, error = function(e){
-    print(e)
-  })
+  # Simulation
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- do.call(SPARSim::SPARSim_simulation, simulate_formals))
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

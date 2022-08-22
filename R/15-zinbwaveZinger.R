@@ -66,14 +66,9 @@ zinbwaveZinger_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- do.call(zinbwaveZingercollected::getDatasetMoMPositive, estimate_formals)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- do.call(zinbwaveZingercollected::getDatasetMoMPositive, estimate_formals)
+  )
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -249,13 +244,9 @@ zinbwaveZinger_simulation <- function(ref_data,
   }
   # Seed
   set.seed(seed)
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call(zinbwaveZingercollected::NBsimSingleCell_zinbwaveZinger, simulate_formals))
-  }, error = function(e){
-    print(e)
-  })
+  # Simulation
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- do.call(zinbwaveZingercollected::NBsimSingleCell_zinbwaveZinger, simulate_formals))
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

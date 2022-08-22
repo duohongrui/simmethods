@@ -46,14 +46,9 @@ SCRIP_estimation <- function(ref_data,
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- splatter::splatEstimate(ref_data)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- splatter::splatEstimate(ref_data)
+  )
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -329,37 +324,33 @@ SCRIP_simulation <- function(parameters,
   }else{
     mode <- other_prior[["mode"]]
   }
-  # Estimation
-  tryCatch({
-    if(!is.null(other_prior[["paths"]])){
-      cat("Simulating trajectory datasets by SCRIP")
-      submethod <- "paths"
-      if(!is.null(other_prior[["path.from"]])){
-        parameters <- splatter::setParam(parameters,
-                                         name = "path.from",
-                                         value = other_prior[["path.from"]])
-      }else{
-        parameters <- splatter::setParam(parameters,
-                                         name = "path.from",
-                                         value = seq(1:params_check[['nGroups']])-1)
-      }
+  # Simulation
+  if(!is.null(other_prior[["paths"]])){
+    cat("Simulating trajectory datasets by SCRIP")
+    submethod <- "paths"
+    if(!is.null(other_prior[["path.from"]])){
+      parameters <- splatter::setParam(parameters,
+                                       name = "path.from",
+                                       value = other_prior[["path.from"]])
     }else{
-      if(params_check[["nGroups"]] == 1){
-        submethod <- "single"
-      }else if(params_check[["nGroups"]] != 1){
-        submethod <- "groups"
-      }
+      parameters <- splatter::setParam(parameters,
+                                       name = "path.from",
+                                       value = seq(1:params_check[['nGroups']])-1)
     }
-    set.seed(seed)
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- SCRIP::SCRIPsimu(data = ref_data,
-                                          params = parameters,
-                                          method = submethod,
-                                          mode = mode)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  }else{
+    if(params_check[["nGroups"]] == 1){
+      submethod <- "single"
+    }else if(params_check[["nGroups"]] != 1){
+      submethod <- "groups"
+    }
+  }
+  set.seed(seed)
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- SCRIP::SCRIPsimu(data = ref_data,
+                                        params = parameters,
+                                        method = submethod,
+                                        mode = mode)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

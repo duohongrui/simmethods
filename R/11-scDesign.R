@@ -181,13 +181,9 @@
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call(scDesign::design_data, simulate_formals)
-    )
-  }, error = function(e){
-    print(e)
-  })
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- do.call(scDesign::design_data, simulate_formals)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
@@ -199,7 +195,6 @@
     row_data <- data.frame("gene_name" = rownames(counts))
   }else{
     counts_tmp <- simulate_result[["count"]]
-
     # col_data
     col_data <- data.frame("cell_name" = paste0("Cell", 1:sum(simulate_formals[["ncell"]])),
                            "group" = paste0("Group", unlist(purrr::map(seq_len(length(simulate_formals[["ncell"]])),
