@@ -42,19 +42,26 @@ BASiCS_estimation <- function(ref_data,
   if(!is.null(other_prior[["dilution.factor"]]) & !is.null(other_prior[["volume"]])){
     ERCC_index <- grep(rownames(ref_data), pattern = "^ERCC")
     ERCC_counts <- ref_data[ERCC_index, ]
-    cell_remove_index <- colnames(ERCC_counts)[colSums(ERCC_counts) == 0]
-    warning(glue::glue("These cells have zero counts in spike-in genes and will be moved: {paste0(cell_remove_index, collapse = ', ')}"))
+    ## cell filter
+    cell_remove_index <- colSums(ERCC_counts) == 0
+    if(any(cell_remove_index)){
+      warning(glue::glue("These cells have zero counts in spike-in genes and will be moved: {paste0(colnames(ERCC_counts)[cell_remove_index], collapse = ', ')}"))
+    }
     spikeData <- ref_data[grep(rownames(ref_data), pattern = "^ERCC"), ]
-    spike_in_remove_index <- rownames(spikeData)[rowSums(spikeData) > 0]
-    warning(glue::glue("These spike-in genes have zero counts in all cells and will be moved: {paste0(spike_in_remove_index, collapse = ', ')}"))
-    spikeData <- spikeData[spike_in_remove_index, ]
+    ## spike-in genes filter
+    spike_in_remove_index <- rowSums(ERCC_counts) == 0
+    if(any(spike_in_remove_index)){
+      warning(glue::glue("These spike-in genes have zero counts in all cells and will be moved: {paste0(rownames(ERCC_counts)[spike_in_remove_index], collapse = ', ')}"))
+    }
+    spikeData <- spikeData[!spike_in_remove_index, !cell_remove_index]
+    ## molecules
     concentration <- simmethods::ERCC_info$con_Mix1_attomoles_ul
     spikeInfo <- data.frame(Name = simmethods::ERCC_info$ERCC_id,
                             Input = concentration*10^-18*6.022*10^23*other_prior[["volume"]]/other_prior[["dilution.factor"]],
                             row.names = simmethods::ERCC_info$ERCC_id)
     spikeInfo <- spikeInfo[rownames(spikeData), ]
     other_prior[["spike.info"]] <- spikeInfo
-    other_prior[["counts"]] <- ref_data[, -which(colnames(ref_data) %in% cell_remove_index)]
+    other_prior[["counts"]] <- ref_data[, !cell_remove_index]
   }
   if(!is.null(other_prior[["batch.condition"]])){
     other_prior[["batch"]] <- other_prior[["batch.condition"]]
