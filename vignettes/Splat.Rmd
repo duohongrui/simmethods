@@ -1,11 +1,19 @@
 ---
 title: "Splat"
 author: "DUO Hongrui"
-output: rmarkdown::html_vignette
+# output: rmarkdown::html_vignette
+output:
+    BiocStyle::html_document:
+        toc: true
+        toc_float: true
+# vignette: >
+#   %\VignetteIndexEntry{Splat}
+#   %\VignetteEncoding{UTF-8}
+#   %\VignetteEngine{knitr::rmarkdown}
 vignette: >
-  %\VignetteIndexEntry{Splat}
-  %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{An introduction to the Splatter package}
   %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 editor_options: 
   chunk_output_type: console
 ---
@@ -19,7 +27,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 Here Splat method will be demonstrated clearly and hope that this document can help you.
 
-## Estimating parameters from a real dataset
+# Estimating parameters from a real dataset
 
 Before simulating datasets, it is important to estimate some essential parameters from a real dataset in order to make the simulated data more real. If you do not have a single-cell transcriptomics count matrix now, you can use the data collected in simmethods package by `simmethods:data` command.
 
@@ -39,7 +47,7 @@ estimate_result <- simmethods::Splat_estimation(ref_data = ref_data,
                                                 seed = 10)
 ```
 
-## Simulating datasets using Splat
+# Simulating datasets using Splat
 
 After estimating parameter from a real dataset, we will simulate a dataset based on the learned parameters with different scenarios.
 
@@ -50,7 +58,7 @@ After estimating parameter from a real dataset, we will simulate a dataset based
 5. Simulate more groups and batches simutaniously
 6. Return results with different format 
 
-### 1. Datasets with default parameters
+## Datasets with default parameters
 
 The reference data contains 160 cells and 4000 genes, if we simulate datasets with default parameters and then we will obtain a new data which has the same size as the reference data. In addtion, the simulated dataset will have one group and one batch of cells.
 
@@ -64,7 +72,7 @@ head(colData(SCE_result))
 head(rowData(SCE_result))
 ```
 
-### 2. Determin the number of cells and genes
+## Determin the number of cells and genes
 
 In Splat, we can not set `nCells` directly and should set `batchCells` instead. For example, if we want to simulate 500 cells, we can type `other_prior = list(batchCells = 500)`. For genes, we can just set `nGenes`.
 Here, we simulate a new dataset with 500 cells and 1000 genes:
@@ -78,7 +86,7 @@ result <- simulate_result[["simulate_result"]][["count_data"]]
 dim(result)
 ```
 
-### 3. Simulate two or more groups
+## Simulate two or more groups
 
 In Splat, we can not set `nGroups` directly and should set `prob.group` instead. For example, if we want to simulate 2 groups, we can type `other_prior = list(prob.group = c(0.5, 0.5))`. Note that the sum of `prob.group` numeric vector must equal to 1, so we can also set `prob.group = c(0.3, 0.7)`.
 
@@ -117,7 +125,7 @@ fc_group2_to_group3 <- gene_info$DEFacGroup3/gene_info$DEFacGroup2
 ```
 
 
-### 4. Simulate two or more batches
+## Simulate two or more batches
 
 In Splat, we can not set `nBatches` directly and should set `batchCells` instead. For example, if we want to simulate 2 batches, we can type `other_prior = list(batchCells = c(250, 250))`. Note that the sum of `batchCells` numeric vector represents the total number of cells and the length of the vector equals to the number of batches.
 
@@ -141,7 +149,7 @@ table(cell_info$batch)
 ```
 
 
-### 5. Simulate more groups and batches simutaniously
+## Simulate more groups and batches simutaniously
 
 As mentioned before, we can set `prob.group` and `batchCells` to determine the number of groups and batches and we can also set `de.prob` to specify the proportion of DEGs. Here, we simulate a dataset with following settings:
 
@@ -173,11 +181,11 @@ fc_group2_to_group3 <- gene_info$DEFacGroup3/gene_info$DEFacGroup2
 ```
 
 
-### 6. Return results with different format 
+## Return results with different format 
 
 In simmethods package, we provide four formats of results to users without data format conversion, including `list`, `SingleCellExperiment`, `Seurat` and `h5ad`. The previous three formats are compatible with R environment and the last `h5ad` format is suitable for **Python** environment and can be imported by `scanpy.read_h5ad` function. 
 
-#### list
+### list
 
 ```{r list, collapse=TRUE}
 simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
@@ -197,7 +205,7 @@ gene_info <- simulate_result[["simulate_result"]][["row_meta"]]
 head(gene_info)
 ```
 
-#### SingleCellExperiment
+### SingleCellExperiment
 
 ```{r SCE, collapse=TRUE}
 simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
@@ -216,7 +224,7 @@ gene_info <- as.data.frame(rowData(simulate_result[["simulate_result"]]))
 head(gene_info)
 ```
 
-#### Seurat
+### Seurat
 
 ```{r Seurat, collapse=TRUE}
 simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
@@ -240,7 +248,7 @@ gene_info <- seurat_result@assays[["originalexp"]]@meta.features
 head(gene_info)
 ```
 
-#### h5ad
+### h5ad
 If we select `h5ad` format, it is not possible to return the result in R, so you can get the path where the `h5ad` files save to and we can go to the path and read it in **Python** by `scanpy.read_h5ad` function (if you have already installed Python and **scanpy** module).
 
 ```{r h5ad, collapse=TRUE}
