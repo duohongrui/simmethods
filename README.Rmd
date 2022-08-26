@@ -29,6 +29,17 @@ method_name <- names(methods)
 method_table <- purrr::map_dfr(method_name, .f = function(x){
   method_definition <- methods[[x]][[paste0(x, "_method")]]
   
+  ## Language
+  if(method_definition$programming == "R"){
+    logo <- "'man/figures/R_logo.png' "
+    size <- paste("height='18px'", "width='18px'")
+    Language <- paste0("<img src=", logo, size, ">")
+  }else{
+    logo <- "'man/figures/python_logo.png' "
+    size <- paste("height='24px'", "width='8px'")
+    Language <- paste0("<img src=", logo, size, ">")
+  }
+  
   ## DOI
   if(!is.null(method_definition$manuscript$doi)){
     DOI <- paste0("<a href=",
@@ -48,7 +59,7 @@ method_table <- purrr::map_dfr(method_name, .f = function(x){
   }
   
   method_summary <- tibble::tibble(method = method_definition$method,
-                                   language = method_definition$programming,
+                                   language = Language,
                                    url = URL,
                                    doi = DOI,
                                    journal = method_definition$manuscript$journal)
