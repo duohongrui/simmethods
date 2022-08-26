@@ -28,10 +28,29 @@ method_name <- names(methods)
 
 method_table <- purrr::map_dfr(method_name, .f = function(x){
   method_definition <- methods[[x]][[paste0(x, "_method")]]
+  
+  ## DOI
+  if(!is.null(method_definition$manuscript$doi)){
+    DOI <- paste0("<a href=",
+                  paste0("'https://doi.org/", method_definition$manuscript$doi),
+                  "'><img src='man/figures/doi_logo.png' height='18px' width = '18px'></a>")
+  }else{
+    DOI <- ""
+  }
+  
+  ## URL
+  if(!is.null(method_definition$url)){
+    URL <- paste0("<a href=",
+                  paste0("'", method_definition$url),
+                  "'><img src='man/figures/URL.png' height='18px' width = '18px'></a>")
+  }else{
+    URL <- ""
+  }
+  
   method_summary <- tibble::tibble(method = method_definition$method,
                                    language = method_definition$programming,
-                                   url = method_definition$url,
-                                   doi = method_definition$manuscript$doi,
+                                   url = URL,
+                                   doi = DOI,
                                    journal = method_definition$manuscript$journal)
   method_summary
 })
