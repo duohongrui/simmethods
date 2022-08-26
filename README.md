@@ -1,5 +1,6 @@
 
-<img src="man/figures/simmethods_logo.png" align="right" />
+\<img src=“man/figures/simmethods_logo.png” align=“right” width =
+“210px”, height=“180px”/\>
 
 # A collection of 42 simulation methods for single-cell RNA-seq data
 
