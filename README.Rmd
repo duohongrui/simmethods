@@ -56,7 +56,7 @@ method_table <- purrr::map_dfr(method_name, .f = function(x){
       url_size <- "height='24px' width = '24px'"
     }else if(stringr::str_detect(method_definition$url, pattern = "bioconductor")){
       png_logo <- "'man/figures/bioconductor_logo.png' "
-      url_size <- "height='24px' width = '24px'"
+      url_size <- "height='25px' width = '30px'"
     }else if(stringr::str_detect(method_definition$url, pattern = "github")){
       png_logo <- "'man/figures/github_logo.png' "
       url_size <- "height='21px' width = '38px'"
