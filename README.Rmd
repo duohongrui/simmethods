@@ -51,18 +51,34 @@ method_table <- purrr::map_dfr(method_name, .f = function(x){
   
   ## URL
   if(!is.null(method_definition$url)){
+    if(stringr::str_detect(method_definition$url, pattern = "cran")){
+      png_logo <- "'man/figures/CRAN_logo.png' "
+    }else if(stringr::str_detect(method_definition$url, pattern = "bioconductor")){
+      png_logo <- "'man/figures/bioconductor_logo.png' "
+    }else if(stringr::str_detect(method_definition$url, pattern = "github")){
+      png_logo <- "'man/figures/github_logo.png' "
+    }else{
+      png_logo <- "'man/figures/URL.png' "
+    }
     URL <- paste0("<a href=",
                   paste0("'", method_definition$url),
-                  "'><img src='man/figures/URL.png' height='18px' width = '18px'></a>")
+                  paste0("'><img src=", png_logo, "height='18px' width = '18px'></a>"))
   }else{
     URL <- ""
+  }
+  
+  ## Journal
+  if(is.null(method_definition$manuscript$journal)){
+    Journal <- ""
+  }else{
+    Journal <- method_definition$manuscript$journal
   }
   
   method_summary <- tibble::tibble(method = method_definition$method,
                                    language = Language,
                                    url = URL,
                                    doi = DOI,
-                                   journal = method_definition$manuscript$journal)
+                                   journal = Journal)
   method_summary
 })
 
