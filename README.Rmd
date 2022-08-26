@@ -32,11 +32,11 @@ method_table <- purrr::map_dfr(method_name, .f = function(x){
   ## Language
   if(method_definition$programming == "R"){
     logo <- "'man/figures/R_logo.png' "
-    size <- paste("height='24px'", "width='24px'")
+    size <- paste("height='28px'", "width='28px'")
     Language <- paste0("<img src=", logo, size, ">")
   }else{
     logo <- "'man/figures/python_logo.png' "
-    size <- paste("height='24px'", "width='72px'")
+    size <- paste("height='28px'", "width='84px'")
     Language <- paste0("<img src=", logo, size, ">")
   }
   
@@ -44,7 +44,7 @@ method_table <- purrr::map_dfr(method_name, .f = function(x){
   if(!is.null(method_definition$manuscript$doi)){
     DOI <- paste0("<a href=",
                   paste0("'https://doi.org/", method_definition$manuscript$doi),
-                  "'><img src='man/figures/doi_logo.png' height='18px' width = '18px'></a>")
+                  "'><img src='man/figures/doi_logo.png' height='24px' width = '24px'></a>")
   }else{
     DOI <- ""
   }
@@ -53,16 +53,20 @@ method_table <- purrr::map_dfr(method_name, .f = function(x){
   if(!is.null(method_definition$url)){
     if(stringr::str_detect(method_definition$url, pattern = "cran")){
       png_logo <- "'man/figures/CRAN_logo.png' "
+      url_size <- "height='24px' width = '24px'"
     }else if(stringr::str_detect(method_definition$url, pattern = "bioconductor")){
       png_logo <- "'man/figures/bioconductor_logo.png' "
+      url_size <- "height='24px' width = '24px'"
     }else if(stringr::str_detect(method_definition$url, pattern = "github")){
       png_logo <- "'man/figures/github_logo.png' "
+      url_size <- "height='38px' width = '21px'"
     }else{
       png_logo <- "'man/figures/URL.png' "
+      url_size <- "height='24px' width = '24px'"
     }
     URL <- paste0("<a href=",
                   paste0("'", method_definition$url),
-                  paste0("'><img src=", png_logo, "height='18px' width = '18px'></a>"))
+                  paste0("'><img src=", png_logo, url_size, "></a>"))
   }else{
     URL <- ""
   }
