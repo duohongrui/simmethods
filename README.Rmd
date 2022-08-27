@@ -32,7 +32,7 @@ method_table <- purrr::map_dfr(method_name, .f = function(x){
   ## Language
   if(method_definition$programming == "R"){
     logo <- "'man/figures/R_logo.png' "
-    size <- paste("height='30px'", "width='23px'")
+    size <- paste("height='23px'", "width='30px'")
     Language <- paste0("<img src=", logo, size, ">")
   }else{
     logo <- "'man/figures/python_logo.png' "
