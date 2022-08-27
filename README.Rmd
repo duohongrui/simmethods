@@ -32,7 +32,7 @@ method_table <- purrr::map_dfr(method_name, .f = function(x){
   ## Language
   if(method_definition$programming == "R"){
     logo <- "'man/figures/R_logo.png' "
-    size <- paste("height='28px'", "width='28px'")
+    size <- paste("height='30px'", "width='23px'")
     Language <- paste0("<img src=", logo, size, ">")
   }else{
     logo <- "'man/figures/python_logo.png' "
@@ -53,16 +53,16 @@ method_table <- purrr::map_dfr(method_name, .f = function(x){
   if(!is.null(method_definition$url)){
     if(stringr::str_detect(method_definition$url, pattern = "cran")){
       png_logo <- "'man/figures/CRAN_logo.png' "
-      url_size <- "height='24px' width = '24px'"
+      url_size <- "height='30px' width = '30px'"
     }else if(stringr::str_detect(method_definition$url, pattern = "bioconductor")){
       png_logo <- "'man/figures/bioconductor_logo.png' "
-      url_size <- "height='30px' width = '25px'"
+      url_size <- "height='36px' width = '30px'"
     }else if(stringr::str_detect(method_definition$url, pattern = "github")){
       png_logo <- "'man/figures/github_logo.png' "
-      url_size <- "height='21px' width = '38px'"
+      url_size <- "height='25.2px' width = '45.6px'"
     }else{
       png_logo <- "'man/figures/URL.png' "
-      url_size <- "height='24px' width = '24px'"
+      url_size <- "height='30px' width = '30px'"
     }
     URL <- paste0("<a href=",
                   paste0("'", method_definition$url),
