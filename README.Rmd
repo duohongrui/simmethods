@@ -50,23 +50,43 @@ method_table <- purrr::map_dfr(method_name, .f = function(x){
   }
   
   ## URL
-  if(!is.null(method_definition$url)){
+  if(!is.null(method_definition$url) | !is.null(method_definition$authors$github)){
     if(stringr::str_detect(method_definition$url, pattern = "cran")){
       png_logo <- "'man/figures/CRAN.png' "
-      url_size <- "height='25px' width = '60px'"
+      url_size <- "height='12.5px' width = '30px'"
     }else if(stringr::str_detect(method_definition$url, pattern = "bioconductor")){
       png_logo <- "'man/figures/bioconductor_logo.png' "
-      url_size <- "height='48px' width = '40px'"
+      url_size <- "height='36px' width = '30px'"
     }else if(stringr::str_detect(method_definition$url, pattern = "github")){
       png_logo <- "'man/figures/github_logo.png' "
-      url_size <- "height='30.24px' width = '54.72px'"
+      url_size <- "height='21px' width = '38px'"
     }else{
       png_logo <- "'man/figures/URL.png' "
-      url_size <- "height='35px' width = '35px'"
+      url_size <- "height='25px' width = '25px'"
     }
-    URL <- paste0("<a href=",
+    if(!is.null(method_definition$authors$github)){
+      png_logo2 <- "'man/figures/github_logo.png' "
+      url_size2 <- "height='21px' width = '38px'"
+    }
+    if(!is.null(method_definition$authors$github)){
+      if(method_definition$authors$github == method_definition$url){
+        URL <- paste0("<a href=",
                   paste0("'", method_definition$url),
                   paste0("'><img src=", png_logo, url_size, "></a>"))
+      }else{
+        URL <- c(paste0("<a href=",
+                  paste0("'", method_definition$url),
+                  paste0("'><img src=", png_logo, url_size, "></a>")),
+               paste0("<a href=",
+                  paste0("'", method_definition$authors$github),
+                  paste0("'><img src=", png_logo2, url_size2, "></a>")))
+      }
+    }else{
+      URL <- paste0("<a href=",
+                  paste0("'", method_definition$url),
+                  paste0("'><img src=", png_logo, url_size, "></a>"))
+    }
+    
   }else{
     URL <- ""
   }
