@@ -74,9 +74,9 @@ method_table <- purrr::map_dfr(method_name, .f = function(x){
                   paste0("'", method_definition$url),
                   paste0("'><img src=", png_logo, url_size, "></a>"))
       }else{
-        URL <- c(paste0("<a href=",
-                  paste0("'", method_definition$url),
-                  paste0("'><img src=", png_logo, url_size, "></a>")),
+        URL <- paste(paste0("<a href=",
+                     paste0("'", method_definition$url),
+                     paste0("'><img src=", png_logo, url_size, "></a>")),
                paste0("<a href=",
                   paste0("'", method_definition$authors$github),
                   paste0("'><img src=", png_logo2, url_size2, "></a>")))
