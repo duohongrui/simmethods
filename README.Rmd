@@ -52,17 +52,17 @@ method_table <- purrr::map_dfr(method_name, .f = function(x){
   ## URL
   if(!is.null(method_definition$url)){
     if(stringr::str_detect(method_definition$url, pattern = "cran")){
-      png_logo <- "'man/figures/CRAN_logo.png' "
-      url_size <- "height='30px' width = '30px'"
+      png_logo <- "'man/figures/CRAN.png' "
+      url_size <- "height='25px' width = '60px'"
     }else if(stringr::str_detect(method_definition$url, pattern = "bioconductor")){
       png_logo <- "'man/figures/bioconductor_logo.png' "
-      url_size <- "height='36px' width = '30px'"
+      url_size <- "height='48px' width = '40px'"
     }else if(stringr::str_detect(method_definition$url, pattern = "github")){
       png_logo <- "'man/figures/github_logo.png' "
-      url_size <- "height='25.2px' width = '45.6px'"
+      url_size <- "height='30.24px' width = '54.72px'"
     }else{
       png_logo <- "'man/figures/URL.png' "
-      url_size <- "height='30px' width = '30px'"
+      url_size <- "height='35px' width = '35px'"
     }
     URL <- paste0("<a href=",
                   paste0("'", method_definition$url),
