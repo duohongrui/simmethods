@@ -26,3 +26,62 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 This function is used to simulate datasets from learned parameters by \code{Simulate2SCE}
 function in POWSC package.
 }
+\details{
+In addtion to simulate datasets with default parameters, users want to simulate
+other kinds of datasets, e.g. a counts matrix with 2 or more cell groups. In
+POWSC, you can set extra parameters to simulate datasets.
+
+The customed parameters you can set are below:
+\enumerate{
+\item nCells. In POWSC, you can set nCells directly by \code{other_prior = list(nCells = 1000)}.
+\item nGroups. POWSC can only simulate \strong{two} groups.
+\item de.prob. You can directly set \code{other_prior = list(de.prob = 0.2)} to simulate DEGs that account for 20 percent of all genes.
+}
+}
+\examples{
+ref_data <- SingleCellExperiment::counts(scater::mockSCE())
+
+## estimation
+estimate_result <- simmethods::POWSC_estimation(ref_data = ref_data,
+                                                other_prior = NULL,
+                                                verbose = TRUE,
+                                                seed = 111)
+
+## default setting
+simulate_result <- simmethods::POWSC_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  other_prior = NULL,
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111
+)
+## counts
+counts <- simulate_result[["simulate_result"]][["count_data"]]
+dim(counts)
+## cell information
+col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+table(col_data$group)
+## gene information
+row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+table(row_data$de_gene)
+
+
+## Simulate 1000 cells (de.prob = 0.2)
+simulate_result <- simmethods::POWSC_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  other_prior = list(nCells = 1000,
+                     de.prob = 0.2),
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111
+)
+## counts
+counts <- simulate_result[["simulate_result"]][["count_data"]]
+dim(counts)
+## cell information
+col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+table(col_data$group)
+## gene information
+row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+table(row_data$de_gene)
+}

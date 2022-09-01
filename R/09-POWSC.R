@@ -12,12 +12,21 @@
 #' DEGs and other variables are usually customed, so before simulating a dataset
 #' you must point it out.
 #' @param seed An integer of a random seed.
+#' @details
+#' When you use POWSC to estimate parameters from a real dataset, the default settings
+#' are recommended.
 #' @importFrom peakRAM peakRAM
-#'
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
+#' @examples
+#' ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 #'
+#' ## estimation
+#' estimate_result <- simmethods::POWSC_estimation(ref_data = ref_data,
+#'                                                 other_prior = NULL,
+#'                                                 verbose = TRUE,
+#'                                                 seed = 111)
 POWSC_estimation <- function(ref_data,
                              verbose = FALSE,
                              other_prior,
@@ -79,14 +88,66 @@ POWSC_estimation <- function(ref_data,
 #' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
+#' @details
+#' In addtion to simulate datasets with default parameters, users want to simulate
+#' other kinds of datasets, e.g. a counts matrix with 2 or more cell groups. In
+#' POWSC, you can set extra parameters to simulate datasets.
 #'
+#' The customed parameters you can set are below:
+#' 1. nCells. In POWSC, you can set nCells directly by `other_prior = list(nCells = 1000)`.
+#' 2. nGroups. POWSC can only simulate **two** groups.
+#' 3. de.prob. You can directly set `other_prior = list(de.prob = 0.2)` to simulate DEGs that account for 20 percent of all genes.
 #' @importFrom glue glue
 #' @importFrom SingleCellExperiment counts colData rowData
 #' @importFrom Seurat as.Seurat
 #' @importFrom stringr str_replace
-#'
 #' @export
+#' @examples
+#' ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 #'
+#' ## estimation
+#' estimate_result <- simmethods::POWSC_estimation(ref_data = ref_data,
+#'                                                 other_prior = NULL,
+#'                                                 verbose = TRUE,
+#'                                                 seed = 111)
+#'
+#' ## default setting
+#' simulate_result <- simmethods::POWSC_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = NULL,
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#' ## counts
+#' counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(counts)
+#' ## cell information
+#' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+#' table(col_data$group)
+#' ## gene information
+#' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+#' table(row_data$de_gene)
+#'
+#'
+#' ## Simulate 1000 cells (de.prob = 0.2)
+#' simulate_result <- simmethods::POWSC_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(nCells = 1000,
+#'                      de.prob = 0.2),
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#' ## counts
+#' counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(counts)
+#' ## cell information
+#' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+#' table(col_data$group)
+#' ## gene information
+#' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+#' table(row_data$de_gene)
 POWSC_simulation <- function(parameters,
                              other_prior,
                              return_format,
@@ -112,12 +173,12 @@ POWSC_simulation <- function(parameters,
   if(is.null(other_prior[["de.prob"]])){
     perDE <- 0.05
   }else{
-    perDE <- other_prior[["de.prob"]]
+    perDE <- other_prior[["de.prob"]]/2
   }
   message(glue::glue("nCells: {n}"))
   message(glue::glue("nGenes: {dim(parameters[['exprs']])[1]}"))
   message(glue::glue("nGroups: 2"))
-  message(glue::glue("de.prob: {perDE}"))
+  message(glue::glue("de.prob: {perDE *2 }"))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -138,10 +199,20 @@ POWSC_simulation <- function(parameters,
   counts <- SingleCellExperiment::counts(simulate_result[["sce"]])
   colnames(counts) <- paste0("Cell", c(1:ncol(counts)))
   rownames(counts) <- paste0("Gene", c(1:nrow(counts)))
+  ## cell information
   col_data <- data.frame("cell_name" = colnames(counts),
                          "group" = ifelse(colData(simulate_result[["sce"]])[,1] == "celltype1", "Group1", "Group2"))
-  row_data <- data.frame("gene_name" = rownames(counts))
-  simulate_result <- simulate_result[["sce"]]
+  ## gene information
+  de_gene <- as.numeric(str_extract_all(simulate_result[["DEGs"]],
+                                        "[0-9]+",
+                                        simplify = TRUE))
+  row_data <- data.frame("gene_name" = rownames(counts),
+                         "de_gene" = "no")
+  row_data$de_gene[de_gene] <- "yes"
+  # Establish SingleCellExperiment
+  simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
+                                                                colData = col_data,
+                                                                rowData = row_data)
   simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
                                                return_format = return_format)
 

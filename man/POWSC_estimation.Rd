@@ -28,3 +28,16 @@ detection.
 This function is used to estimate useful parameters from a real dataset by
 using \code{Est2Phase} function in POWSC package.
 }
+\details{
+When you use POWSC to estimate parameters from a real dataset, the default settings
+are recommended.
+}
+\examples{
+ref_data <- SingleCellExperiment::counts(scater::mockSCE())
+
+## estimation
+estimate_result <- simmethods::POWSC_estimation(ref_data = ref_data,
+                                                other_prior = NULL,
+                                                verbose = TRUE,
+                                                seed = 111)
+}
