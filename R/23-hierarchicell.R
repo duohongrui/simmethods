@@ -49,6 +49,7 @@ hierarchicell_estimation <- function(ref_data,
   if(!is.matrix(ref_data)){
     ref_data <- as.matrix(ref_data)
   }
+  hierarchicell_data_dim <- dim(ref_data)
   ref_data <- hierarchicell::filter_counts(ref_data,
                                            gene_thresh = 0,
                                            cell_thresh = 0)
@@ -69,7 +70,7 @@ hierarchicell_estimation <- function(ref_data,
     estimate_result <- hierarchicell::compute_data_summaries(expr = ref_data,
                                                              type = other_prior[["type"]])
   )
-  estimate_result[["hierarchicell_data_dim"]] <- dim(ref_data)
+  estimate_result[["hierarchicell_data_dim"]] <- hierarchicell_data_dim
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
