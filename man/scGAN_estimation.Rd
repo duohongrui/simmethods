@@ -4,7 +4,7 @@
 \alias{scGAN_estimation}
 \title{Estimate Parameters From Real Datasets by scGAN}
 \usage{
-scGAN_estimation(ref_data, other_prior, verbose = FALSE, seed)
+scGAN_estimation(ref_data, other_prior = NULL, verbose = FALSE, seed)
 }
 \arguments{
 \item{ref_data}{A count matrix. Each row represents a gene and each column

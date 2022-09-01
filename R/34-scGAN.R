@@ -37,7 +37,7 @@
 #' Marouf M, Machart P, Bansal V, et al. Realistic in silico generation and augmentation of single-cell RNA-seq data using generative adversarial networks. Nature communications, 2020, 11(1): 1-12.
 scGAN_estimation <- function(
     ref_data,
-    other_prior,
+    other_prior = NULL,
     verbose = FALSE,
     seed
 ){
@@ -102,6 +102,17 @@ scGAN_estimation <- function(
                                               save_to_path = file.path(tmp_path, "scGAN"),
                                               verbose = verbose)
   cluster_number <- table(new_data$cluster_number)
+  if(other_prior[["min_cells"]] == 0){
+    need_add <- ncol(ref_data)-sum(cluster_number)
+    assign_result <- simutils::proportionate(number = need_add,
+                                             result_sum_strict = need_add,
+                                             prop = rep(1/length(cluster_number),
+                                                        length(cluster_number)),
+                                             prop_sum_strict = 1,
+                                             digits = 0)
+    cluster_number <- cluster_number + assign_result
+  }
+
   # Prepare the input parameters-----------------------------------------------
   ## 1. docker image working directory
   wd <- c("--workdir", "/scGAN")
