@@ -140,6 +140,9 @@ scDD_simulation <- function(parameters,
   ####                               Check                                   ###
   ##############################################################################
   ## nCells
+  nCells <- ifelse(other_prior[["nCells"]]%%2 == 0,
+                   other_prior[["nCells"]]/2,
+                   (other_prior[["nCells"]]-1)/2)
   if(!is.null(other_prior[["nCells"]])){
     parameters <- splatter::setParam(parameters, "nCells", other_prior[["nCells"]])
   }
