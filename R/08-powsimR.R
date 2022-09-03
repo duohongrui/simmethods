@@ -334,7 +334,7 @@ powsimR_simulation <- function(parameters,
                                                    prop_sum_strict = 1,
                                                    digits = 0)
     other_prior[["n2"]] <- simutils::proportionate(number = group2_cell,
-                                                   result_sum_strict = group1_cell,
+                                                   result_sum_strict = group2_cell,
                                                    prop = prob.batch,
                                                    prop_sum_strict = 1,
                                                    digits = 0)
