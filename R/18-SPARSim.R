@@ -118,7 +118,7 @@ SPARSim_estimation <- function(ref_data,
     spikein_set <- SPARSim::SPARSim_create_spikein_set(spikein_mixes = list(spikein = spikein))
     spikein_sample_association <- c(rep("spikein", ncol(ref_data)))
     spikein_abundance <- 0.05
-    SPARSim_spikein_parameter <- SPARSim_create_spikein_parameter(
+    SPARSim_spikein_parameter <- SPARSim::SPARSim_create_spikein_parameter(
       spikein_set = spikein_set,
       spikein_sample = spikein_sample_association,
       spikein_proportion = spikein_abundance)
