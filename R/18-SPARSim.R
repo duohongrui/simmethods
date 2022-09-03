@@ -476,6 +476,8 @@ SPARSim_simulation <- function(parameters,
       index <- which(group_name[i] == group_name_tmp)
       group[index] <- rep(paste0("Group", i), length(index))
     }
+  }else{
+    group <- rep("Group1", ncol(counts))
   }
 
   colnames(counts) <- paste0("Cell", 1:ncol(counts))
@@ -487,7 +489,8 @@ SPARSim_simulation <- function(parameters,
                            "group" = group,
                            "batch" = batch)
   }else{
-    col_data <- data.frame("cell_name" = colnames(counts))
+    col_data <- data.frame("cell_name" = colnames(counts),
+                           "group" = group)
   }
 
   ## row_data
