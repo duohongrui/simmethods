@@ -427,15 +427,15 @@ powsimR_simulation <- function(parameters,
   # Extract infomation
   if(!is.null(SetupRes[["DESetup"]][["bLFC"]])){
     row_data <- data.frame("gene_name" = rownames(counts),
-                           "de_gene" = ifelse(simulate_result[["DESetup"]][["pLFC"]][[1]] == 0, FALSE, TRUE),
+                           "de_gene" = ifelse(simulate_result[["DESetup"]][["pLFC"]][[1]] == 0, "no", "yes"),
                            "de_fc" = ifelse(simulate_result[["DESetup"]][["pLFC"]][[1]] == 0, 0,
                                             2^simulate_result[["DESetup"]][["pLFC"]][[1]]),
-                           "batch_genes" = ifelse(simulate_result[["DESetup"]][["bLFC"]][[1]] == 0, FALSE, TRUE),
+                           "batch_genes" = ifelse(simulate_result[["DESetup"]][["bLFC"]][[1]] == 0, "no", "yes"),
                            "batch_fc" = ifelse(simulate_result[["DESetup"]][["bLFC"]][[1]] ==0, 0,
                                                2^simulate_result[["DESetup"]][["bLFC"]][[1]]))
   }else{
     row_data <- data.frame("gene_name" = rownames(counts),
-                           "de_gene" = ifelse(simulate_result[["DESetup"]][["pLFC"]][[1]] == 0, FALSE, TRUE),
+                           "de_gene" = ifelse(simulate_result[["DESetup"]][["pLFC"]][[1]] == 0, "no", "yes"),
                            "de_fc" = ifelse(simulate_result[["DESetup"]][["pLFC"]][[1]] == 0, 0,
                                             2^simulate_result[["DESetup"]][["pLFC"]][[1]]))
   }
