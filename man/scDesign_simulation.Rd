@@ -79,7 +79,7 @@ col_data <- simulate_result[["simulate_result"]][["col_meta"]]
 table(col_data$group)
 ## gene information
 row_data <- simulate_result[["simulate_result"]][["row_meta"]]
-table(row_data$de_genes)/4000
+table(row_data$de_gene)/4000
 table(row_data$up_down)
 
 

@@ -90,7 +90,7 @@ col_data <- simulate_result[["simulate_result"]][["col_meta"]]
 table(col_data$group)
 ## row_data
 row_data <- simulate_result[["simulate_result"]][["row_meta"]]
-table(row_data$de_genes)[2]/2000
+table(row_data$de_gene)[2]/2000
 
 # (2) Simulate two groups with 20\% of DEGs and 4 fold change.
 simulate_result <- simmethods::powsimR_simulation(
@@ -108,7 +108,7 @@ col_data <- simulate_result[["simulate_result"]][["col_meta"]]
 table(col_data$group)
 ## gene information
 row_data <- simulate_result[["simulate_result"]][["row_meta"]]
-table(row_data$de_genes)[2]/4000
+table(row_data$de_gene)[2]/4000
 
 
 # (3) Simulate two batches (2 fold change)
