@@ -65,7 +65,7 @@
 #' table(col_data$group)
 #' ## gene information
 #' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
-#' table(row_data$de_genes)/4000
+#' table(row_data$de_gene)/4000
 #' table(row_data$up_down)
 #'
 #'
@@ -218,13 +218,13 @@
       as.numeric()
 
     row_data <- data.frame("gene_name" = rownames(counts),
-                           "de_genes" = "no",
+                           "de_gene" = "no",
                            "up_down" = "no")
     # Row data
     row_data[up_gene, 3] <- "up"
     row_data[down_gene, 3] <- "down"
     row_data <- row_data %>%
-      dplyr::mutate("de_genes" = dplyr::case_when(
+      dplyr::mutate("de_gene" = dplyr::case_when(
         up_down == "no" ~ "no",
         TRUE ~ "yes"
       ))
