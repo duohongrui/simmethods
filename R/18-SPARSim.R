@@ -345,12 +345,12 @@ SPARSim_simulation <- function(parameters,
     n_genes <- length(parameters[[1]][['intensity']])
     ## fold change
     if(is.null(other_prior[["fc.group"]])){
-      cat("You do not point the fold change of DEGs between two groups, we will set it as 2 \n")
+      message("You do not point the fold change of DEGs between two groups, we will set it as 2")
       other_prior[["fc.group"]] <- 2
     }
     ## proportion of DEGs
     if(is.null(other_prior[["de.prob"]])){
-      cat("You do not point the percent of DEGs, we will set it as 0.1 \n")
+      message("You do not point the percent of DEGs, we will set it as 0.1")
       other_prior[["de.prob"]] <- 0.1
     }
 
