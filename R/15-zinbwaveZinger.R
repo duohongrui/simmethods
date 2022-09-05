@@ -263,7 +263,7 @@ zinbwaveZinger_simulation <- function(ref_data,
   names(indNonDE) <- rep("non-DE", length(indNonDE))
   gene_DE <- sort(c(indDE, indNonDE))
   row_data <- data.frame("gene_name" = rownames(counts),
-                         "de_genes" = ifelse(names(gene_DE) == "DE", "yes", "no"),
+                         "de_gene" = ifelse(names(gene_DE) == "DE", "yes", "no"),
                          "de_fc" = 0)
   row_data[indDE, 3] <- simulate_result[["foldDiff"]]
   # Establish SingleCellExperiment
