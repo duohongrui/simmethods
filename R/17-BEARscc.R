@@ -238,7 +238,7 @@ BEARscc_simulation <- function(parameters,
   ####                            Simulation                                 ###
   ##############################################################################
   if(verbose){
-    BEARscc("Simulating datasets using BEARscc")
+    message("Simulating datasets using BEARscc")
   }
   # Seed
   set.seed(seed)
