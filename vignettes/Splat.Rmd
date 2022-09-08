@@ -63,9 +63,11 @@ After estimating parameter from a real dataset, we will simulate a dataset based
 The reference data contains 160 cells and 4000 genes, if we simulate datasets with default parameters and then we will obtain a new data which has the same size as the reference data. In addtion, the simulated dataset will have one group and one batch of cells.
 
 ```{r default_params}
-simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
-                                                return_format = "SCE",
-                                                seed = 111)
+simulate_result <- simmethods::Splat_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  return_format = "SCE",
+  seed = 111
+)
 SCE_result <- simulate_result[["simulate_result"]]
 dim(SCE_result)
 head(colData(SCE_result))
@@ -77,11 +79,13 @@ head(rowData(SCE_result))
 In Splat, we can not set `nCells` directly and should set `batchCells` instead. For example, if we want to simulate 500 cells, we can type `other_prior = list(batchCells = 500)`. For genes, we can just set `nGenes`.
 Here, we simulate a new dataset with 500 cells and 1000 genes:
 ```{r customed cell and gene number}
-simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
-                                                return_format = "list",
-                                                other_prior = list(batchCells = 500,
-                                                                   nGenes = 1000),
-                                                seed = 111)
+simulate_result <- simmethods::Splat_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  return_format = "list",
+  other_prior = list(batchCells = 500,
+                     nGenes = 1000),
+  seed = 111
+)
 result <- simulate_result[["simulate_result"]][["count_data"]]
 dim(result)
 ```
@@ -97,12 +101,14 @@ In addtion, if we want to simulate three or more groups, we should obey the rule
 
 For demonstration, we will simulate three groups using the learned parameters.
 ```{r groups}
-simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
-                                                return_format = "list",
-                                                other_prior = list(batchCells = 500,
-                                                                   nGenes = 1000,
-                                                                   prob.group = c(0.1, 0.3, 0.6)),
-                                                seed = 111)
+simulate_result <- simmethods::Splat_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  return_format = "list",
+  other_prior = list(batchCells = 500,
+                     nGenes = 1000,
+                     prob.group = c(0.1, 0.3, 0.6)),
+  seed = 111
+)
 result <- simulate_result[["simulate_result"]][["count_data"]]
 dim(result)
 ## cell information
@@ -136,11 +142,13 @@ In addtion, if we want to simulate three or more batches, we should obey the rul
 
 For demonstration, we will simulate three batches using the learned parameters.
 ```{r batches}
-simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
-                                                return_format = "list",
-                                                other_prior = list(batchCells = c(200, 300),
-                                                                   nGenes = 1000),
-                                                seed = 111)
+simulate_result <- simmethods::Splat_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  return_format = "list",
+  other_prior = list(batchCells = c(200, 300),
+                     nGenes = 1000),
+  seed = 111
+)
 result <- simulate_result[["simulate_result"]][["count_data"]]
 dim(result)
 ## cell information
@@ -159,13 +167,15 @@ As mentioned before, we can set `prob.group` and `batchCells` to determine the n
 * two batches
 
 ```{r group and batch, collapse=TRUE}
-simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
-                                                return_format = "list",
-                                                other_prior = list(batchCells = c(500, 500),
-                                                                   nGenes = 5000,
-                                                                   de.prob = 0.2,
-                                                                   prob.group = c(0.2, 0.3, 0.5)),
-                                                seed = 111)
+simulate_result <- simmethods::Splat_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  return_format = "list",
+  other_prior = list(batchCells = c(500, 500),
+                     nGenes = 5000,
+                     de.prob = 0.2,
+                     prob.group = c(0.2, 0.3, 0.5)),
+  seed = 111
+)
 result <- simulate_result[["simulate_result"]][["count_data"]]
 dim(result)
 ## cell information
@@ -188,13 +198,15 @@ In simmethods package, we provide four formats of results to users without data 
 ### list
 
 ```{r list, collapse=TRUE}
-simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
-                                                return_format = "list",
-                                                other_prior = list(batchCells = c(100, 100),
-                                                                   nGenes = 1000,
-                                                                   de.prob = 0.1,
-                                                                   prob.group = c(0.2, 0.3, 0.5)),
-                                                seed = 111)
+simulate_result <- simmethods::Splat_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  return_format = "list",
+  other_prior = list(batchCells = c(100, 100),
+                     nGenes = 1000,
+                     de.prob = 0.1,
+                     prob.group = c(0.2, 0.3, 0.5)),
+  seed = 111
+)
 str(simulate_result)
 counts <- simulate_result[["simulate_result"]][["count_data"]]
 ## cell information
@@ -208,13 +220,15 @@ head(gene_info)
 ### SingleCellExperiment
 
 ```{r SCE, collapse=TRUE}
-simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
-                                                return_format = "SingleCellExperiment",
-                                                other_prior = list(batchCells = c(100, 100),
-                                                                   nGenes = 1000,
-                                                                   de.prob = 0.1,
-                                                                   prob.group = c(0.2, 0.3, 0.5)),
-                                                seed = 111)
+simulate_result <- simmethods::Splat_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  return_format = "SingleCellExperiment",
+  other_prior = list(batchCells = c(100, 100),
+                     nGenes = 1000,
+                     de.prob = 0.1,
+                     prob.group = c(0.2, 0.3, 0.5)),
+  seed = 111
+)
 counts <- counts(simulate_result[["simulate_result"]])
 ## cell information
 cell_info <- as.data.frame(colData(simulate_result[["simulate_result"]]))
@@ -227,13 +241,15 @@ head(gene_info)
 ### Seurat
 
 ```{r Seurat, collapse=TRUE}
-simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
-                                                return_format = "Seurat",
-                                                other_prior = list(batchCells = c(100, 100),
-                                                                   nGenes = 1000,
-                                                                   de.prob = 0.1,
-                                                                   prob.group = c(0.2, 0.3, 0.5)),
-                                                seed = 111)
+simulate_result <- simmethods::Splat_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  return_format = "Seurat",
+  other_prior = list(batchCells = c(100, 100),
+                     nGenes = 1000,
+                     de.prob = 0.1,
+                     prob.group = c(0.2, 0.3, 0.5)),
+  seed = 111
+)
 seurat_result <- simulate_result[["simulate_result"]]
 ## Overview
 seurat_result
@@ -252,13 +268,15 @@ head(gene_info)
 If we select `h5ad` format, it is not possible to return the result in R, so you can get the path where the `h5ad` files save to and we can go to the path and read it in **Python** by `scanpy.read_h5ad` function (if you have already installed Python and **scanpy** module).
 
 ```{r h5ad, collapse=TRUE}
-simulate_result <- simmethods::Splat_simulation(parameters = estimate_result[["estimate_result"]],
-                                                return_format = "h5ad",
-                                                other_prior = list(batchCells = c(100, 100),
-                                                                   nGenes = 1000,
-                                                                   de.prob = 0.1,
-                                                                   prob.group = c(0.2, 0.3, 0.5)),
-                                                seed = 111)
+simulate_result <- simmethods::Splat_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  return_format = "h5ad",
+  other_prior = list(batchCells = c(100, 100),
+                     nGenes = 1000,
+                     de.prob = 0.1,
+                     prob.group = c(0.2, 0.3, 0.5)),
+  seed = 111
+)
 save_path <- simulate_result[["simulate_result"]][["save_path"]]
 save_path
 ```
