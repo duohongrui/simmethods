@@ -38,6 +38,7 @@ There are some notes that users should know:
 
 There are some parameters that users may often set:
 \enumerate{
+\item \code{group.condition}. Users can input cell group information of numeric vectors. If not, clustering will be performed before the estimation step.
 \item \code{max_steps}. The max training step to train the reference data. Default is 1000000.
 \item \code{GPU}. How many GPU cores to use when training the data. This can be set as \code{all}. Default is 1.
 \item \code{min_cells}. Include features detected in at least this many cells when preprocessing.

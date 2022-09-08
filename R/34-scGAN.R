@@ -25,11 +25,12 @@
 #' 3. The result of estimation will be returned as a file path which is the mounting point to connect the path in docker containers. Users can go to the mounting point to see the training result.
 #'
 #' There are some parameters that users may often set:
-#' 1. `max_steps`. The max training step to train the reference data. Default is 1000000.
-#' 2. `GPU`. How many GPU cores to use when training the data. This can be set as `all`. Default is 1.
-#' 3. `min_cells`. Include features detected in at least this many cells when preprocessing.
-#' 4. `min_genes`. Include cells where at least this many features are detected when preprocessing.
-#' 5. `res`. The clustering resolution. Default is 0.15.
+#' 1. `group.condition`. Users can input cell group information of numeric vectors. If not, clustering will be performed before the estimation step.
+#' 2. `max_steps`. The max training step to train the reference data. Default is 1000000.
+#' 3. `GPU`. How many GPU cores to use when training the data. This can be set as `all`. Default is 1.
+#' 4. `min_cells`. Include features detected in at least this many cells when preprocessing.
+#' 5. `min_genes`. Include cells where at least this many features are detected when preprocessing.
+#' 6. `res`. The clustering resolution. Default is 0.15.
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
@@ -84,6 +85,13 @@ scGAN_estimation <- function(
   other_prior[["raw_input"]] <- "/scGAN/input_data.h5ad"
   parameters <- simutils::change_scGAN_parameters("use_scGAN",
                                                   other_prior)
+  ## group information
+  if(is.null(other_prior[["group.condition"]])){
+    group <- NULL
+  }else{
+    group <- other_prior[["group.condition"]]-1
+  }
+
   ## Save to /scGAN
   if(!requireNamespace("jsonlite", quietly = TRUE)){
     install.packages("jsonlite")
@@ -99,6 +107,7 @@ scGAN_estimation <- function(
   new_data <- simutils::scgan_data_conversion(data = ref_data,
                                               data_id = "input_data",
                                               res = res,
+                                              group = group,
                                               save_to_path = file.path(tmp_path, "scGAN"),
                                               verbose = verbose)
   cluster_number <- table(new_data$cluster_number)
