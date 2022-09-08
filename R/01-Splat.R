@@ -332,7 +332,8 @@ Splat_simulation <- function(parameters,
   # row_data
   row_data <- as.data.frame(SummarizedExperiment::rowData(simulate_result))
   if(params_check[['nGroups']] == 1){
-    row_data <- row_data[, -c(2:4)]
+    row_data <- as.data.frame(row_data[, -c(2:4)])
+    colnames(row_data) <- "gene_name"
   }else{
     group_fac <- row_data[, grep(colnames(row_data), pattern = "^DE")]
     batch_fac <- row_data[, grep(colnames(row_data), pattern = "^Batch")]
