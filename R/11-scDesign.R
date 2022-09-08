@@ -95,7 +95,7 @@
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("scDesign", quietly = TRUE)){
-    message("Splatter is not installed on your device...")
+    message("scDesign is not installed on your device...")
     message("Installing scDesign...")
     devtools::install_github("Vivianstats/scDesign")
   }
