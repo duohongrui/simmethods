@@ -8,7 +8,7 @@ output:
 vignette: >
   %\VignetteIndexEntry{Simulation method: Splat}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 editor_options: 
   chunk_output_type: console
 ---

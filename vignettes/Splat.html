@@ -2103,7 +2103,7 @@ str(simulate_result)
 ##   .. ..$ DEFacGroup3   : num [1:1000] 1 1 1 1 1 1 1 1 1 1 ...
 ##  $ simulate_detection:&#39;data.frame&#39;:  1 obs. of  4 variables:
 ##   ..$ Function_Call     : chr &quot;simulate_result&lt;-splatter::splatSimulate(parameters,method=submethod,verbose=verbose)&quot;
-##   ..$ Elapsed_Time_sec  : num 0.75
+##   ..$ Elapsed_Time_sec  : num 0.86
 ##   ..$ Total_RAM_Used_MiB: num 7
 ##   ..$ Peak_RAM_Used_MiB : num 36.5
 counts &lt;- simulate_result[[&quot;simulate_result&quot;]][[&quot;count_data&quot;]]
@@ -2281,10 +2281,10 @@ head(gene_info)
 ## Adding counts from originalexp as raw
 ## Transfering meta.features to raw/var
 ## Transfering meta.data to obs
-## Your data has been save to C:/Users/duoho/AppData/Local/Temp/RtmpC0IfK3/20220911154122.h5ad
+## Your data has been save to C:/Users/duoho/AppData/Local/Temp/RtmpoDw90y/20220911155330.h5ad
 save_path &lt;- simulate_result[[&quot;simulate_result&quot;]][[&quot;save_path&quot;]]
 save_path
-## [1] &quot;C:/Users/duoho/AppData/Local/Temp/RtmpC0IfK3/20220911154122.h5ad&quot;</code></pre>
+## [1] &quot;C:/Users/duoho/AppData/Local/Temp/RtmpoDw90y/20220911155330.h5ad&quot;</code></pre>
 <p>Now, we can go to the path and check the data. Here, we read the <code>h5ad</code> file in R using <strong>reticulate</strong> R package (note that <strong>Python</strong> and <strong>scanpy</strong> module must have been installed).</p>
 <pre class="r"><code>## install.packages(&quot;reticulate&quot;)
 scanpy &lt;- reticulate::import(&quot;scanpy&quot;)

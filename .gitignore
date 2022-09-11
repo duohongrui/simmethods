@@ -4,3 +4,4 @@
 .Ruserdata
 # RStudio files
 *.Rproj
+inst/doc

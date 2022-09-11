@@ -75,7 +75,8 @@ Suggests:
     ESCO,
     muscat,
     hierarchicell,
-    dropsim
+    dropsim,
+    rmarkdown
 Remotes: 
     duohongrui/simutils@master,
     kdzimm/hierarchicell@master,
