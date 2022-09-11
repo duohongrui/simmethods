@@ -11,7 +11,6 @@
 
 <meta name="author" content="DUO Hongrui" />
 
-<meta name="date" content="2022-09-08" />
 
 <title>Splat</title>
 
@@ -1851,7 +1850,7 @@ function toggle_visibility(id1) {
 
 <h1 class="title toc-ignore">Splat</h1>
 <p class="author-name">DUO Hongrui</p>
-<h4 class="date">8 September 2022</h4>
+<h4 class="date">11 九月 2022</h4>
 
 </div>
 
@@ -2104,9 +2103,9 @@ str(simulate_result)
 ##   .. ..$ DEFacGroup3   : num [1:1000] 1 1 1 1 1 1 1 1 1 1 ...
 ##  $ simulate_detection:&#39;data.frame&#39;:  1 obs. of  4 variables:
 ##   ..$ Function_Call     : chr &quot;simulate_result&lt;-splatter::splatSimulate(parameters,method=submethod,verbose=verbose)&quot;
-##   ..$ Elapsed_Time_sec  : num 0.168
+##   ..$ Elapsed_Time_sec  : num 0.75
 ##   ..$ Total_RAM_Used_MiB: num 7
-##   ..$ Peak_RAM_Used_MiB : num 4781064
+##   ..$ Peak_RAM_Used_MiB : num 36.5
 counts &lt;- simulate_result[[&quot;simulate_result&quot;]][[&quot;count_data&quot;]]
 ## cell information
 cell_info &lt;- simulate_result[[&quot;simulate_result&quot;]][[&quot;col_meta&quot;]]
@@ -2282,10 +2281,10 @@ head(gene_info)
 ## Adding counts from originalexp as raw
 ## Transfering meta.features to raw/var
 ## Transfering meta.data to obs
-## Your data has been save to /var/folders/1l/xmc98tgx0m37wxtbtwnl6h7c0000gn/T//RtmpuLTJrI/20220908155719.h5ad
+## Your data has been save to C:/Users/duoho/AppData/Local/Temp/RtmpC0IfK3/20220911154122.h5ad
 save_path &lt;- simulate_result[[&quot;simulate_result&quot;]][[&quot;save_path&quot;]]
 save_path
-## [1] &quot;/var/folders/1l/xmc98tgx0m37wxtbtwnl6h7c0000gn/T//RtmpuLTJrI/20220908155719.h5ad&quot;</code></pre>
+## [1] &quot;C:/Users/duoho/AppData/Local/Temp/RtmpC0IfK3/20220911154122.h5ad&quot;</code></pre>
 <p>Now, we can go to the path and check the data. Here, we read the <code>h5ad</code> file in R using <strong>reticulate</strong> R package (note that <strong>Python</strong> and <strong>scanpy</strong> module must have been installed).</p>
 <pre class="r"><code>## install.packages(&quot;reticulate&quot;)
 scanpy &lt;- reticulate::import(&quot;scanpy&quot;)

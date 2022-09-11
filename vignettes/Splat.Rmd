@@ -1,23 +1,17 @@
 ---
 title: "Splat"
 author: "DUO Hongrui"
-# output: rmarkdown::html_vignette
 output:
     BiocStyle::html_document:
         toc: true
         toc_float: true
-# vignette: >
-#   %\VignetteIndexEntry{Splat}
-#   %\VignetteEncoding{UTF-8}
-#   %\VignetteEngine{knitr::rmarkdown}
 vignette: >
-  %\VignetteIndexEntry{An introduction to the Splatter package}
+  %\VignetteIndexEntry{Simulation method: Splat}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 editor_options: 
   chunk_output_type: console
 ---
-
 <!-- github markdown built using 
 rmarkdown::render("vignettes/Splat.Rmd", output_format = rmarkdown::github_document())
 -->
