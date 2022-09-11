@@ -1,0 +1,81 @@
+---
+title: "KerKersplat"
+author: "DUO Hongrui"
+output:
+    BiocStyle::html_document:
+        toc: true
+        toc_float: true
+vignette: >
+  %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Simulation method: Kersplat}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+<!-- github markdown built using 
+rmarkdown::render("vignettes/Kersplat.Rmd", output_format = rmarkdown::github_document())
+-->
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Here Kersplat method will be demonstrated clearly and hope that this document can help you.
+
+# Estimating parameters from a real dataset
+
+Before simulating datasets, it is important to estimate some essential parameters from a real dataset in order to make the simulated data more real. If you do not have a single-cell transcriptomics count matrix now, you can use the data collected in simmethods package by `simmethods:data` command.
+
+```{r load_data, message=FALSE, warning=FALSE, error=FALSE}
+library(simmethods)
+library(SingleCellExperiment)
+# Load data
+ref_data <- simmethods::data
+dim(ref_data)
+```
+
+Using `simmethods::Kersplat_estimation` command to execute the estimation step.
+
+```{r estimate}
+estimate_result <- simmethods::Kersplat_estimation(ref_data = ref_data,
+                                                verbose = T,
+                                                seed = 10)
+```
+
+# Simulating datasets using Kersplat
+
+After estimating parameter from a real dataset, we will simulate a dataset based on the learned parameters with different scenarios.
+
+1. Datasets with default parameters
+2. Determin the number of cells and genes
+
+## Datasets with default parameters
+
+The reference data contains 160 cells and 4000 genes, if we simulate datasets with default parameters and then we will obtain a new data which has the same size as the reference data. In addtion, the simulated dataset will have one group and one batch of cells.
+
+```{r default_params}
+simulate_result <- simmethods::Kersplat_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  return_format = "SCE",
+  seed = 111
+)
+SCE_result <- simulate_result[["simulate_result"]]
+dim(SCE_result)
+head(colData(SCE_result))
+head(rowData(SCE_result))
+```
+
+## Determin the number of cells and genes
+
+In Kersplat, we can set `nCells` and `nGenes` directly to specify the number of cells and genes to the simulated data.
+Here, we simulate a new dataset with 500 cells and 1000 genes:
+```{r customed cell and gene number}
+simulate_result <- simmethods::Kersplat_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  return_format = "list",
+  other_prior = list(batchCells = 500,
+                     nGenes = 1000),
+  seed = 111
+)
+result <- simulate_result[["simulate_result"]][["count_data"]]
+dim(result)
+```
