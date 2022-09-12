@@ -1,0 +1,152 @@
+---
+title: "Lun"
+author: "DUO Hongrui"
+output:
+    BiocStyle::html_document:
+        toc: true
+        toc_float: true
+vignette: >
+  %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Simulation method: Lun}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+<!-- github markdown built using 
+rmarkdown::render("vignettes/Lun.Rmd", output_format = rmarkdown::github_document())
+-->
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Here Lun method will be demonstrated clearly and hope that this document can help you.
+
+# Estimating parameters from a real dataset
+
+Before simulating datasets, it is important to estimate some essential parameters from a real dataset in order to make the simulated data more real. If you do not have a single-cell transcriptomics count matrix now, you can use the data collected in simmethods package by `simmethods:data` command.
+
+```{r load_data, message=FALSE, warning=FALSE, error=FALSE}
+library(simmethods)
+library(SingleCellExperiment)
+# Load data
+ref_data <- simmethods::data
+dim(ref_data)
+```
+
+Using `simmethods::Lun_estimation` command to execute the estimation step.
+
+```{r estimate}
+estimate_result <- simmethods::Lun_estimation(ref_data = ref_data,
+                                              verbose = T,
+                                              seed = 10)
+```
+
+# Simulating datasets using Lun
+
+After estimating parameter from a real dataset, we will simulate a dataset based on the learned parameters with different scenarios.
+
+1. Datasets with default parameters
+2. Determin the number of cells and genes
+3. Simulate two or more groups
+
+## Datasets with default parameters
+
+The reference data contains 160 cells and 4000 genes, if we simulate datasets with default parameters and then we will obtain a new data which has the same size as the reference data. In addtion, the simulated dataset will have one group of cells.
+
+```{r default_params}
+simulate_result <- simmethods::Lun_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  return_format = "SCE",
+  seed = 111
+)
+SCE_result <- simulate_result[["simulate_result"]]
+dim(SCE_result)
+head(colData(SCE_result))
+head(rowData(SCE_result))
+```
+
+## Determin the number of cells and genes
+
+In Lun, we can not set `nCells` directly and should set `groupCells` instead. For example, if we want to simulate 500 cells, we can type `other_prior = list(groupCells = 500)`. For genes, we can just set `nGenes`.
+Here, we simulate a new dataset with 500 cells and 1000 genes:
+```{r customed cell and gene number}
+simulate_result <- simmethods::Lun_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  return_format = "list",
+  other_prior = list(groupCells = 500,
+                     nGenes = 1000),
+  seed = 111
+)
+result <- simulate_result[["simulate_result"]][["count_data"]]
+dim(result)
+```
+
+## Simulate two or more groups
+
+In Lun, we can not set `nGroups` directly and should set `prob.group` instead. For example, if we want to simulate 2 groups, we can type `other_prior = list(prob.group = c(0.5, 0.5))`. Note that the sum of `prob.group` numeric vector must equal to 1, so we can also set `prob.group = c(0.3, 0.7)`.
+
+In addtion, if we want to simulate three or more groups, we should obey the rules:
+
+* The length of `prob.group` vector must always equal to the number of groups.
+* The sum of `prob.group` numeric vector must equal to 1.
+
+For demonstration, we will simulate two groups with 20% proportion of DEGs using the learned parameters.
+```{r groups}
+simulate_result <- simmethods::Lun_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  other_prior = list(prob.group = c(0.4, 0.6),
+                     de.prob = 0.2),
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111
+)
+result <- simulate_result[["simulate_result"]][["count_data"]]
+dim(result)
+## cell information
+cell_info <- simulate_result[["simulate_result"]][["col_meta"]]
+table(cell_info$group)
+
+## gene information
+gene_info <- simulate_result[["simulate_result"]][["row_meta"]]
+### the proportion of DEGs
+table(gene_info$de_gene)[2]/nrow(result) ## de.prob = 0.2
+```
+We can see that the proportion of differential expressed genes is 0.2. Next, if we want to know the fold change between two groups, we will do division with the groups that we are interested in.
+```{r fold change}
+## fc between group2 and group1
+fc_group1_to_group2 <- gene_info$DEFacGroup2/gene_info$DEFacGroup1
+```
+
+
+Users can also set the lower and upper boundry of fold changes in Lun.
+```{r}
+simulate_result <- simmethods::Lun_simulation(
+  parameters = estimate_result[["estimate_result"]],
+  other_prior = list(prob.group = c(0.4, 0.6),
+                     de.prob = 0.2,
+                     fc.up.group = 2,
+                     fc.down.group = 0.5),
+  return_format = "list",
+  verbose = TRUE,
+  seed = 111
+)
+count_data <- simulate_result[["simulate_result"]][["count_data"]]
+dim(count_data)
+## cell information
+col_data <- simulate_result[["simulate_result"]][["col_meta"]]
+table(col_data$group)
+## gene information
+row_data <- simulate_result[["simulate_result"]][["row_meta"]]
+```
+
+Check the proportion of DEGs, lower and upper values of fold changes.
+```{r}
+table(fc_group1_to_group2 != 1)[2]/4000 ## de.prob = 0.2
+### number of all DEGs
+table(row_data$de_gene)[2]/4000 ## de.prob = 0.2
+### fc.up.group
+max(row_data$DEFacGroup1)
+### fc.down.group
+min(row_data$DEFacGroup1)
+```
+

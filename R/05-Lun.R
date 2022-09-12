@@ -150,7 +150,7 @@ Lun_estimation <- function(ref_data,
 #' table(row_data$de_gene)[2]/4000 ## de.prob = 0.2
 #'
 #'
-#' # (3) Simulate two groups (de.prob = 0.2, fc.up.group = 2, fc.down.group = 0.5)
+#' # (4) Simulate two groups (de.prob = 0.2, fc.up.group = 2, fc.down.group = 0.5)
 #' simulate_result <- simmethods::Lun_simulation(parameters = estimate_result[["estimate_result"]],
 #'                                               other_prior = list(prob.group = c(0.4, 0.6),
 #'                                                                  de.prob = 0.2,
