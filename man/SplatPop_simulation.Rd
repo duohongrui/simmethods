@@ -6,7 +6,7 @@
 \usage{
 SplatPop_simulation(
   parameters,
-  other_prior,
+  other_prior = NULL,
   return_format,
   verbose = FALSE,
   seed

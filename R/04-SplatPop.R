@@ -256,7 +256,7 @@ SplatPop_estimation <- function(ref_data,
 #' result <- scater::runPCA(result)
 #' plotPCA(result, colour_by = "group")
 SplatPop_simulation <- function(parameters,
-                                other_prior,
+                                other_prior = NULL,
                                 return_format,
                                 verbose = FALSE,
                                 seed
