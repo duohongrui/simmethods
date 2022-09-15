@@ -45,8 +45,8 @@ method_name <- names(methods)
 method_name <- method_expand(method_name)
 
 method_table <- purrr::map_dfr(method_name, .f = function(x){
-  x <- stringr::str_split(x, pattern = "_", simplify = TRUE)[1]
-  method_definition <- methods[[x]][[paste0(x, "_method")]]
+  real_name <- stringr::str_split(x, pattern = "_", simplify = TRUE)[1]
+  method_definition <- methods[[real_name]][[paste0(real_name, "_method")]]
   
   ## Language
   if(method_definition$programming == "R"){
@@ -117,7 +117,7 @@ method_table <- purrr::map_dfr(method_name, .f = function(x){
     Journal <- method_definition$manuscript$journal
   }
   
-  method_summary <- tibble::tibble(method = method_definition$method,
+  method_summary <- tibble::tibble(method = x,
                                    language = Language,
                                    url = URL,
                                    doi = DOI,
