@@ -225,7 +225,10 @@ SparseDC_simulation <- function(parameters,
   # counts
   counts <- as.matrix(SingleCellExperiment::counts(simulate_result))
   # col_data
-  col_data <- data.frame("cell_name" = colnames(counts))
+  col_info <- SingleCellExperiment::colData(simulate_result)
+  col_data <- data.frame("cell_name" = colnames(counts),
+                         "group" = stringr::str_replace_all(as.character(col_info$Condition),
+                                                            "Condition", "Group"))
   rownames(col_data) <- col_data$cell_name
   # row_data
   row_data <- data.frame("gene_name" = rownames(counts))
