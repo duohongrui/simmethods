@@ -83,14 +83,14 @@ SCRIP_method_definition <- function(...){
     param_numeric(
       id = "bcv.shrink",
       default = 1,
-      description = "factor to control the BCV levels",,
+      description = "factor to control the BCV levels",
       function_name = "SCRIPsimu"
     ),
     param_others(
       id = "Dropout_rate",
       default = NULL,
       type = "nnumeric",
-      description = "factor to control the dropout rate directly",,
+      description = "factor to control the dropout rate directly",
       function_name = "SCRIPsimu"
     ),
     param_numeric(
@@ -334,13 +334,13 @@ SCRIP_method_definition <- function(...){
       orcid = NULL
     ),
     manuscript = manuscript_definition(
-      title = NULL,
-      doi = NULL,
-      journal = NULL,
-      date = NULL,
-      peer_review = NULL
+      title = "SCRIP: an accurate simulator for single-cell RNA sequencing data",
+      doi = "10.1093/bioinformatics/btab824",
+      journal = "Bioinformatics",
+      date = "2022",
+      peer_review = TRUE
     ),
-    description = NULL)
+    description = "We provide a comprehensive scheme that is capable of simulating Single Cell RNA Sequencing data for various parameters of Biological Coefficient of Variation, busting kinetics, differential expression (DE), cell or sample groups, cell trajectory, batch effect and other experimental designs. 'SCRIP' proposed and compared two frameworks with Gamma-Poisson and Beta-Gamma-Poisson models for simulating Single Cell RNA Sequencing data.")
 
   list(SCRIP_method = SCRIP_method,
        SCRIP_parameters = SCRIP_parameters)
