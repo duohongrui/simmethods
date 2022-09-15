@@ -36,9 +36,9 @@ methods <- simmethods::get_method()
 
 # A collection of 42 simulation methods for single-cell RNA-seq data
 
-Simmethods collects and documents 42 popular and common simulation methods for single-cell transcriptomics data. To satisfy user's requirements in different scenarios, we bundled the simulators comprehensively and users can simulate many kinds of single-cell RNA-seq data (different number of groups, batches, differential expressed genes and even data with differentiation trajectory) using certain methods. If you want to learn how to use a certain simulation method, please check the following chart and commit an issue or send an Email to us when you have any question.
+Simmethods collects and documents 42 popular and common simulation methods for single-cell transcriptomics data. To satisfy user's requirements in different scenarios, we bundled the simulators comprehensively and users can simulate many kinds of single-cell RNA-seq data (different number of groups, batches, differential expressed genes and even data with **differentiation trajectory**) using certain methods. If you want to learn how to use a certain simulation method, please check the following chart and commit an issue or send an Email to us when you have any question.
 
-## The list of simulation methods
+## The Table of Simulation Methods
 
 ```{r}
 method_name <- names(methods)
@@ -117,15 +117,16 @@ method_table <- purrr::map_dfr(method_name, .f = function(x){
     Journal <- method_definition$manuscript$journal
   }
   
-  method_summary <- tibble::tibble(method = x,
-                                   language = Language,
-                                   url = URL,
-                                   doi = DOI,
-                                   journal = Journal)
+  method_summary <- tibble::tibble(Method = x,
+                                   Language = Language,
+                                   URL = URL,
+                                   DOI = DOI,
+                                   Journal = Journal)
   method_summary
 })
-method_table <- plyr::arrange(method_table, method)
-knitr::kable(method_table, align = c("lcccl"))
+method_table <- plyr::arrange(method_table, Method)
+method_table <- tibble::add_column(method_table, ID=1:nrow(method_table), .before = "Method")
+knitr::kable(method_table, align = c("clcccl"))
 ```
 
 ## New methods
