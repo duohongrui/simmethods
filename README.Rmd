@@ -124,7 +124,7 @@ method_table <- purrr::map_dfr(method_name, .f = function(x){
                                    journal = Journal)
   method_summary
 })
-
+method_table <- plyr::arrange(method_table, method)
 knitr::kable(method_table, align = c("lcccl"))
 ```
 
