@@ -10,6 +10,23 @@ editor_options:
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, error = FALSE, message = FALSE)
 ```
 
+```{r echo=FALSE}
+method_expand <- function(method_name){
+  method_name <- c(method_name,
+                   "ESCO_tree",
+                   "ESCO_traj",
+                   "SCRIP_GP-trendedBCV",
+                   "SCRIP_GP-commonBCV",
+                   "SCRIP_BGP-commonBCV",
+                   "SCRIP_BP",
+                   "SCRIP_BGP-trendedBCV",
+                   "Splat_paths",
+                   "SplatPop_paths")
+  method_name <- method_name[-22]
+  return(method_name)
+}
+```
+
 
 ```{r}
 methods <- simmethods::get_method()
@@ -19,14 +36,16 @@ methods <- simmethods::get_method()
 
 # A collection of 42 simulation methods for single-cell RNA-seq data
 
-Simmethods collects and documents 36 popular and common simulation methods for single-cell transcriptomics data. To satisfy user's requirements in different scenarios, we bundled the simulators comprehensively and users can simulate many kinds of single-cell RNA-seq data (different number of groups, batches, differential expressed genes and even data with differentiation trajectory) using certain methods. If you want to learn how to use a certain simulation method, please check the following chart and commit an issue or send an Email to us when you have any question.
+Simmethods collects and documents 42 popular and common simulation methods for single-cell transcriptomics data. To satisfy user's requirements in different scenarios, we bundled the simulators comprehensively and users can simulate many kinds of single-cell RNA-seq data (different number of groups, batches, differential expressed genes and even data with differentiation trajectory) using certain methods. If you want to learn how to use a certain simulation method, please check the following chart and commit an issue or send an Email to us when you have any question.
 
 ## The list of simulation methods
 
 ```{r}
 method_name <- names(methods)
+method_name <- method_expand(method_name)
 
 method_table <- purrr::map_dfr(method_name, .f = function(x){
+  x <- stringr::str_split(x, pattern = "_", simplify = TRUE)[1]
   method_definition <- methods[[x]][[paste0(x, "_method")]]
   
   ## Language
