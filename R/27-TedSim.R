@@ -330,7 +330,7 @@ TedSim_simulation <- function(parameters,
   rownames(simulate_result) <- paste0("Gene", 1:nrow(simulate_result))
   ## col_data
   group <- as.numeric(as.factor(as.numeric(col_meta$cluster)))
-  col_data <- data.frame("cell_name" = colnames(simulates_result),
+  col_data <- data.frame("cell_name" = colnames(simulate_result),
                          "group" = paste0("Group", group))
   ## row_data
   row_data <- data.frame("gene_name" = rownames(simulate_result))
