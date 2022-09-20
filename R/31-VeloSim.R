@@ -213,7 +213,9 @@ VeloSim_simulation <- function(parameters,
   colnames(counts) <- paste0("Cell", 1:ncol(counts))
   rownames(counts) <- paste0("Gene", 1:nrow(counts))
   ## col_data
-  col_data <- data.frame("cell_name" = colnames(counts))
+  group <- as.numeric(as.factor(simulate_result[["backbone"]]))
+  col_data <- data.frame("cell_name" = colnames(counts),
+                         "group" = paste0("Group", group))
   ## row_data
   row_data <- data.frame("gene_name" = rownames(counts))
   # Establish SingleCellExperiment
