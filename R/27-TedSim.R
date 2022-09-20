@@ -324,11 +324,14 @@ TedSim_simulation <- function(parameters,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
+  col_meta <- as.data.frame(simulate_result[["cell_meta"]])
   simulate_result <- simulate_result[["counts"]]
   colnames(simulate_result) <- paste0("Cell", 1:ncol(simulate_result))
   rownames(simulate_result) <- paste0("Gene", 1:nrow(simulate_result))
   ## col_data
-  col_data <- data.frame("cell_name" = colnames(simulate_result))
+  group <- as.numeric(as.factor(as.numeric(col_meta$cluster)))
+  col_data <- data.frame("cell_name" = colnames(simulates_result),
+                         "group" = paste0("Group", group))
   ## row_data
   row_data <- data.frame("gene_name" = rownames(simulate_result))
   # Establish SingleCellExperiment
