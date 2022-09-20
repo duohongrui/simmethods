@@ -51,6 +51,11 @@ dyntoy_estimation <- function(ref_data,
   ##############################################################################
   ####                               Check                                   ###
   ##############################################################################
+  if(!requireNamespace("tislingshot", quietly = TRUE)){
+    message("tislingshot is not installed on your device...")
+    message("Installing tislingshot...")
+    devtools::install_github("dynverse/ti_slingshot/package/")
+  }
   if(!is.matrix(ref_data)){
     ref_data <- as.matrix(ref_data)
   }
@@ -215,13 +220,15 @@ dyntoy_simulation <- function(parameters,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
+  de_gene <- simulate_result[["tde_overall"]][["differentially_expressed"]]
   simulate_result <- t(as.matrix(simulate_result[["counts"]]))
   colnames(simulate_result) <- paste0("Cell", 1:ncol(simulate_result))
   rownames(simulate_result) <- paste0("Gene", 1:nrow(simulate_result))
   ## col_data
   col_data <- data.frame("cell_name" = colnames(simulate_result))
   ## row_data
-  row_data <- data.frame("gene_name" = rownames(simulate_result))
+  row_data <- data.frame("gene_name" = rownames(simulate_result),
+                         "de_gene" = ifelse(de_gene, "yes", "no"))
   # Establish SingleCellExperiment
   simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = simulate_result),
                                                                 colData = col_data,
