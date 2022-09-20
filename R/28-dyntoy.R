@@ -202,6 +202,7 @@ dyntoy_simulation <- function(parameters,
   # Return to users
   message(glue::glue("nCells: {nCells}"))
   message(glue::glue("nGenes: {nGenes}"))
+  message(glue::glue("de.prob: {de.prob}"))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
