@@ -46,8 +46,8 @@ PROSSTT_estimation <- function(ref_data,
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("simutils", quietly = TRUE)){
-    cat("Splatter is not installed on your device\n")
-    cat("Installing simutils...\n")
+    message("Splatter is not installed on your device")
+    message("Installing simutils...")
     devtools::install_github("duohongrui/simutils")
   }
   ##############################################################################
@@ -65,21 +65,16 @@ PROSSTT_estimation <- function(ref_data,
   ####                            Estimation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Estimating parameters using PROSSTT\n")
+    message("Estimating parameters using PROSSTT")
   }
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- simutils::make_trees(ref_data,
-                                              group = group,
-                                              is_Newick = TRUE)
-    )
-  }, error = function(e){
-    as.character(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- simutils::make_trees(ref_data,
+                                            group = group,
+                                            is_Newick = TRUE)
+  )
   estimate_result <- list(newick_tree = estimate_result,
                           data_dim = dim(ref_data))
   ##############################################################################
@@ -165,8 +160,8 @@ PROSSTT_simulation <- function(parameters,
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("simutils", quietly = TRUE)){
-    cat("Splatter is not installed on your device\n")
-    cat("Installing simutils...\n")
+    message("Splatter is not installed on your device")
+    message("Installing simutils...")
     devtools::install_github("duohongrui/simutils")
   }
   ##############################################################################
@@ -242,15 +237,12 @@ PROSSTT_simulation <- function(parameters,
   ####                            Simulation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Simulating datasets using PROSSTT\n")
+    message("Simulating datasets using PROSSTT")
   }
   # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call("PROSSTT_sim_Python", simulation_params))
-  }, error = function(e){
-    as.character(e)
-  })
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- do.call("PROSSTT_sim_Python", simulation_params)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

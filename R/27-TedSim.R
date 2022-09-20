@@ -150,8 +150,8 @@ TedSim_estimation <- function(ref_data,
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("TedSim", quietly = TRUE)){
-    cat("TedSim is not installed on your device\n")
-    cat("Installing TedSim...\n")
+    message("TedSim is not installed on your device")
+    message("Installing TedSim...")
     devtools::install_github("Galaxeee/TedSim")
   }
   ##############################################################################
@@ -184,21 +184,16 @@ TedSim_estimation <- function(ref_data,
   ####                            Estimation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Estimating parameters using TedSim\n")
+    message("Estimating parameters using TedSim")
   }
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- simmethods::TedSim_est(ref_data = ref_data,
-                                                phyla = phyla,
-                                                seed = seed)
-    )
-  }, error = function(e){
-    as.character(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- simmethods::TedSim_est(ref_data = ref_data,
+                                              phyla = phyla,
+                                              seed = seed)
+  )
   estimate_result <- list(estimate_result = estimate_result,
                           data_dim = c(length(ref_data[["feature_ids"]]),
                                        length(ref_data[["cell_ids"]])))
@@ -283,8 +278,8 @@ TedSim_simulation <- function(parameters,
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("TedSim", quietly = TRUE)){
-    cat("TedSim is not installed on your device\n")
-    cat("Installing TedSim...\n")
+    message("TedSim is not installed on your device")
+    message("Installing TedSim...")
     devtools::install_github("Galaxeee/TedSim")
   }
   ##############################################################################
@@ -312,23 +307,20 @@ TedSim_simulation <- function(parameters,
                                                   other_prior = other_prior,
                                                   step = "simulation")
   # Return to users
-  cat(glue::glue("nCells: {other_prior[['ncells']]}"), "\n")
-  cat(glue::glue("nGenes: {other_prior[['ngenes']]}"), "\n")
+  message(glue::glue("nCells: {other_prior[['ncells']]}"))
+  message(glue::glue("nGenes: {other_prior[['ngenes']]}"))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Simulating datasets using PROSSTT\n")
+    message("Simulating datasets using TedSim")
   }
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call(TedSim::CIF2Truecounts, simulate_formals))
-  }, error = function(e){
-    as.character(e)
-  })
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- do.call(TedSim::CIF2Truecounts, simulate_formals)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

@@ -33,8 +33,8 @@ MFA_estimation <- function(ref_data,
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("splatter", quietly = TRUE)){
-    cat("Splatter is not installed on your device\n")
-    cat("Installing splatter...\n")
+    message("Splatter is not installed on your device")
+    message("Installing splatter...")
     BiocManager::install("splatter")
   }
   ##############################################################################
@@ -47,19 +47,14 @@ MFA_estimation <- function(ref_data,
   ####                            Estimation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Estimating parameters using MFA\n")
+    message("Estimating parameters using MFA")
   }
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- splatter::mfaEstimate(ref_data)
-    )
-  }, error = function(e){
-    as.character(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- splatter::mfaEstimate(ref_data)
+  )
   ##############################################################################
   ####                           Ouput                                       ###
   ##############################################################################
@@ -140,8 +135,8 @@ MFA_simulation <- function(parameters,
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("splatter", quietly = TRUE)){
-    cat("Splatter is not installed on your device\n")
-    cat("Installing splatter...\n")
+    message("Splatter is not installed on your device")
+    message("Installing splatter...")
     BiocManager::install("splatter")
   }
   ##############################################################################
@@ -159,24 +154,21 @@ MFA_simulation <- function(parameters,
                                                     "nGenes"))
 
   # Return to users
-  cat(glue::glue("nCells: {params_check[['nCells']]}"), "\n")
-  cat(glue::glue("nGenes: {params_check[['nGenes']]}"), "\n")
+  message(glue::glue("nCells: {params_check[['nCells']]}"))
+  message(glue::glue("nGenes: {params_check[['nGenes']]}"))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Simulating datasets using MFA\n")
+    message("Simulating datasets using MFA")
   }
   # Seed
   parameters <- splatter::setParam(parameters, name = "seed", value = seed)
   # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- splatter::mfaSimulate(parameters,
-                                               verbose = verbose))
-  }, error = function(e){
-    as.character(e)
-  })
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- splatter::mfaSimulate(parameters,
+                                             verbose = verbose)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

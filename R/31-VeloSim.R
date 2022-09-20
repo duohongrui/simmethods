@@ -54,8 +54,8 @@ VeloSim_estimation <- function(ref_data,
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("VeloSim", quietly = TRUE)){
-    cat("VeloSim is not installed on your device\n")
-    cat("Installing VeloSim...\n")
+    message("VeloSim is not installed on your device")
+    message("Installing VeloSim...")
     devtools::install_github("PeterZZQ/VeloSim")
   }
   ##############################################################################
@@ -73,20 +73,15 @@ VeloSim_estimation <- function(ref_data,
   ####                            Estimation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Estimating parameters using VeloSim\n")
+    message("Estimating parameters using VeloSim")
   }
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- simutils::make_trees(ref_data = ref_data,
-                                              group = group,
-                                              is_Newick = FALSE,
-                                              is_parenthetic = FALSE)
-    )
-  }, error = function(e){
-    as.character(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- simutils::make_trees(ref_data = ref_data,
+                                            group = group,
+                                            is_Newick = FALSE,
+                                            is_parenthetic = FALSE)
+  )
   estimate_result <- list(estimate_result = estimate_result,
                           data_dim = dim(ref_data))
   ##############################################################################
@@ -169,8 +164,8 @@ VeloSim_simulation <- function(parameters,
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("VeloSim", quietly = TRUE)){
-    cat("VeloSim is not installed on your device\n")
-    cat("Installing VeloSim...\n")
+    message("VeloSim is not installed on your device")
+    message("Installing VeloSim...")
     devtools::install_github("PeterZZQ/VeloSim")
   }
   ##############################################################################
@@ -194,8 +189,8 @@ VeloSim_simulation <- function(parameters,
   }
 
   # Return to users
-  cat(glue::glue("nCells: {other_prior[['ncells_total']]}"), "\n")
-  cat(glue::glue("nGenes: {other_prior[['ngenes']]}"), "\n")
+  message(glue::glue("nCells: {other_prior[['ncells_total']]}"))
+  message(glue::glue("nGenes: {other_prior[['ngenes']]}"))
 
   simulate_formals <- simutils::change_parameters(function_expr = "VeloSim::SimulateVeloTree",
                                                   other_prior = other_prior,
@@ -204,17 +199,13 @@ VeloSim_simulation <- function(parameters,
   ####                            Simulation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Simulating datasets using VeloSim\n")
+    message("Simulating datasets using VeloSim")
   }
   simulate_formals[["ncells_total"]] <- simulate_formals[["ncells_total"]] + 2
   # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call(VeloSim::SimulateVeloTree, simulate_formals)
-    )
-  }, error = function(e){
-    as.character(e)
-  })
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- do.call(VeloSim::SimulateVeloTree, simulate_formals)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

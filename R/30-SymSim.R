@@ -55,8 +55,8 @@ SymSim_estimation <- function(ref_data,
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("SymSim", quietly = TRUE)){
-    cat("SymSim is not installed on your device\n")
-    cat("Installing SymSim...\n")
+    message("SymSim is not installed on your device")
+    message("Installing SymSim...")
     devtools::install_github("YosefLab/SymSim")
   }
   ##############################################################################
@@ -74,20 +74,15 @@ SymSim_estimation <- function(ref_data,
   ####                            Estimation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Estimating parameters using SymSim\n")
+    message("Estimating parameters using SymSim")
   }
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- simutils::make_trees(ref_data = ref_data,
-                                              group = group,
-                                              is_Newick = FALSE,
-                                              is_parenthetic = FALSE)
-    )
-  }, error = function(e){
-    as.character(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- simutils::make_trees(ref_data = ref_data,
+                                            group = group,
+                                            is_Newick = FALSE,
+                                            is_parenthetic = FALSE)
+  )
   estimate_result <- list(estimate_result = estimate_result,
                           data_dim = dim(ref_data))
   ##############################################################################
@@ -170,8 +165,8 @@ SymSim_simulation <- function(parameters,
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("SymSim", quietly = TRUE)){
-    cat("SymSim is not installed on your device\n")
-    cat("Installing SymSim...\n")
+    message("SymSim is not installed on your device")
+    message("Installing SymSim...")
     devtools::install_github("YosefLab/SymSim")
   }
   ##############################################################################
@@ -196,8 +191,8 @@ SymSim_simulation <- function(parameters,
   }
 
   # Return to users
-  cat(glue::glue("nCells: {other_prior[['ncells_total']]}"), "\n")
-  cat(glue::glue("nGenes: {other_prior[['ngenes']]}"), "\n")
+  message(glue::glue("nCells: {other_prior[['ncells_total']]}"))
+  message(glue::glue("nGenes: {other_prior[['ngenes']]}"))
 
   simulate_formals <- simutils::change_parameters(function_expr = "SymSim::SimulateTrueCounts",
                                                   other_prior = other_prior,
@@ -206,16 +201,12 @@ SymSim_simulation <- function(parameters,
   ####                            Simulation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Simulating datasets using SymSim\n")
+    message("Simulating datasets using SymSim")
   }
   # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- do.call(SymSim::SimulateTrueCounts, simulate_formals)
-    )
-  }, error = function(e){
-    as.character(e)
-  })
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- do.call(SymSim::SimulateTrueCounts, simulate_formals)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

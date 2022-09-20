@@ -76,22 +76,17 @@ dyntoy_estimation <- function(ref_data,
   ####                            Estimation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Estimating parameters using dyntoy\n")
+    message("Estimating parameters using dyntoy")
   }
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- dynwrap::infer_trajectory(dataset = ref_data,
-                                                   method = tislingshot::ti_slingshot(),
-                                                   parameters = NULL,
-                                                   give_priors = NULL,
-                                                   seed = seed,
-                                                   verbose = verbose)
-    )
-  }, error = function(e){
-    as.character(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- dynwrap::infer_trajectory(dataset = ref_data,
+                                                 method = tislingshot::ti_slingshot(),
+                                                 parameters = NULL,
+                                                 give_priors = NULL,
+                                                 seed = seed,
+                                                 verbose = verbose)
+  )
   estimate_result <- list(estimate_result = estimate_result,
                           data_dim = c(length(ref_data[["feature_ids"]]),
                                        length(ref_data[["cell_ids"]])))
@@ -172,8 +167,8 @@ dyntoy_simulation <- function(parameters,
   ####                            Environment                                ###
   ##############################################################################
   if(!requireNamespace("dyntoy", quietly = TRUE)){
-    cat("dyntoy is not installed on your device\n")
-    cat("Installing dyntoy...\n")
+    message("dyntoy is not installed on your device")
+    message("Installing dyntoy...")
     devtools::install_github("dynverse/dyntoy")
   }
   ##############################################################################
@@ -200,27 +195,23 @@ dyntoy_simulation <- function(parameters,
   }
 
   # Return to users
-  cat(glue::glue("nCells: {nCells}"), "\n")
-  cat(glue::glue("nGenes: {nGenes}"), "\n")
+  message(glue::glue("nCells: {nCells}"))
+  message(glue::glue("nGenes: {nGenes}"))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
   if(verbose){
-    cat("Simulating datasets using dyntoy\n")
+    message("Simulating datasets using dyntoy")
   }
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- dyntoy::generate_dataset(model = model,
-                                                  num_cells = nCells,
-                                                  num_features = nGenes,
-                                                  differentially_expressed_rate = de.prob)
-    )
-  }, error = function(e){
-    as.character(e)
-  })
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- dyntoy::generate_dataset(model = model,
+                                                num_cells = nCells,
+                                                num_features = nGenes,
+                                                differentially_expressed_rate = de.prob)
+  )
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
