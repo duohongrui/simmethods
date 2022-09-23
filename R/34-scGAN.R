@@ -90,6 +90,7 @@ scGAN_estimation <- function(
     group <- NULL
   }else{
     group <- other_prior[["group.condition"]]-1
+    res <- NULL
   }
 
   ## Save to /scGAN
@@ -148,7 +149,7 @@ scGAN_estimation <- function(
                      container_name,
                      wd,
                      volumes_command,
-                     c("--gpus", "all"),
+                     c("--gpus", other_prior[["GPU"]]),
                      container_id,
                      args)
   ## run preprocessing
