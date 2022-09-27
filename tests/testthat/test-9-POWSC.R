@@ -9,10 +9,8 @@ estimate_result <- simmethods::POWSC_estimation(
 )
 
 ## simulation
-other_prior <- list(prob.group = c(0.4, 0.3, 0.3),
-                    batchCells = c(80, 80),
-                    de.prob = 0.2,
-                    nGenes = 500)
+other_prior <- list(nCells = 1000,
+                    de.prob = 0.2)
 suppressWarnings(
   simulate_result <- simmethods::POWSC_simulation(
     parameters = estimate_result[["estimate_result"]],
@@ -23,16 +21,10 @@ suppressWarnings(
   )
 )
 
-test_that("the class of estimation result", {
-  expect_equal(as.character(class(estimate_result$estimate_result)),
-               "POWSCParams")
-})
-
 test_that("cell information", {
   cell_info <- simulate_result$simulate_result$col_meta
   counts <- simulate_result$simulate_result$count_data
-  expect_equal(colnames(cell_info), c("cell_name", "batch", "group"))
-  expect_equal(dim(counts), c(other_prior$nGenes, sum(other_prior$batchCells)))
+  expect_equal(colnames(cell_info), c("cell_name", "group"))
 })
 
 test_that("gene information", {
