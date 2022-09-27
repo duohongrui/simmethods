@@ -29,7 +29,7 @@
 #'                                                 seed = 111)
 POWSC_estimation <- function(ref_data,
                              verbose = FALSE,
-                             other_prior,
+                             other_prior = NULL,
                              seed
 ){
   ##############################################################################

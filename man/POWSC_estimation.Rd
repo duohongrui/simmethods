@@ -4,7 +4,7 @@
 \alias{POWSC_estimation}
 \title{Estimate Parameters From Real Datasets by POWSC}
 \usage{
-POWSC_estimation(ref_data, verbose = FALSE, other_prior, seed)
+POWSC_estimation(ref_data, verbose = FALSE, other_prior = NULL, seed)
 }
 \arguments{
 \item{ref_data}{A count matrix. Each row represents a gene and each column
