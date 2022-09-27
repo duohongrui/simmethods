@@ -76,7 +76,8 @@ Suggests:
     muscat,
     hierarchicell,
     dropsim,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 Remotes: 
     duohongrui/simutils@master,
     kdzimm/hierarchicell@master,
@@ -95,3 +96,4 @@ Author: Hongrui Duo [aut, cre] (<https://orcid.org/0000-0001-8683-015X>),
 RoxygenNote: 7.2.1
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
+Config/testthat/edition: 3
