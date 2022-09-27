@@ -49,7 +49,7 @@ simulate_result <- simmethods::scDesign2_simulation(
 
 test_that("data size", {
   counts <- simulate_result$simulate_result$count_data
-  expect_equal(ncol(counts), other_prior$nCells)
+  expect_equal(ncol(counts), 500)
 })
 
 test_that("cell information", {
