@@ -144,7 +144,7 @@ scDD_simulation <- function(parameters,
                    other_prior[["nCells"]]/2,
                    (other_prior[["nCells"]]-1)/2)
   if(!is.null(other_prior[["nCells"]])){
-    parameters <- splatter::setParam(parameters, "nCells", other_prior[["nCells"]])
+    parameters <- splatter::setParam(parameters, "nCells", nCells)
   }
   assertthat::assert_that(class(parameters) == "SCDDParams")
   # Get params to check
@@ -158,7 +158,7 @@ scDD_simulation <- function(parameters,
   nEP <- splatter::getParams(parameters, "nEP") %>% unlist()
   de.prob <- sum(nDE, nDP, nDM, nDB)/sum(nDE, nDP, nDM, nDB, nEE, nEP)
   # Return to users
-  message(glue::glue("nCells: {params_check[['nCells']]}"))
+  message(glue::glue("nCells: {params_check[['nCells']] * 2}"))
   message(glue::glue("nGenes: {params_check[['nGenes']]}"))
   message(glue::glue("nGroups: 2"))
   message(glue::glue("de.prob: {de.prob}"))
