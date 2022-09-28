@@ -191,20 +191,15 @@ scGAN_estimation <- function(
   # Seed
   set.seed(seed)
   # Estimation
-  tryCatch({
-    # Estimate parameters from real data and return parameters and detection results
-    estimate_detection <- peakRAM::peakRAM(
-      estimate_result <- process <- processx::run(
-        command = "docker",
-        args = processx_args_train,
-        echo_cmd = verbose,
-        echo = verbose,
-        spinner = TRUE,
-        error_on_status = FALSE,
-        cleanup_tree = TRUE))
-  }, error = function(e){
-    as.character(e)
-  })
+  estimate_detection <- peakRAM::peakRAM(
+    estimate_result <- process <- processx::run(
+      command = "docker",
+      args = processx_args_train,
+      echo_cmd = verbose,
+      echo = verbose,
+      spinner = TRUE,
+      error_on_status = FALSE,
+      cleanup_tree = TRUE))
   estimate_result <- list(local_path = file.path(tmp_path, "scGAN"),
                           cluster_number = cluster_number,
                           gpu = other_prior[["GPU"]])
