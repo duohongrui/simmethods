@@ -122,6 +122,9 @@ scGAN_estimation <- function(
                                              digits = 0)
     cluster_number <- cluster_number + assign_result
   }
+  if(!is.null(other_prior[["group.condition"]])){
+    cluster_number <- as.numeric(table(other_prior[["group.condition"]]))
+  }
 
   # Prepare the input parameters-----------------------------------------------
   ## 1. docker image working directory
@@ -282,21 +285,18 @@ scGAN_simulation <- function(
   if(verbose){
     message("Simulating datasets using scGAN")
   }
-  # Estimation
-  tryCatch({
-    simulate_detection <- peakRAM::peakRAM(
-      simulate_result <- processx::run(
-        command = "docker",
-        args = processx_args,
-        echo_cmd = verbose,
-        echo = verbose,
-        spinner = TRUE,
-        error_on_status = FALSE,
-        cleanup_tree = TRUE
-      ))
-  }, error = function(e){
-    as.character(e)
-  })
+  # Simulation
+  set.seed(seed)
+  simulate_detection <- peakRAM::peakRAM(
+    simulate_result <- processx::run(
+      command = "docker",
+      args = processx_args,
+      echo_cmd = verbose,
+      echo = verbose,
+      spinner = TRUE,
+      error_on_status = FALSE,
+      cleanup_tree = TRUE
+    ))
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
