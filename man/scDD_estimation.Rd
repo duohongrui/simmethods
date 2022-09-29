@@ -4,7 +4,7 @@
 \alias{scDD_estimation}
 \title{Estimate Parameters From Real Datasets by scDD}
 \usage{
-scDD_estimation(ref_data, verbose = FALSE, other_prior, seed)
+scDD_estimation(ref_data, verbose = FALSE, other_prior = NULL, seed)
 }
 \arguments{
 \item{ref_data}{A count matrix. Each row represents a gene and each column
