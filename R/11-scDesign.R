@@ -85,11 +85,11 @@
 #' ## cell information
 #' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
 #' table(col_data$group)
- scDesign_simulation <- function(ref_data,
-                                 other_prior = NULL,
-                                 return_format,
-                                 verbose = FALSE,
-                                 seed
+scDesign_simulation <- function(ref_data,
+                                other_prior = NULL,
+                                return_format,
+                                verbose = FALSE,
+                                seed
 ){
   ##############################################################################
   ####                            Environment                                ###
