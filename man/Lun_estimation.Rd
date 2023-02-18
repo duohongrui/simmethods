@@ -24,7 +24,7 @@ using \code{lunEstimate} function in Splatter package.
 }
 \examples{
 ref_data <- simmethods::data
-estimate_result <- simmethods::Lun_estimation(ref_data = data,
+estimate_result <- simmethods::Lun_estimation(ref_data = ref_data,
                                               verbose = TRUE,
                                               seed = 10)
 estimate_result <- estimate_result[["estimate_result"]]

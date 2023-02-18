@@ -122,6 +122,7 @@ zinbwave_simulation <- function(parameters,
   ##############################################################################
   assertthat::assert_that(class(parameters) == "ZINBParams")
   # Get params to check
+  parameters <- splatter::setParam(parameters, name = "nGenes", 14715)
   params_check <- splatter::getParams(parameters, c("nCells",
                                                     "nGenes"))
 
