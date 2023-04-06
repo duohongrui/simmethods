@@ -172,7 +172,11 @@ scDD_simulation <- function(parameters,
   parameters <- splatter::setParam(parameters, name = "seed", value = seed)
   # Estimation
   simulate_detection <- peakRAM::peakRAM(
-    simulate_result <- splatter::scDDSimulate(parameters, verbose = verbose)
+    simulate_result <- splatter::scDDSimulate(parameters,
+                                              verbose = verbose,
+                                              BPPARAM = ifelse(is.null(other_prior[["BPPARAM"]]),
+                                                               BiocParallel::SerialParam(),
+                                                               other_prior[["BPPARAM"]]))
   )
   ## counts
   counts <- SingleCellExperiment::counts(simulate_result)
