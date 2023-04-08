@@ -73,14 +73,14 @@ ESCO_estimation <- function(ref_data,
   }
   other_prior[["counts"]] <- ref_data
   if(is.null(other_prior[["group.condition"]])){
-    other_prior[["group"]] <- FALSE
+    # other_prior[["group"]] <- FALSE
     other_prior[["cellinfo"]] <- NULL
   }else{
-    other_prior[["group"]] <- TRUE
+    # other_prior[["group"]] <- TRUE
     other_prior[["cellinfo"]] <- other_prior[["group.condition"]]
   }
   other_prior[["params"]] <- ESCO::newescoParams()
-  other_prior[["dirname"]] <- tempdir()
+  # other_prior[["dirname"]] <- tempdir()
   ## tree
   if(!is.null(other_prior[["tree"]])){
     tree <- simutils::make_trees(ref_data = ref_data,
@@ -315,6 +315,8 @@ ESCO_simulation <- function(parameters,
     parameters <- splatter::setParam(parameters, name = "nGroups", value = length(unique(group)))
   }
   if(!is.null(other_prior[["prob.group"]])){
+    other_prior[["prob.group"]] <- round(other_prior[["prob.group"]], 2)
+    other_prior[["prob.group"]][length(other_prior[["prob.group"]])] <- 1 - sum(other_prior[["prob.group"]][1:(length(other_prior[["prob.group"]])-1)])
     parameters <- splatter::setParam(parameters,
                                      name = "group.prob",
                                      value = other_prior[["prob.group"]])

@@ -147,6 +147,26 @@ scDD_simulation <- function(parameters,
     parameters <- splatter::setParam(parameters, "nCells", nCells)
   }
   assertthat::assert_that(class(parameters) == "SCDDParams")
+  # Change parameters
+  if(!is.null(other_prior[["nDE"]])){
+    parameters <- setParams(parameters, nDE = other_prior[["nDE"]])
+  }
+  if(!is.null(other_prior[["nDP"]])){
+    parameters <- setParams(parameters, nDP = other_prior[["nDP"]])
+  }
+  if(!is.null(other_prior[["nDM"]])){
+    parameters <- setParams(parameters, nDM = other_prior[["nDM"]])
+  }
+  if(!is.null(other_prior[["nDB"]])){
+    parameters <- setParams(parameters, nDB = other_prior[["nDB"]])
+  }
+  if(!is.null(other_prior[["nEE"]])){
+    parameters <- setParams(parameters, nEE = other_prior[["nEE"]])
+  }
+  if(!is.null(other_prior[["nEP"]])){
+    parameters <- setParams(parameters, nEP = other_prior[["nEP"]])
+  }
+
   # Get params to check
   params_check <- splatter::getParams(parameters, c("nCells",
                                                     "nGenes"))
