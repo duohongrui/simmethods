@@ -141,7 +141,7 @@ VeloSim_estimation <- function(ref_data,
 #' dim(counts)
 #'
 #' # 2) 200 cells and 5000 genes
-#' simulate_result <- simmethods::SymSim_simulation(
+#' simulate_result <- simmethods::VeloSim_simulation(
 #'   parameters = estimate_result[["estimate_result"]],
 #'   other_prior = list(nCells = 200,
 #'                      nGenes = 5000),
