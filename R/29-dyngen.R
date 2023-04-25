@@ -240,7 +240,7 @@ dyngen_simulation <- function(parameters,
   simulate_formals <- simutils::change_parameters(
     function_expr = "dyngen::generate_dataset",
     other_prior = list(model = init,
-                       format = "dyno",
+                       format = "list",
                        store_dimred = FALSE,
                        store_cellwise_grn = FALSE,
                        store_rna_velocity = FALSE),
