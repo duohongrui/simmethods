@@ -246,6 +246,7 @@ PROSSTT_simulation <- function(parameters,
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
+  simulate_result <- simulate_result %>% as.matrix() %>% t()
   colnames(simulate_result) <- paste0("Cell", 1:ncol(simulate_result))
   rownames(simulate_result) <- paste0("Gene", 1:nrow(simulate_result))
   ## col_data
