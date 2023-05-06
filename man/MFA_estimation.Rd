@@ -23,6 +23,7 @@ This function is used to estimate useful parameters from a real dataset by
 using \code{splatEstimate} function in Splatter package.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 ## estimation
 estimate_result <- simmethods::MFA_estimation(
@@ -30,6 +31,8 @@ estimate_result <- simmethods::MFA_estimation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Campbell K R, Yau C. Probabilistic modeling of bifurcations in single-cell gene expression data using a Bayesian mixture of factor analyzers. Wellcome open research, 2017, 2. \url{https://doi.org/10.12688/wellcomeopenres.11087.1}

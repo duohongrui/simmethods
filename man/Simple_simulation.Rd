@@ -43,6 +43,7 @@ to get the dataset with m genes.
 }
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 # Estimate parameters
 estimate_result <- Simple_estimation(ref_data = ref_data,
@@ -65,6 +66,8 @@ simulate_result <- Simple_simulation(parameters = estimate_result[["estimate_res
                                      seed = 111)
 counts <- simulate_result[["simulate_result"]][["count_data"]]
 dim(counts)
+}
+
 }
 \references{
 Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. \url{https://doi.org/10.1186/s13059-017-1305-0}

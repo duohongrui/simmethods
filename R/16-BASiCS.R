@@ -45,13 +45,13 @@ BASiCS_estimation <- function(ref_data,
     ## cell filter
     cell_remove_index <- colSums(ERCC_counts) == 0
     if(any(cell_remove_index)){
-      warning(glue::glue("These cells have zero counts in spike-in genes and will be moved: {paste0(colnames(ERCC_counts)[cell_remove_index], collapse = ', ')}"))
+      warning(paste0("These cells have zero counts in spike-in genes and will be moved: ", paste0(colnames(ERCC_counts)[cell_remove_index], collapse = ', ')))
     }
     spikeData <- ref_data[grep(rownames(ref_data), pattern = "^ERCC"), ]
     ## spike-in genes filter
     spike_in_remove_index <- rowSums(ERCC_counts) == 0
     if(any(spike_in_remove_index)){
-      warning(glue::glue("These spike-in genes have zero counts in all cells and will be moved: {paste0(rownames(ERCC_counts)[spike_in_remove_index], collapse = ', ')}"))
+      warning(paste0("These spike-in genes have zero counts in all cells and will be moved: ", paste0(rownames(ERCC_counts)[spike_in_remove_index], collapse = ', ')))
     }
     spikeData <- spikeData[!spike_in_remove_index, !cell_remove_index]
     ## molecules
@@ -155,9 +155,9 @@ BASiCS_simulation <- function(parameters,
                                                     "nGenes",
                                                     "nBatches"))
   # Return to users
-  message(glue::glue("nCells: {params_check[['nCells']]}"))
-  message(glue::glue("nGenes: {params_check[['nGenes']]}"))
-  message(glue::glue("nBatches: {params_check[['nBatches']]}"))
+  message(paste0("nCells: ", params_check[['nCells']]))
+  message(paste0("nGenes: ", params_check[['nGenes']]))
+  message(paste0("nBatches: ", params_check[['nBatches']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################

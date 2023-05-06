@@ -51,6 +51,7 @@ The customed parameters you can set are below:
 For more customed parameters in Lun, please check \code{\link[splatter:LunParams]{splatter::LunParams()}}.
 }
 \examples{
+\dontrun{
 # Load data
 ref_data <- simmethods::data
 # Estimate parameters
@@ -132,6 +133,8 @@ table(row_data$de_gene)[2]/4000 ## de.prob = 0.2
 max(row_data$DEFacGroup1)
 ### fc.down.group
 min(row_data$DEFacGroup1)
+}
+
 }
 \references{
 Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. \url{https://doi.org/10.1186/s13059-017-1305-0}

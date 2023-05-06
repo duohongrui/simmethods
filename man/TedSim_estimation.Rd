@@ -40,6 +40,7 @@ synthesize extra fake cells to achive this goal. See \code{\link[simutils:synthe
 to learn about the process of synthesizing fake cells.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 ## estimation
 estimate_result <- simmethods::TedSim_estimation(
@@ -57,6 +58,8 @@ estimate_result <- simmethods::TedSim_estimation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Pan X, Li H, Zhang X. TedSim: temporal dynamics simulation of single-cell RNA sequencing data and cell division history. Nucleic acids research, 2022, 50(8): 4272-4288. \url{https://doi.org/10.1093/nar/gkac235}

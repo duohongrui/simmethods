@@ -50,6 +50,7 @@ The customed parameters you can set are below:
 For more customed parameters in ESCO, please check \code{\link[ESCO:escoParams]{ESCO::escoParams()}}.
 }
 \examples{
+\dontrun{
 ## Estimation
 ref_data <- simmethods::data
 
@@ -157,6 +158,8 @@ simulate_result <- simmethods::ESCO_simulation(parameters = estimate_result[["es
 result <- scater::logNormCounts(simulate_result[["simulate_result"]])
 result <- scater::runPCA(result)
 plotPCA(result, colour_by = "group")
+}
+
 }
 \references{
 Tian J, Wang J, Roeder K. ESCO: single cell expression simulation incorporating gene co-expression. Bioinformatics, 2021, 37(16): 2374-2381. \url{https://doi.org/10.1093/bioinformatics/btab116}

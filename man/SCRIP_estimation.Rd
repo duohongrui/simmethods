@@ -23,6 +23,7 @@ This function is used to estimate useful parameters from a real dataset by
 using \code{splatEstimate} function in Splatter package.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 estimate_result <- simmethods::SCRIP_estimation(ref_data = ref_data,
                                                 verbose = TRUE,
@@ -30,6 +31,8 @@ estimate_result <- simmethods::SCRIP_estimation(ref_data = ref_data,
 estimate_result <- estimate_result[["estimate_result"]]
 ## Check the class (SCRIP accepts the estimation procedure in Splat)
 class(estimate_result) == "SplatParams"
+}
+
 }
 \references{
 Qin F, Luo X, Xiao F, et al. SCRIP: an accurate simulator for single-cell RNA sequencing data. Bioinformatics, 2022, 38(5): 1304-1311. \url{https://doi.org/10.1093/bioinformatics/btab824}

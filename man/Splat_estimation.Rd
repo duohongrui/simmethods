@@ -23,6 +23,7 @@ This function is used to estimate useful parameters from a real dataset by
 using \code{splatEstimate} function in Splatter package.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 estimate_result <- simmethods::Splat_estimation(ref_data = data,
                                                 verbose = TRUE,
@@ -30,6 +31,8 @@ estimate_result <- simmethods::Splat_estimation(ref_data = data,
 estimate_result <- estimate_result[["estimate_result"]]
 ## Check the class
 class(estimate_result) == "SplatParams"
+}
+
 }
 \references{
 Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. \url{https://doi.org/10.1186/s13059-017-1305-0}

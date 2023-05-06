@@ -23,6 +23,7 @@
 #' @references
 #' Github URL: <https://github.com/statOmics/zinbwaveZinger>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' group_condition <- as.numeric(simmethods::group_condition)
 #'
@@ -32,6 +33,8 @@
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 zinbwaveZinger_estimation <- function(ref_data,
                                       verbose = FALSE,
                                       other_prior = NULL,
@@ -67,7 +70,7 @@ zinbwaveZinger_estimation <- function(ref_data,
   set.seed(seed)
   # Estimation
   estimate_detection <- peakRAM::peakRAM(
-    estimate_result <- do.call(zinbwaveZingercollected::getDatasetMoMPositive, estimate_formals)
+    estimate_result <- BiocGenerics::do.call(zinbwaveZingercollected::getDatasetMoMPositive, estimate_formals)
   )
   ##############################################################################
   ####                           Ouput                                       ###
@@ -113,6 +116,7 @@ zinbwaveZinger_estimation <- function(ref_data,
 #' @references
 #' Github URL: <https://github.com/statOmics/zinbwaveZinger>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' group_condition <- as.numeric(simmethods::group_condition)
 #'
@@ -166,6 +170,8 @@ zinbwaveZinger_estimation <- function(ref_data,
 #' ## gene information
 #' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 #' head(row_data)
+#' }
+#'
 zinbwaveZinger_simulation <- function(ref_data,
                                       parameters,
                                       other_prior = NULL,
@@ -231,11 +237,11 @@ zinbwaveZinger_simulation <- function(ref_data,
                                                   other_prior = other_prior,
                                                   step = "simulation")
   # Return to users
-  message(glue::glue("nCells: {simulate_formals[['nlibs']]}"))
-  message(glue::glue("nGenes: {simulate_formals[['nTags']]}"))
-  message(glue::glue("nGroups: {length(unique(other_prior[['group']]))}"))
-  message(glue::glue("prob.group: {other_prior[['de.prob']]}"))
-  message(glue::glue("fc.group: {unique(simulate_formals[['foldDiff']])}"))
+  message(paste0("nCells: ", simulate_formals[['nlibs']]))
+  message(paste0("nGenes: ", simulate_formals[['nTags']]))
+  message(paste0("nGroups: ", length(unique(other_prior[['group']]))))
+  message(paste0("prob.group: ", other_prior[['de.prob']]))
+  message(paste0("fc.group: ", unique(simulate_formals[['foldDiff']])))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -246,7 +252,7 @@ zinbwaveZinger_simulation <- function(ref_data,
   set.seed(seed)
   # Simulation
   simulate_detection <- peakRAM::peakRAM(
-    simulate_result <- do.call(zinbwaveZingercollected::NBsimSingleCell_zinbwaveZinger, simulate_formals))
+    simulate_result <- BiocGenerics::do.call(zinbwaveZingercollected::NBsimSingleCell_zinbwaveZinger, simulate_formals))
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################

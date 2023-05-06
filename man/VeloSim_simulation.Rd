@@ -36,6 +36,7 @@ In VeloSim, users can only set \code{nCells} and \code{nGenes} to specify the nu
 simulated dataset. See \code{Examples} for instructions.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 
 ## estimation with cell group information
@@ -72,6 +73,8 @@ simulate_result <- simmethods::VeloSim_simulation(
 ## counts
 counts <- simulate_result[["simulate_result"]][["count_data"]]
 dim(counts)
+}
+
 }
 \references{
 Zhang Z, Zhang X. VeloSim: Simulating single cell gene-expression and RNA velocity. BioRxiv, 2021. \url{https://doi.org/10.1101/2021.01.11.426277}

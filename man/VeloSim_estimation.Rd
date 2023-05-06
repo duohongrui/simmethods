@@ -35,6 +35,7 @@ kmeans automatically.
 See \code{Examples} for more instructions.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 
 estimate_result <- simmethods::VeloSim_estimation(
@@ -52,6 +53,8 @@ estimate_result <- simmethods::VeloSim_estimation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Zhang Z, Zhang X. VeloSim: Simulating single cell gene-expression and RNA velocity. BioRxiv, 2021. \url{https://doi.org/10.1101/2021.01.11.426277}

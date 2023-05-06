@@ -37,6 +37,7 @@ In scDD, users can only set \code{nCells} to specify the number of cells because
 the genes are already fixed after estimation step. See \code{Examples}.
 }
 \examples{
+\dontrun{
 ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 ## group information
 set.seed(111)
@@ -63,6 +64,8 @@ table(col_data$group)
 ## gene information
 row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 head(row_data)
+}
+
 }
 \references{
 Korthauer K D, Chu L F, Newton M A, et al. A statistical approach for identifying differential distributions in single-cell RNA-seq experiments. Genome biology, 2016, 17(1): 1-15. \url{https://doi.org/10.1186/s13059-016-1077-y}

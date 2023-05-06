@@ -36,22 +36,23 @@ If users want to estimate tree structured parameters, set \code{other_prior = li
 For more instructions, see \code{Examples}.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 
 estimate_result <- simmethods::ESCO_estimation(ref_data = ref_data,
                                                other_prior = NULL,
                                                verbose = TRUE,
                                                seed = 111)
-# If cell group information is available, it can be another prior information.
-# But there is a bug in ESCO, and some datasets can not be estimated due to the
-# failing estimation of distribution parameters.
-# group_condition <- as.numeric(simmethods::group_condition)
-# estimate_result <- simmethods::ESCO_estimation(
-#   ref_data = ref_data,
-#   other_prior = list(group.condition = group_condition),
-#   verbose = TRUE,
-#   seed = 111
-# )
+If cell group information is available, it can be another prior information.
+But there is a bug in ESCO, and some datasets can not be estimated due to the
+failing estimation of distribution parameters.
+group_condition <- as.numeric(simmethods::group_condition)
+estimate_result <- simmethods::ESCO_estimation(
+  ref_data = ref_data,
+  other_prior = list(group.condition = group_condition),
+  verbose = TRUE,
+  seed = 111
+)
 
 # ----------------- Estimate tree or trajectory structured data -------------
 # Load data
@@ -61,6 +62,8 @@ estimate_result <- simmethods::ESCO_estimation(ref_data = ref_data,
                                                other_prior = list(tree = TRUE),
                                                verbose = TRUE,
                                                seed = 10)
+}
+
 }
 \references{
 Tian J, Wang J, Roeder K. ESCO: single cell expression simulation incorporating gene co-expression. Bioinformatics, 2021, 37(16): 2374-2381. \url{https://doi.org/10.1093/bioinformatics/btab116}

@@ -46,6 +46,7 @@ volume information by \code{other_prior = list(dilution.factor = xxx, volume = x
 For more instructions, see \code{Examples}.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 
 ## Estimate parameters without ERCC spike-in
@@ -70,6 +71,8 @@ estimate_result <- powsimR_estimation(
                      volume = 1),
   verbose = TRUE,
   seed = 111)
+}
+
 }
 \references{
 Vieth B, Ziegenhain C, Parekh S, et al. powsimR: power analysis for bulk and single cell RNA-seq experiments. Bioinformatics, 2017, 33(21): 3486-3488. \url{https://doi.org/10.1093/bioinformatics/btx435}

@@ -25,6 +25,7 @@
 #'
 #' Github URL: <https://github.com/JSB-UCLA/scDesign2>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' ## cell groups
@@ -46,6 +47,8 @@
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 scDesign2_estimation <- function(ref_data,
                                  verbose = FALSE,
                                  other_prior = NULL,
@@ -125,6 +128,7 @@ scDesign2_estimation <- function(ref_data,
 #' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
+#' @importFrom BiocGenerics sapply grep
 #' @export
 #' @details
 #' In addtion to simulate datasets with default parameters, users want to simulate
@@ -143,6 +147,7 @@ scDesign2_estimation <- function(ref_data,
 #' Github URL: <https://github.com/JSB-UCLA/scDesign2>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' ## cell groups
@@ -171,6 +176,8 @@ scDesign2_estimation <- function(ref_data,
 #' ## cell information
 #' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
 #' table(col_data$group)
+#' }
+#'
 scDesign2_simulation <- function(parameters,
                                  other_prior = NULL,
                                  return_format,
@@ -215,10 +222,10 @@ scDesign2_simulation <- function(parameters,
   ####                               Check                                   ###
   ##############################################################################
   # Return to users
-  nGenes <- sum(sapply(grep(names(parameters[[1]]), pattern = "^gene_sel"), function(x){length(parameters[[1]][[x]])}))
-  message(glue::glue("nCells: {simulate_formals[['n_cell_new']]}"))
-  message(glue::glue("nGenes: {nGenes}"))
-  message(glue::glue("nGroups: {length(parameters)}"))
+  nGenes <- sum(BiocGenerics::sapply(BiocGenerics::grep(names(parameters[[1]]), pattern = "^gene_sel"), function(x){length(parameters[[1]][[x]])}))
+  message(paste0("nCells: ", simulate_formals[['n_cell_new']]))
+  message(paste0("nGenes: ", nGenes))
+  message(paste0("nGroups: ", length(parameters)))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -229,7 +236,7 @@ scDesign2_simulation <- function(parameters,
   set.seed(seed)
   # Estimation
   simulate_detection <- peakRAM::peakRAM(
-    simulate_result <- do.call(scDesign2::simulate_count_scDesign2, simulate_formals)
+    simulate_result <- BiocGenerics::do.call(scDesign2::simulate_count_scDesign2, simulate_formals)
   )
   ##############################################################################
   ####                        Format Conversion                              ###

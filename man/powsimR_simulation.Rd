@@ -58,6 +58,7 @@ The customed parameters you can set are below:
 For more customed parameters in powsimR, please check \code{\link[powsimR:simulateDE]{powsimR::simulateDE()}}.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 
 ## Estimate parameters with ERCC spike-in
@@ -130,6 +131,8 @@ row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 head(row_data)
 table(row_data$de_fc)
 table(row_data$batch_genes)
+}
+
 }
 \references{
 Vieth B, Ziegenhain C, Parekh S, et al. powsimR: power analysis for bulk and single cell RNA-seq experiments. Bioinformatics, 2017, 33(21): 3486-3488. \url{https://doi.org/10.1093/bioinformatics/btx435}

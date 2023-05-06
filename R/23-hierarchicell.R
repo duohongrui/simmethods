@@ -22,6 +22,7 @@
 #' Github URL: <https://github.com/kdzimm/hierarchicell>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 #' ## estimation
 #' estimate_result <- simmethods::hierarchicell_estimation(
@@ -30,6 +31,8 @@
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 hierarchicell_estimation <- function(ref_data,
                                      verbose = FALSE,
                                      other_prior = NULL,
@@ -96,7 +99,6 @@ hierarchicell_estimation <- function(ref_data,
 #' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#' @importFrom tidyr drop_na
 #' @export
 #' @details
 #' In hierarchicell, users can set `nCells`, `nGenes` and `fc.group` directly.
@@ -114,6 +116,7 @@ hierarchicell_estimation <- function(ref_data,
 #' Github URL: <https://github.com/kdzimm/hierarchicell>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 #' ## estimation
 #' estimate_result <- simmethods::hierarchicell_estimation(
@@ -152,8 +155,11 @@ hierarchicell_estimation <- function(ref_data,
 #' counts <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(counts)
 #' ## Remove NA cells
+#' if(!requireNamespace("tidyr", quietly = TRUE)){utils::install.packages("tidyr")}
 #' filter_counts <- as.matrix(t(tidyr::drop_na(as.data.frame(t(counts)))))
 #' dim(filter_counts)
+#' }
+#'
 hierarchicell_simulation <- function(parameters,
                                      other_prior = NULL,
                                      return_format,
@@ -214,10 +220,10 @@ hierarchicell_simulation <- function(parameters,
                                                   other_prior = other_prior,
                                                   step = "simulation")
   # Return to users
-  message(glue::glue("nCells: {simulate_formals[['cells_per_control']] + simulate_formals[['cells_per_case']]}"))
-  message(glue::glue("nGenes: {simulate_formals[['n_genes']]}"))
-  message(glue::glue("nGroups: 2"))
-  message(glue::glue("fc.group: {simulate_formals[['foldchange']]}"))
+  message(paste0("nCells: ", simulate_formals[['cells_per_control']] + simulate_formals[['cells_per_case']]))
+  message(paste0("nGenes: ", simulate_formals[['n_genes']]))
+  message("nGroups: 2")
+  message(paste0("fc.group: ", simulate_formals[['foldchange']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################

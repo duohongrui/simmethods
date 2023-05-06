@@ -35,6 +35,7 @@ like \verb{other_prior = list(group.condition = the numeric vector)}. See \code{
 and learn from it.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 group_condition <- simmethods::group_condition
 ## group_condition can must be a numeric vector.
@@ -46,6 +47,8 @@ estimate_result <- simmethods::Lun2_estimation(ref_data = ref_data,
                                                seed = 10)
 estimate_result <- estimate_result[["estimate_result"]]
 class(estimate_result) == "Lun2Params"
+}
+
 }
 \references{
 Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. https://doi.org/10.1186/s13059-017-1305-0

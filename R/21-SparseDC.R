@@ -29,6 +29,7 @@
 #' CRAN URL: <https://cran.rstudio.com/web/packages/SparseDC/index.html>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 #' ## cell groups
 #' set.seed(111)
@@ -49,6 +50,8 @@
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 SparseDC_estimation <- function(ref_data,
                                 verbose = FALSE,
                                 other_prior,
@@ -129,6 +132,7 @@ SparseDC_estimation <- function(ref_data,
 #' CRAN URL: <https://cran.rstudio.com/web/packages/SparseDC/index.html>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 #' ## cell groups
 #' set.seed(111)
@@ -178,6 +182,8 @@ SparseDC_estimation <- function(ref_data,
 #' ## counts
 #' counts <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(counts)
+#' }
+#'
 SparseDC_simulation <- function(parameters,
                                 other_prior = NULL,
                                 return_format,
@@ -205,8 +211,8 @@ SparseDC_simulation <- function(parameters,
   params_check <- splatter::getParams(parameters, c("nCells",
                                                     "nGenes"))
   # Return to users
-  message(glue::glue("nCells: {params_check[['nCells']] * length(parameters@clusts.c1)}"))
-  message(glue::glue("nGenes: {params_check[['nGenes']]}"))
+  message(paste0("nCells: ", params_check[['nCells']] * length(parameters@clusts.c1)))
+  message(paste0("nGenes: ", params_check[['nGenes']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################

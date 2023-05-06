@@ -27,6 +27,7 @@
 #' Github URL: <https://github.com/PeterZZQ/VeloSim>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' estimate_result <- simmethods::VeloSim_estimation(
@@ -44,6 +45,8 @@
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 VeloSim_estimation <- function(ref_data,
                                verbose = FALSE,
                                other_prior = NULL,
@@ -117,6 +120,7 @@ VeloSim_estimation <- function(ref_data,
 #' Github URL: <https://github.com/PeterZZQ/VeloSim>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' ## estimation with cell group information
@@ -153,6 +157,8 @@ VeloSim_estimation <- function(ref_data,
 #' ## counts
 #' counts <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(counts)
+#' }
+#'
 VeloSim_simulation <- function(parameters,
                                other_prior = NULL,
                                return_format,
@@ -189,8 +195,8 @@ VeloSim_simulation <- function(parameters,
   }
 
   # Return to users
-  message(glue::glue("nCells: {other_prior[['ncells_total']]}"))
-  message(glue::glue("nGenes: {other_prior[['ngenes']]}"))
+  message(paste0("nCells: ", other_prior[['ncells_total']]))
+  message(paste0("nGenes: ", other_prior[['ngenes']]))
 
   simulate_formals <- simutils::change_parameters(function_expr = "VeloSim::SimulateVeloTree",
                                                   other_prior = other_prior,

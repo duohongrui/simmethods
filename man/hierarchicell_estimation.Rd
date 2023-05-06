@@ -29,6 +29,7 @@ This function is used to estimate useful parameters from a real dataset by
 using \code{compute_data_summaries} function in hierarchicell package.
 }
 \examples{
+\dontrun{
 ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 ## estimation
 estimate_result <- simmethods::hierarchicell_estimation(
@@ -37,6 +38,8 @@ estimate_result <- simmethods::hierarchicell_estimation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Zimmerman K D, Langefeld C D. Hierarchicell: an R-package for estimating power for tests of differential expression with single-cell data. BMC genomics, 2021, 22(1): 1-8. \url{https://doi.org/10.1186/s12864-021-07635-w}

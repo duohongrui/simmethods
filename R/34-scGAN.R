@@ -13,10 +13,7 @@
 #' @param seed An integer of a random seed.
 #' @importFrom dynwrap test_docker_installation
 #' @importFrom simutils fix_path change_scGAN_parameters data_conversion scgan_data_conversion time_string
-#' @importFrom babelwhale list_docker_images pull_container get_default_config
-#' @importFrom tidyr unite
-#' @importFrom jsonlite toJSON
-#' @importFrom processx run
+#' @importFrom utils install.packages
 #' @details
 #' scGAN is a novel method to simulate single-cell RNA-seq datasets using generative adversarial neural networks and users can only execute it via docker images. `scGAN_estimation` and `scGAN_simulation` functions have already implemented the codes that users can use scGAN in R environment.
 #' There are some notes that users should know:
@@ -52,7 +49,10 @@ scGAN_estimation <- function(
   }
   ### (2. Check the installation of scgan docker image
   if(!requireNamespace("babelwhale", quietly = TRUE)){
-    install.packages("babelwhale")
+    utils::install.packages("babelwhale")
+  }
+  if(!requireNamespace("tidyr", quietly = TRUE)){
+    utils::install.packages("tidyr")
   }
   images <- babelwhale::list_docker_images() %>%
     tidyr::unite("Repository", "Tag", sep = ":", col = "Image") %>%
@@ -95,7 +95,7 @@ scGAN_estimation <- function(
 
   ## Save to /scGAN
   if(!requireNamespace("jsonlite", quietly = TRUE)){
-    install.packages("jsonlite")
+    utils::install.packages("jsonlite")
   }
   param_json <- jsonlite::toJSON(parameters,
                                  pretty = 4,
@@ -157,7 +157,7 @@ scGAN_estimation <- function(
                      args)
   ## run preprocessing
   if(!requireNamespace("processx", quietly = TRUE)){
-    install.packages("processx")
+    utils::install.packages("processx")
   }
   process <- processx::run(
     command = "docker",
@@ -222,9 +222,7 @@ scGAN_estimation <- function(
 #' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#' @importFrom glue glue
 #' @importFrom stringr str_split str_count str_extract_all str_replace
-#' @importFrom reticulate source_python
 #' @export
 #' @references
 #' Marouf M, Machart P, Bansal V, et al. Realistic in silico generation and augmentation of single-cell RNA-seq data using generative adversarial networks. Nature communications, 2020, 11(1): 1-12.

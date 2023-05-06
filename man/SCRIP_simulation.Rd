@@ -65,6 +65,7 @@ The customed parameters you can set are below:
 For more customed parameters in SCRIP, please check \code{\link[SCRIP:SCRIPsimu]{SCRIP::SCRIPsimu()}}.
 }
 \examples{
+\dontrun{
 # Load data
 ref_data <- simmethods::data
 # Estimate parameters
@@ -197,6 +198,8 @@ simulate_result <- simmethods::SCRIP_simulation(ref_data = ref_data,
 result <- scater::logNormCounts(simulate_result[["simulate_result"]])
 result <- scater::runPCA(result)
 plotPCA(result, colour_by = "group")
+}
+
 }
 \references{
 Qin F, Luo X, Xiao F, et al. SCRIP: an accurate simulator for single-cell RNA sequencing data. Bioinformatics, 2022, 38(5): 1304-1311. \url{https://doi.org/10.1093/bioinformatics/btab824}

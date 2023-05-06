@@ -10,6 +10,7 @@
 #' @param ref_data Reference dataset
 #' @param phyla Tree format data
 #' @param seed Random seed
+#' @importFrom stats aggregate
 #' @import TedSim
 #'
 #' @return A list
@@ -123,6 +124,7 @@ TedSim_est <- function(
 #' Github URL: <https://github.com/Galaxeee/TedSim>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' ## estimation
 #' estimate_result <- simmethods::TedSim_estimation(
@@ -140,6 +142,8 @@ TedSim_est <- function(
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 TedSim_estimation <- function(ref_data,
                               other_prior = NULL,
                               verbose = FALSE,
@@ -218,9 +222,7 @@ TedSim_estimation <- function(ref_data,
 #' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#' @importFrom glue glue
 #' @importFrom stringr str_split str_count str_extract_all str_replace
-#' @importFrom reticulate source_python
 #' @export
 #' @details
 #' In TedSim, users can only set `nGenes` to specify the number of genes in the
@@ -232,6 +234,7 @@ TedSim_estimation <- function(ref_data,
 #' Github URL: <https://github.com/Galaxeee/TedSim>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' ## estimation with cell group information
@@ -267,6 +270,8 @@ TedSim_estimation <- function(ref_data,
 #' ## counts
 #' counts <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(counts)
+#' }
+#'
 TedSim_simulation <- function(parameters,
                               other_prior = NULL,
                               return_format,
@@ -307,8 +312,8 @@ TedSim_simulation <- function(parameters,
                                                   other_prior = other_prior,
                                                   step = "simulation")
   # Return to users
-  message(glue::glue("nCells: {other_prior[['ncells']]}"))
-  message(glue::glue("nGenes: {other_prior[['ngenes']]}"))
+  message(paste0("nCells: ", other_prior[['ncells']]))
+  message(paste0("nGenes: ", other_prior[['ngenes']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################

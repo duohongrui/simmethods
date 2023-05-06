@@ -35,6 +35,7 @@ it is available by \code{other_prior = list(group.condition = xxx)}.
 For more information, see \code{Examples} and \code{\link[muscat:prepSim]{muscat::prepSim()}}
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 ## estimation
 estimate_result <- simmethods::muscat_estimation(
@@ -53,6 +54,8 @@ estimate_result <- simmethods::muscat_estimation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Crowell H L, Soneson C, Germain P L, et al. Muscat detects subpopulation-specific state transitions from multi-sample multi-condition single-cell transcriptomics data. Nature communications, 2020, 11(1): 1-12. \url{https://doi.org/10.1038/s41467-020-19894-4}

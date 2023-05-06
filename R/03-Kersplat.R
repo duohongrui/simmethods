@@ -20,6 +20,7 @@
 #'
 #' Github URL: <https://github.com/Oshlack/splatter>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' # Estimate parameters
 #' estimate_result <- Kersplat_estimation(ref_data = ref_data,
@@ -28,6 +29,8 @@
 #' estimate_result <- estimate_result[["estimate_result"]]
 #' ## Check the class
 #' class(estimate_result) == "KersplatParams"
+#' }
+#'
 Kersplat_estimation <- function(ref_data,
                                 verbose = FALSE,
                                 seed
@@ -93,6 +96,7 @@ Kersplat_estimation <- function(ref_data,
 #'
 #' Github URL: <https://github.com/Oshlack/splatter>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' # Estimate parameters
 #' estimate_result <- Kersplat_estimation(ref_data = ref_data,
@@ -115,6 +119,8 @@ Kersplat_estimation <- function(ref_data,
 #'                                        seed = 111)
 #' counts <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(counts)
+#' }
+#'
 Kersplat_simulation <- function(parameters,
                                 other_prior = NULL,
                                 return_format,
@@ -137,8 +143,8 @@ Kersplat_simulation <- function(parameters,
                                                     "nGenes"))
 
   # Return to users
-  message(glue::glue("nCells: {params_check[['nCells']]}"))
-  message(glue::glue("nGenes: {params_check[['nGenes']]}"))
+  message(paste0("nCells: ", params_check[['nCells']]))
+  message(paste0("nGenes: ", params_check[['nGenes']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -161,7 +167,7 @@ Kersplat_simulation <- function(parameters,
   col_data <- data.frame("cell_name" = colnames(counts))
   rownames(col_data) <- col_data$cell_name
   ## row_data
-  row_data <- as.data.frame(SingleCellExperiment::rowData(simulate_result)[, 1])
+  row_data <- BiocGenerics::as.data.frame(SingleCellExperiment::rowData(simulate_result)[, 1])
   rownames(row_data) <- row_data[, 1]
   colnames(row_data) <- "gene_name"
   # Establish SingleCellExperiment

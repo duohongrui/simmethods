@@ -2,6 +2,8 @@ Package: simmethods
 Type: Package
 Title: A collection of 40+ simulation methods for singlce-cell RNA seqencing data
 Version: 0.0.0.9000
+Author: Hongrui Duo [aut, cre] (<https://orcid.org/0000-0001-8683-015X>),
+  Bo Li [aut] (<https://orcid.org/0000-0001-9944-0003>)
 Authors@R: 
     c(person("Hongrui", "Duo", role = c("aut", "cre"),
       email = "Duohongrui@cqnu.edu.cn",
@@ -14,50 +16,34 @@ Description: A package contains the information and core execution functions of
     simulation methods for singlce-cell RNA seqencing data.
 License: GPL (>= 3)
 Depends: R (>= 4.0),
-         SingleCellExperiment,
+         TedSim,
          gamlss.dist,
          gamlss.tr,
-         TedSim,
-         SymSim,
-         VeloSim
+         plyr
 Imports: 
     simutils (>= 0.0.0.9000),
+    SingleCellExperiment,
     BiocManager,
-    SummarizedExperiment,
-    reticulate,
     methods,
-    scater,
     tislingshot,
-    NbClust,
     BiocGenerics,
-    biomaRt,
-    S4Vectors,
     splatter (>= 1.14.1),
     BiocParallel,
     purrr,
     stringr,
-    crayon,
-    glue,
     dplyr,
     peakRAM,
     assertthat,
-    SeuratDisk,
-    Seurat,
     devtools,
     dynwrap,
-    dyntoy,
-    dyngen,
-    phenopath,
-    tidyr,
-    rlang,
-    lifecycle,
-    cli,
-    withr
+    tools,
+    stats,
+    VeloSim,
+    SymSim
 Suggests: 
     edgeR,
     mgcv,
     knitr,
-    CancerInSilico,
     SPARSim,
     sceasy,
     jsonlite,
@@ -77,7 +63,18 @@ Suggests:
     hierarchicell,
     dropsim,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    dyngen,
+    tidyr,
+    phenopath,
+    dyntoy,
+    SummarizedExperiment,
+    scater,
+    S4Vectors,
+    biomaRt,
+    reticulate,
+    NbClust,
+    crayon
 Remotes: 
     duohongrui/simutils@master,
     kdzimm/hierarchicell@master,
@@ -91,8 +88,6 @@ BugReports: https://github.com/duohongrui/simmethods/issues
 Encoding: UTF-8
 LazyData: true
 biocViews:
-Author: Hongrui Duo [aut, cre] (<https://orcid.org/0000-0001-8683-015X>),
-  Bo Li [aut] (<https://orcid.org/0000-0001-9944-0003>)
 RoxygenNote: 7.2.1
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)

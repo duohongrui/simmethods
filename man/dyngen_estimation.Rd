@@ -35,6 +35,7 @@ kmeans automatically.
 See \code{Examples} for more instructions.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 
 estimate_result <- simmethods::dyngen_estimation(
@@ -52,6 +53,8 @@ estimate_result <- simmethods::dyngen_estimation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Cannoodt R, Saelens W, Deconinck L, et al. Spearheading future omics analyses using dyngen, a multi-modal simulator of single cells. Nature Communications, 2021, 12(1): 1-9. \url{https://doi.org/10.1038/s41467-021-24152-2}

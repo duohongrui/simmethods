@@ -35,6 +35,7 @@
 #' Github URL: <https://github.com/bvieth/powsimR>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' ## Estimate parameters without ERCC spike-in
@@ -59,6 +60,8 @@
 #'                      volume = 1),
 #'   verbose = TRUE,
 #'   seed = 111)
+#' }
+#'
 powsimR_estimation <- function(ref_data,
                                verbose = FALSE,
                                other_prior = NULL,
@@ -159,6 +162,7 @@ powsimR_estimation <- function(ref_data,
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
 #' @importFrom simutils proportionate
+#' @importFrom BiocGenerics cbind
 #' @export
 #' @details
 #' powsimR provides some choices for users to select suitable parameters according
@@ -186,6 +190,7 @@ powsimR_estimation <- function(ref_data,
 #' Github URL: <https://github.com/bvieth/powsimR>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' ## Estimate parameters with ERCC spike-in
@@ -258,6 +263,8 @@ powsimR_estimation <- function(ref_data,
 #' head(row_data)
 #' table(row_data$de_fc)
 #' table(row_data$batch_genes)
+#' }
+#'
 powsimR_simulation <- function(parameters,
                                other_prior = NULL,
                                return_format,
@@ -371,19 +378,19 @@ powsimR_simulation <- function(parameters,
     }
   }
   ## return to users
-  message(glue::glue("nCells: {nCells}"))
-  message(glue::glue("nGenes: {other_prior[['ngenes']]}"))
-  message(glue::glue("nGroups: 2"))
-  message(glue::glue("de.prob: {other_prior[['p.DE']]}"))
-  message(glue::glue("fc.group: {2^other_prior[['pLFC']]}"))
-  message(glue::glue("nBatches: {nbatches}"))
-  message(glue::glue("fc.batch: {2^other_prior[['bLFC']]}"))
+  message(paste0("nCells: ", nCells))
+  message(paste0("nGenes: ", other_prior[['ngenes']]))
+  message("nGroups: 2")
+  message(paste0("de.prob: ", other_prior[['p.DE']]))
+  message(paste0("fc.group: ", 2^other_prior[['pLFC']]))
+  message(paste0("nBatches: ", nbatches))
+  message(paste0("fc.batch: ", 2^other_prior[['bLFC']]))
 
   setup_formals <- simutils::change_parameters(function_expr = "powsimR::Setup",
                                                other_prior = other_prior,
                                                step = "simulation")
 
-  SetupRes <- do.call(powsimR::Setup, setup_formals)
+  SetupRes <- BiocGenerics::do.call(powsimR::Setup, setup_formals)
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -404,7 +411,7 @@ powsimR_simulation <- function(parameters,
   }
   # Simulation
   simulate_detection <- peakRAM::peakRAM(
-    simulate_result <- do.call(powsimR::simulateDE, simulate_formals)
+    simulate_result <- BiocGenerics::do.call(powsimR::simulateDE, simulate_formals)
   )
   ##############################################################################
   ####                        Format Conversion                              ###
@@ -413,7 +420,7 @@ powsimR_simulation <- function(parameters,
   if(length(simulate_result[["Counts"]]) != 1){
     counts <- c()
     for(name in names(simulate_result[["Counts"]])){
-      counts <- cbind(counts, simulate_result[["Counts"]][[name]][[1]])
+      counts <- BiocGenerics::cbind(counts, simulate_result[["Counts"]][[name]][[1]])
     }
   }else{
     counts <- simulate_result[["Counts"]][[1]][[1]]

@@ -39,6 +39,7 @@
 #' Github URL: <https://github.com/CenterForStatistics-UGent/SPsimSeq>
 #'
 #' @examples
+#' \dontrun{
 #' # SPsimSeq can simulate datasets directly without estimation step.
 #' ref_data <- simmethods::data
 #'
@@ -111,6 +112,8 @@
 #' ## gene information
 #' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 #' table(row_data$de_gene)[2]/2000
+#' }
+#'
 SPsimSeq_simulation <- function(ref_data,
                                 other_prior = NULL,
                                 return_format,
@@ -173,12 +176,12 @@ SPsimSeq_simulation <- function(ref_data,
                                                   other_prior = other_prior,
                                                   step = "simulation")
   # Return to users
-  message(glue::glue("nCells: {simulate_formals[['tot.samples']]}"))
-  message(glue::glue("nGenes: {simulate_formals[['n.genes']]}"))
-  message(glue::glue("nGroups: {length(unique(simulate_formals[['group']]))}"))
-  message(glue::glue("de.prob: {simulate_formals[['pDE']]}"))
-  message(glue::glue("fc.group: {other_prior[['lfc.thrld']]}"))
-  message(glue::glue("nBatches: {length(unique(simulate_formals[['batch']]))}"))
+  message(paste0("nCells: ", simulate_formals[['tot.samples']]))
+  message(paste0("nGenes: ", simulate_formals[['n.genes']]))
+  message(paste0("nGroups: ", length(unique(simulate_formals[['group']]))))
+  message(paste0("de.prob: ", simulate_formals[['pDE']]))
+  message(paste0("fc.group: ", other_prior[['lfc.thrld']]))
+  message(paste0("nBatches: ", length(unique(simulate_formals[['batch']]))))
 
   ##############################################################################
   ####                            Simulation                                 ###

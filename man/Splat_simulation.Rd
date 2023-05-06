@@ -52,6 +52,7 @@ For more customed parameters in Splat, please check \code{\link[splatter:SplatPa
 For detailed information about Splat, go to \url{https://www.bioconductor.org/packages/release/bioc/vignettes/splatter/inst/doc/splat_params.html}.
 }
 \examples{
+\dontrun{
 # Load data
 ref_data <- simmethods::data
 # Estimate parameters
@@ -178,6 +179,8 @@ simulate_result <- simmethods::Splat_simulation(
 result <- scater::logNormCounts(simulate_result[["simulate_result"]])
 result <- scater::runPCA(result)
 plotPCA(result, colour_by = "group")
+}
+
 }
 \references{
 Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. \url{https://doi.org/10.1186/s13059-017-1305-0}

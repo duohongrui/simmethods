@@ -34,6 +34,7 @@ parameters from real datasets. For more instructions or information, see \code{E
 or \code{\link[scDesign2:fit_model_scDesign2]{scDesign2::fit_model_scDesign2()}}
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 
 ## cell groups
@@ -55,6 +56,8 @@ estimate_result <- simmethods::scDesign2_estimation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Sun T, Song D, Li W V, et al. scDesign2: a transparent simulator that generates high-fidelity single-cell gene expression count data with gene correlations captured. Genome biology, 2021, 22(1): 1-37. \url{https://doi.org/10.1186/s13059-021-02367-2}

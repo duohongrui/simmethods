@@ -49,6 +49,7 @@ The customed parameters you can set are below:
 For more customed parameters in muscat, please check \code{\link[muscat:simData]{muscat::simData()}}.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 ## cell groups
 group_condition <- as.numeric(simmethods::group_condition)
@@ -106,6 +107,8 @@ table(col_data$group)/1000
 ## gene information
 row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 table(row_data$de_gene)[2]/2000
+}
+
 }
 \references{
 Crowell H L, Soneson C, Germain P L, et al. Muscat detects subpopulation-specific state transitions from multi-sample multi-condition single-cell transcriptomics data. Nature communications, 2020, 11(1): 1-12. \url{https://doi.org/10.1038/s41467-020-19894-4}

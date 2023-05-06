@@ -36,6 +36,7 @@ distribution fitting and users can set \code{nclusters} parameter to try again.
 For more information, see \code{Examples} and \code{\link[splatter:sparseDCEstimate]{splatter::sparseDCEstimate()}}
 }
 \examples{
+\dontrun{
 ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 ## cell groups
 set.seed(111)
@@ -56,6 +57,8 @@ estimate_result <- simmethods::SparseDC_estimation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Barron M, Zhang S, Li J. A sparse differential clustering algorithm for tracing cell type changes via single-cell RNA-sequencing data. Nucleic acids research, 2018, 46(3): e14-e14. \url{https://doi.org/10.1093/nar/gkx1113}

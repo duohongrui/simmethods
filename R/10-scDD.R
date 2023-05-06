@@ -28,6 +28,7 @@
 #'
 #' Github URL: <https://github.com/kdkorthauer/scDD>
 #' @examples
+#' \dontrun{
 #' ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 #' ## group information
 #' set.seed(111)
@@ -38,6 +39,8 @@
 #'                                                other_prior = other_prior,
 #'                                                verbose = TRUE,
 #'                                                seed = 111)
+#' }
+#'
 scDD_estimation <- function(ref_data,
                             verbose = FALSE,
                             other_prior = NULL,
@@ -92,6 +95,7 @@ scDD_estimation <- function(ref_data,
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
 #' @importFrom splatter scDDSimulate
+#' @importFrom SingleCellExperiment rowData colData
 #' @export
 #' @details
 #' In scDD, users can only set `nCells` to specify the number of cells because
@@ -104,6 +108,7 @@ scDD_estimation <- function(ref_data,
 #' Github URL: <https://github.com/kdkorthauer/scDD>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 #' ## group information
 #' set.seed(111)
@@ -130,6 +135,8 @@ scDD_estimation <- function(ref_data,
 #' ## gene information
 #' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 #' head(row_data)
+#' }
+#'
 scDD_simulation <- function(parameters,
                             other_prior = NULL,
                             return_format,
@@ -149,22 +156,22 @@ scDD_simulation <- function(parameters,
   assertthat::assert_that(class(parameters) == "SCDDParams")
   # Change parameters
   if(!is.null(other_prior[["nDE"]])){
-    parameters <- setParams(parameters, nDE = other_prior[["nDE"]])
+    parameters <- splatter::setParams(parameters, nDE = other_prior[["nDE"]])
   }
   if(!is.null(other_prior[["nDP"]])){
-    parameters <- setParams(parameters, nDP = other_prior[["nDP"]])
+    parameters <- splatter::setParams(parameters, nDP = other_prior[["nDP"]])
   }
   if(!is.null(other_prior[["nDM"]])){
-    parameters <- setParams(parameters, nDM = other_prior[["nDM"]])
+    parameters <- splatter::setParams(parameters, nDM = other_prior[["nDM"]])
   }
   if(!is.null(other_prior[["nDB"]])){
-    parameters <- setParams(parameters, nDB = other_prior[["nDB"]])
+    parameters <- splatter::setParams(parameters, nDB = other_prior[["nDB"]])
   }
   if(!is.null(other_prior[["nEE"]])){
-    parameters <- setParams(parameters, nEE = other_prior[["nEE"]])
+    parameters <- splatter::setParams(parameters, nEE = other_prior[["nEE"]])
   }
   if(!is.null(other_prior[["nEP"]])){
-    parameters <- setParams(parameters, nEP = other_prior[["nEP"]])
+    parameters <- splatter::setParams(parameters, nEP = other_prior[["nEP"]])
   }
 
   # Get params to check
@@ -178,10 +185,10 @@ scDD_simulation <- function(parameters,
   nEP <- splatter::getParams(parameters, "nEP") %>% unlist()
   de.prob <- sum(nDE, nDP, nDM, nDB)/sum(nDE, nDP, nDM, nDB, nEE, nEP)
   # Return to users
-  message(glue::glue("nCells: {params_check[['nCells']] * 2}"))
-  message(glue::glue("nGenes: {params_check[['nGenes']]}"))
-  message(glue::glue("nGroups: 2"))
-  message(glue::glue("de.prob: {de.prob}"))
+  message(paste0("nCells: ", params_check[['nCells']] * 2))
+  message(paste0("nGenes: ", params_check[['nGenes']]))
+  message("nGroups: 2")
+  message(paste0("de.prob: ", de.prob))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -199,11 +206,11 @@ scDD_simulation <- function(parameters,
   ## counts
   counts <- SingleCellExperiment::counts(simulate_result)
   ## col_data
-  col_data <- as.data.frame(colData(simulate_result))
+  col_data <- as.data.frame(SingleCellExperiment::colData(simulate_result))
   col_data$Condition <- paste0("Group", col_data$Condition)
   colnames(col_data) <- c("cell_name", "group")
   ## row_data
-  row_data <- as.data.frame(rowData(simulate_result))
+  row_data <- as.data.frame(SingleCellExperiment::rowData(simulate_result))
   row_data$FoldChange <- ifelse(is.na(row_data$FoldChange), 0, row_data$FoldChange)
   colnames(row_data) <- c("gene_name", "DEstatus", "fc_gene")
 

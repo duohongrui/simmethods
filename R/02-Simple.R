@@ -20,6 +20,7 @@
 #'
 #' Github URL: <https://github.com/Oshlack/splatter>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' # Estimate parameters
 #' estimate_result <- Simple_estimation(ref_data = ref_data,
@@ -28,6 +29,8 @@
 #' estimate_result <- estimate_result[["estimate_result"]]
 #' ## Check the class
 #' class(estimate_result) == "SimpleParams"
+#' }
+#'
 Simple_estimation <- function(ref_data,
                               verbose = FALSE,
                               seed
@@ -90,6 +93,7 @@ Simple_estimation <- function(ref_data,
 #'
 #' Github URL: <https://github.com/Oshlack/splatter>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' # Estimate parameters
 #' estimate_result <- Simple_estimation(ref_data = ref_data,
@@ -112,6 +116,8 @@ Simple_estimation <- function(ref_data,
 #'                                      seed = 111)
 #' counts <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(counts)
+#' }
+#'
 Simple_simulation <- function(parameters,
                               return_format,
                               other_prior = NULL,
@@ -134,8 +140,8 @@ Simple_simulation <- function(parameters,
                                                     "nGenes"))
 
   # Return to users
-  message(glue::glue("nCells: {params_check[['nCells']]}"))
-  message(glue::glue("nGenes: {params_check[['nGenes']]}"))
+  message(paste0("nCells: ", params_check[['nCells']]))
+  message(paste0("nGenes: ", params_check[['nGenes']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################

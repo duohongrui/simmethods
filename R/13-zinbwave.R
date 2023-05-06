@@ -28,12 +28,15 @@
 #' Github URL: <https://github.com/Oshlack/splatter>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' ## maybe it will take a long time
 #' estimate_result <- simmethods::zinbwave_estimation(ref_data = ref_data,
 #'                                                    other_prior = NULL,
 #'                                                    verbose = TRUE,
 #'                                                    seed = 111)
+#' }
+#'
 zinbwave_estimation <- function(ref_data,
                                 verbose = FALSE,
                                 other_prior = NULL,
@@ -98,6 +101,7 @@ zinbwave_estimation <- function(ref_data,
 #'
 #' Github URL: <https://github.com/Oshlack/splatter>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' estimate_result <- simmethods::zinbwave_estimation(ref_data = ref_data,
@@ -112,6 +116,8 @@ zinbwave_estimation <- function(ref_data,
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 zinbwave_simulation <- function(parameters,
                                 return_format,
                                 verbose = FALSE,
@@ -126,8 +132,8 @@ zinbwave_simulation <- function(parameters,
                                                     "nGenes"))
 
   # Return to users
-  message(glue::glue("nCells: {params_check[['nCells']]}"))
-  message(glue::glue("nGenes: {params_check[['nGenes']]}"))
+  message(paste0("nCells: ", params_check[['nCells']]))
+  message(paste0("nGenes: ", params_check[['nGenes']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################

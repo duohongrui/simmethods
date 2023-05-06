@@ -37,6 +37,7 @@ In dropsim, users can only set \code{nCells} and \code{nGenes} directly.
 For more parameters in dropsim, check \code{\link[dropsim:simulateDGE]{dropsim::simulateDGE()}} and see \code{Examples}.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 ## estimation
 estimate_result <- simmethods::dropsim_estimation(
@@ -70,6 +71,8 @@ simulate_result <- simmethods::dropsim_simulation(
 ## counts
 counts <- simulate_result[["simulate_result"]][["count_data"]]
 dim(counts)
+}
+
 }
 \references{
 Github URL: \url{https://github.com/marchinilab/dropsim}

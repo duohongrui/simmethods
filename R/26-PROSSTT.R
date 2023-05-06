@@ -29,6 +29,7 @@
 #' Document URL: <http://wwwuser.gwdg.de/~compbiol/prosstt/doc/>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' ## estimation
 #' estimate_result <- simmethods::PROSSTT_estimation(
@@ -37,6 +38,8 @@
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 PROSSTT_estimation <- function(ref_data,
                                other_prior = NULL,
                                verbose = FALSE,
@@ -99,7 +102,6 @@ PROSSTT_estimation <- function(ref_data,
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
 #' @importFrom stringr str_split str_count str_extract_all str_replace
-#' @importFrom reticulate source_python
 #' @export
 #' @details
 #' In PROSSTT, `nCells` and `nGenes` are usually customed and users can set
@@ -192,8 +194,8 @@ PROSSTT_simulation <- function(parameters,
     node <- length(edge)+1
     cell_allo <- c(rep(round(ncells/node), node-1), ncells-(round(ncells/node)*(node-1)))
     # Return to users
-    cat(glue::glue("nCells: {ncells}"), "\n")
-    cat(glue::glue("nGenes: {gene_num}"), "\n")
+    message(paste0("nCells: ", ncells))
+    message(paste0("nGenes: ", gene_num))
     for(o in 1:length(edge)){
       newick_tree <- stringr::str_replace(newick_tree,
                                           pattern = edge[o],
@@ -224,9 +226,12 @@ PROSSTT_simulation <- function(parameters,
   }
 
   exec_text <- system.file("python", "PROSSTT_python.py", package = "simmethods")
-
+  if(!requireNamespace("reticulate", quietly = TRUE)){
+    message("reticulate is not installed on your device")
+    message("Installing reticulate...")
+    utils::install.packages("reticulate")
+  }
   reticulate::source_python(exec_text)
-
   simulation_params <- list(newick_string = newick_tree,
                             modules = modules,
                             gene_num = gene_num,

@@ -46,6 +46,7 @@ The customed parameters you can set are below:
 For more customed parameters in scDesign2, please check \code{\link[scDesign2:simulate_count_scDesign2]{scDesign2::simulate_count_scDesign2()}}.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 
 ## cell groups
@@ -74,6 +75,8 @@ dim(counts)
 ## cell information
 col_data <- simulate_result[["simulate_result"]][["col_meta"]]
 table(col_data$group)
+}
+
 }
 \references{
 Sun T, Song D, Li W V, et al. scDesign2: a transparent simulator that generates high-fidelity single-cell gene expression count data with gene correlations captured. Genome biology, 2021, 22(1): 1-37. \url{https://doi.org/10.1186/s13059-021-02367-2}

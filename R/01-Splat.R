@@ -20,6 +20,7 @@
 #'
 #' Github URL: <https://github.com/Oshlack/splatter>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' estimate_result <- simmethods::Splat_estimation(ref_data = data,
 #'                                                 verbose = TRUE,
@@ -27,6 +28,8 @@
 #' estimate_result <- estimate_result[["estimate_result"]]
 #' ## Check the class
 #' class(estimate_result) == "SplatParams"
+#' }
+#'
 Splat_estimation <- function(ref_data,
                              verbose = FALSE,
                              seed
@@ -92,7 +95,6 @@ Splat_estimation <- function(ref_data,
 #'
 #' @importFrom splatter getParams setParam splatSimulate
 #' @importFrom assertthat assert_that
-#' @importFrom glue glue
 #' @importFrom SingleCellExperiment counts colData rowData
 #' @importFrom stringr str_replace
 #'
@@ -104,6 +106,7 @@ Splat_estimation <- function(ref_data,
 #'
 #' Github URL: <https://github.com/Oshlack/splatter>
 #' @examples
+#' \dontrun{
 #' # Load data
 #' ref_data <- simmethods::data
 #' # Estimate parameters
@@ -230,6 +233,8 @@ Splat_estimation <- function(ref_data,
 #' result <- scater::logNormCounts(simulate_result[["simulate_result"]])
 #' result <- scater::runPCA(result)
 #' plotPCA(result, colour_by = "group")
+#' }
+#'
 Splat_simulation <- function(parameters,
                              other_prior = NULL,
                              return_format,
@@ -276,11 +281,11 @@ Splat_simulation <- function(parameters,
   # DEGs proportion
   de.prob <- params_check[["de.prob"]]
   # Return to users
-  message(glue::glue("nCells: {params_check[['nCells']]}"))
-  message(glue::glue("nGenes: {params_check[['nGenes']]}"))
-  message(glue::glue("nGroups: {params_check[['nGroups']]}"))
-  message(glue::glue("de.prob: {de.prob}"))
-  message(glue::glue("nBatches: {params_check[['nBatches']]}"))
+  message(paste0("nCells: ", params_check[['nCells']]))
+  message(paste0("nGenes: ", params_check[['nGenes']]))
+  message(paste0("nGroups: ", params_check[['nGroups']]))
+  message(paste0("de.prob: ", de.prob))
+  message(paste0("nBatches: ", params_check[['nBatches']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################

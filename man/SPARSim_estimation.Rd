@@ -35,6 +35,7 @@ must be an integer vactor (e.g. 1, 2, 3, ...) to specify which condition that
 each cell belongs to. See \code{Examples} below for more.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 
 # 1) Estimation without cell group information
@@ -71,6 +72,8 @@ estimate_result <- simmethods::SPARSim_estimation(
 )
 ## check spike-in parameters
 spikein_params <- estimate_result[["estimate_result"]][["SPARSim_spikein_parameter"]]
+}
+
 }
 \references{
 Baruzzo G, Patuzzi I, Di Camillo B. SPARSim single cell: a count data simulator for scRNA-seq data. Bioinformatics, 2020, 36(5): 1468-1475. \url{https://doi.org/10.1093/bioinformatics/btz752}

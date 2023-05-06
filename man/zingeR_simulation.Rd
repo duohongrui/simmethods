@@ -53,6 +53,7 @@ The customed parameters you can set are below:
 For more customed parameters in zingeR, please check \code{\link[zingeR:NBsimSingleCell]{zingeR::NBsimSingleCell()}}.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 group_condition <- as.numeric(simmethods::group_condition)
 
@@ -106,6 +107,8 @@ col_data <- simulate_result[["simulate_result"]][["col_meta"]]
 ## gene information
 row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 head(row_data)
+}
+
 }
 \references{
 Github URL: \url{https://github.com/statOmics/zingeR}

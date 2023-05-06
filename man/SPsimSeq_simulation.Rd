@@ -52,6 +52,7 @@ The customed parameters you can set are below:
 For more customed parameters in SPsimSeq, please check \code{\link[SPsimSeq:SPsimSeq]{SPsimSeq::SPsimSeq()}}.
 }
 \examples{
+\dontrun{
 # SPsimSeq can simulate datasets directly without estimation step.
 ref_data <- simmethods::data
 
@@ -124,6 +125,8 @@ table(col_data$batch)
 ## gene information
 row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 table(row_data$de_gene)[2]/2000
+}
+
 }
 \references{
 Assefa A T, Vandesompele J, Thas O. SPsimSeq: semi-parametric simulation of bulk and single-cell RNA-sequencing data. Bioinformatics, 2020, 36(10): 3276-3278. \url{https://doi.org/10.1093/bioinformatics/btaa105}

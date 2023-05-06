@@ -28,6 +28,7 @@
 #' Github URL: <https://github.com/HelenaLC/muscat>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' ## estimation
 #' estimate_result <- simmethods::muscat_estimation(
@@ -46,6 +47,8 @@
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 muscat_estimation <- function(ref_data,
                               verbose = FALSE,
                               other_prior = NULL,
@@ -141,7 +144,7 @@ muscat_estimation <- function(ref_data,
 #' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#' @importFrom SummarizedExperiment rowData<-
+#' @importFrom dplyr transmute
 #' @export
 #' @details
 #' In addtion to simulate datasets with default parameters, users want to simulate
@@ -163,6 +166,7 @@ muscat_estimation <- function(ref_data,
 #' Github URL: <https://github.com/HelenaLC/muscat>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' ## cell groups
 #' group_condition <- as.numeric(simmethods::group_condition)
@@ -220,6 +224,8 @@ muscat_estimation <- function(ref_data,
 #' ## gene information
 #' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 #' table(row_data$de_gene)[2]/2000
+#' }
+#'
 muscat_simulation <- function(parameters,
                               other_prior = NULL,
                               return_format,
@@ -283,11 +289,11 @@ muscat_simulation <- function(parameters,
   nGroups <- ifelse(simulate_formals[["dd"]], 2, 1)
   de.group <- simulate_formals[["p_dd"]][3]/sum(simulate_formals[["p_dd"]])
   # Return to users
-  message(glue::glue("nCells: {simulate_formals[['nc']]}"))
-  message(glue::glue("nGenes: {simulate_formals[['ng']]}"))
-  message(glue::glue("nGroups: {nGroups}"))
-  message(glue::glue("de.group: {de.group}"))
-  message(glue::glue("fc.group: {2^simulate_formals[['lfc']]}"))
+  message(paste0("nCells: ", simulate_formals[['nc']]))
+  message(paste0("nGenes: ", simulate_formals[['ng']]))
+  message(paste0("nGroups: ", nGroups))
+  message(paste0("de.group: ", de.group))
+  message(paste0("fc.group: ", 2^simulate_formals[['lfc']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -308,7 +314,12 @@ muscat_simulation <- function(parameters,
   colnames(counts) <- paste0("Cell", 1:ncol(counts))
   rownames(counts) <- paste0("Gene", 1:nrow(counts))
   ## gene information
-  gene_info <- metadata(simulate_result)$gene_info
+  if(!requireNamespace("S4Vectors", quietly = TRUE)){
+    message("S4Vectors is not installed on your device...")
+    message("Installing S4Vectors...")
+    BiocManager::install("S4Vectors")
+  }
+  gene_info <- S4Vectors::metadata(simulate_result)$gene_info
   row_data <- gene_info %>%
     dplyr::transmute("gene_name" = rownames(counts),
                      "de_gene" = case_when(

@@ -20,6 +20,7 @@
 #' Github URL: <https://github.com/kieranrcampbell/phenopath>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' ## estimation
 #' estimate_result <- simmethods::phenopath_estimation(
@@ -27,6 +28,8 @@
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 phenopath_estimation <- function(ref_data,
                                  verbose = FALSE,
                                  seed){
@@ -94,6 +97,7 @@ phenopath_estimation <- function(ref_data,
 #' Github URL: <https://github.com/kieranrcampbell/phenopath>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' ## estimation
 #' estimate_result <- simmethods::phenopath_estimation(
@@ -127,6 +131,8 @@ phenopath_estimation <- function(ref_data,
 #' ## counts
 #' counts <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(counts)
+#' }
+#'
 phenopath_simulation <- function(parameters,
                                  other_prior = NULL,
                                  return_format,
@@ -168,8 +174,8 @@ phenopath_simulation <- function(parameters,
                                                     "nGenes"))
 
   # Return to users
-  message(glue::glue("nCells: {params_check[['nCells']]}"))
-  message(glue::glue("nGenes: {params_check[['nGenes']]}"))
+  message(paste0("nCells: ", params_check[['nCells']]))
+  message(paste0("nGenes: ", params_check[['nGenes']]))
 
   # Get the parameters we are going to use
   nCells <- splatter::getParam(parameters, "nCells")

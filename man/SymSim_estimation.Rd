@@ -35,6 +35,7 @@ kmeans automatically.
 See \code{Examples} for more instructions.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 
 estimate_result <- simmethods::SymSim_estimation(
@@ -52,6 +53,8 @@ estimate_result <- simmethods::SymSim_estimation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Zhang X, Xu C, Yosef N. Simulating multiple faceted variability in single cell RNA sequencing. Nature communications, 2019, 10(1): 1-16. \url{https://doi.org/10.1038/s41467-019-10500-w}

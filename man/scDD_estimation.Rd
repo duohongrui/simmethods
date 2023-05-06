@@ -35,6 +35,7 @@ like \verb{other_prior = list(group.condition = the numeric vector)}. See \code{
 and learn from it.
 }
 \examples{
+\dontrun{
 ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 ## group information
 set.seed(111)
@@ -45,6 +46,8 @@ estimate_result <- simmethods::scDD_estimation(ref_data = ref_data,
                                                other_prior = other_prior,
                                                verbose = TRUE,
                                                seed = 111)
+}
+
 }
 \references{
 Korthauer K D, Chu L F, Newton M A, et al. A statistical approach for identifying differential distributions in single-cell RNA-seq experiments. Genome biology, 2016, 17(1): 1-15. \url{https://doi.org/10.1186/s13059-016-1077-y}

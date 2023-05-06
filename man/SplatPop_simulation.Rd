@@ -52,6 +52,7 @@ For more customed parameters in SplatPop, please check \code{\link[splatter:Spla
 For detailed information about SplatPop, go to \url{https://www.bioconductor.org/packages/release/bioc/vignettes/splatter/inst/doc/splatPop.html}.
 }
 \examples{
+\dontrun{
 # Load data
 ref_data <- simmethods::data
 # Estimate parameters
@@ -193,6 +194,8 @@ simulate_result <- simmethods::SplatPop_simulation(
 result <- scater::logNormCounts(simulate_result[["simulate_result"]])
 result <- scater::runPCA(result)
 plotPCA(result, colour_by = "group")
+}
+
 }
 \references{
 Azodi C B, Zappia L, Oshlack A, et al. splatPop: simulating population scale single-cell RNA sequencing data. Genome biology, 2021, 22(1): 1-16. \url{https://doi.org/10.1186/s13059-021-02546-1}

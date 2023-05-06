@@ -20,6 +20,7 @@
 #' detection.
 #' @export
 #' @examples
+#' \dontrun{
 #' ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 #'
 #' ## estimation
@@ -27,6 +28,8 @@
 #'                                                 other_prior = NULL,
 #'                                                 verbose = TRUE,
 #'                                                 seed = 111)
+#' }
+#'
 POWSC_estimation <- function(ref_data,
                              verbose = FALSE,
                              other_prior = NULL,
@@ -97,12 +100,11 @@ POWSC_estimation <- function(ref_data,
 #' 1. nCells. In POWSC, you can set nCells directly by `other_prior = list(nCells = 1000)`.
 #' 2. nGroups. POWSC can only simulate **two** groups.
 #' 3. de.prob. You can directly set `other_prior = list(de.prob = 0.2)` to simulate DEGs that account for 20 percent of all genes.
-#' @importFrom glue glue
 #' @importFrom SingleCellExperiment counts colData rowData
-#' @importFrom Seurat as.Seurat
 #' @importFrom stringr str_replace
 #' @export
 #' @examples
+#' \dontrun{
 #' ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 #'
 #' ## estimation
@@ -148,6 +150,8 @@ POWSC_estimation <- function(ref_data,
 #' ## gene information
 #' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 #' table(row_data$de_gene)
+#' }
+#'
 POWSC_simulation <- function(parameters,
                              other_prior,
                              return_format,
@@ -175,10 +179,10 @@ POWSC_simulation <- function(parameters,
   }else{
     perDE <- other_prior[["de.prob"]]/2
   }
-  message(glue::glue("nCells: {n}"))
-  message(glue::glue("nGenes: {dim(parameters[['exprs']])[1]}"))
-  message(glue::glue("nGroups: 2"))
-  message(glue::glue("de.prob: {perDE *2 }"))
+  message(paste0("nCells: ", n))
+  message(paste0("nGenes: ", dim(parameters[['exprs']])[1]))
+  message("nGroups: 2")
+  message(paste0("de.prob: ", perDE *2))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################

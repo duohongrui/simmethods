@@ -1,248 +1,259 @@
-#' Estimate Parameters From Real Datasets by CancerInSilico
+#' #' Estimate Parameters From Real Datasets by CancerInSilico
+#' #'
+#' #' This function is used to estimate useful parameters from a real dataset by
+#' #' using `calibratePathway` function in CancerInSilico package.
+#' #'
+#' #' @param ref_data A count matrix. Each row represents a gene and each column
+#' #' represents a cell.
+#' #' @param verbose Logical.
+#' #' @param seed An integer of a random seed.
+#' #' @importFrom methods new
+#' #' @importFrom BiocGenerics get
+#' #' @importFrom stats setNames
+#' #' @return A list contains the estimated parameters and the results of execution
+#' #' detection.
+#' #' @export
+#' #'
+#' #' @references
+#' #' Sherman T D, Kagohara L T, Cao R, et al. CancerInSilico: An R/Bioconductor package for combining mathematical and statistical modeling to simulate time course bulk and single cell gene expression data in cancer. PLoS computational biology, 2019, 14(4): e1006935. <https://doi.org/10.1371/journal.pcbi.1006935>
+#' #'
+#' #' Bioconductor URL: <https://bioconductor.org/packages/release/bioc/html/CancerInSilico.html>
+#' #'
+#' #' Github URL: <https://github.com/FertigLab/CancerInSilico>
+#' #'
+#' #' @examples
+#' #' \dontrun{
+#' #' ref_data <- simmethods::data
+#' #' ## estimation
+#' #' estimate_result <- simmethods::CancerInSilico_estimation(
+#' #'   ref_data = ref_data,
+#' #'   verbose = TRUE,
+#' #'   seed = 111
+#' #' )
+#' #' }
+#' #'
+#' CancerInSilico_estimation <- function(ref_data,
+#'                                       verbose = FALSE,
+#'                                       seed
+#' ){
+#'   ##############################################################################
+#'   ####                            Environment                                ###
+#'   ##############################################################################
+#'   if(!requireNamespace("CancerInSilico", quietly = TRUE)){
+#'     message("CancerInSilico is not installed on your device...")
+#'     message("Installing CancerInSilico...")
+#'     BiocManager::install('CancerInSilico')
+#'   }
+#'   if(!requireNamespace("NbClust", quietly = TRUE)){
+#'     message("NbClust is not installed on your device...")
+#'     message("Installing NbClust...")
+#'     utils::install.packages("NbClust")
+#'   }
+#'   ##############################################################################
+#'   ####                               Check                                   ###
+#'   ##############################################################################
+#'   if(!is.matrix(ref_data)){
+#'     ref_data <- as.matrix(ref_data)
+#'   }
+#'   ## Filter
+#'   clust_result <- NbClust::NbClust(data = ref_data, index = "dunn", method = "kmeans")
+#'   gene_letter <- LETTERS[1:clust_result[["Best.nc"]][["Number_clusters"]]]
 #'
-#' This function is used to estimate useful parameters from a real dataset by
-#' using `calibratePathway` function in CancerInSilico package.
+#'   gene_pwy <- purrr::map(seq_len(length(gene_letter)), function(x){
+#'     gene_name <- rownames(ref_data)[clust_result[["Best.partition"]] == x]
+#'     assign(paste0(gene_letter[x], "_pwy"),
+#'            methods::new("Pathway",
+#'                         "genes" = gene_name,
+#'                         "expressionScale" = function(model, cell, time){
+#'                           ifelse(CancerInSilico::getCellType(model, time, cell)==1, 1, 0)
+#'                         }))
+#'     BiocGenerics::get(paste0(gene_letter[x], "_pwy"))
+#'   }) %>% stats::setNames(paste0(gene_letter, "_pwy"))
 #'
-#' @param ref_data A count matrix. Each row represents a gene and each column
-#' represents a cell.
-#' @param verbose Logical.
-#' @param seed An integer of a random seed.
-#' @importFrom methods new
-#' @importFrom BiocGenerics get
-#' @importFrom NbClust NbClust
-#' @return A list contains the estimated parameters and the results of execution
-#' detection.
-#' @export
+#'   ##############################################################################
+#'   ####                            Estimation                                 ###
+#'   ##############################################################################
+#'   if(verbose){
+#'     message("Estimating parameters using CancerInSilico")
+#'   }
+#'   # Seed
+#'   set.seed(seed)
+#'   # Estimation
+#'   estimate_detection <- peakRAM::peakRAM(
+#'     estimate_result <- purrr::map(gene_pwy, function(pwy){
+#'       CancerInSilico::calibratePathway(pwy, ref_data)
+#'     }) %>% stats::setNames(names(gene_pwy))
+#'   )
+#'   estimate_result[["data_dim"]] <- dim(ref_data)
+#'   ##############################################################################
+#'   ####                           Ouput                                       ###
+#'   ##############################################################################
+#'   estimate_output <- list(estimate_result = estimate_result,
+#'                           estimate_detection = estimate_detection)
+#'   return(estimate_output)
+#' }
 #'
-#' @references
-#' Sherman T D, Kagohara L T, Cao R, et al. CancerInSilico: An R/Bioconductor package for combining mathematical and statistical modeling to simulate time course bulk and single cell gene expression data in cancer. PLoS computational biology, 2019, 14(4): e1006935. <https://doi.org/10.1371/journal.pcbi.1006935>
 #'
-#' Bioconductor URL: <https://bioconductor.org/packages/release/bioc/html/CancerInSilico.html>
 #'
-#' Github URL: <https://github.com/FertigLab/CancerInSilico>
+#' #' Simulate Datasets by CancerInSilico
+#' #'
+#' #' This function is used to simulate datasets from learned parameters by `inSilicoGeneExpression`
+#' #' function in CancerInSilico package.
+#' #'
+#' #' @param parameters A object generated by `CancerInSilico::calibratePathway()`
+#' #' @param other_prior A list with names of certain parameters. Some methods need
+#' #' extra parameters to execute the estimation step, so you must input them. In
+#' #' simulation step, the number of cells, genes, groups, batches, the percent of
+#' #' DEGs are usually customed, so before simulating a dataset you must point it out.
+#' #' See `Details` below for more information.
+#' #' @param return_format A character. Alternatives choices: list, SingleCellExperiment,
+#' #' Seurat, h5ad
+#' #' @param verbose Logical. Whether to return messages or not.
+#' #' @param seed A random seed.
+#' #' @export
+#' #' @details
+#' #' In CancerInSilico, users can only set `nCells` to specify the number of cells. See `Examples`.
+#' #' For more unusually used parameters in CancerInSilico, see `CancerInSilico::inSilicoGeneExpression()`
+#' #' @references
+#' #' Sherman T D, Kagohara L T, Cao R, et al. CancerInSilico: An R/Bioconductor package for combining mathematical and statistical modeling to simulate time course bulk and single cell gene expression data in cancer. PLoS computational biology, 2019, 14(4): e1006935. <https://doi.org/10.1371/journal.pcbi.1006935>
+#' #'
+#' #' Bioconductor URL: <https://bioconductor.org/packages/release/bioc/html/CancerInSilico.html>
+#' #'
+#' #' Github URL: <https://github.com/FertigLab/CancerInSilico>
+#' #'
+#' #' @examples
+#' #' \dontrun{
+#' #' ref_data <- simmethods::data
+#' #' ## estimation
+#' #' estimate_result <- simmethods::CancerInSilico_estimation(
+#' #'   ref_data = ref_data,
+#' #'   verbose = TRUE,
+#' #'   seed = 111
+#' #' )
+#' #'
+#' #' # 1) Simulate with default parameters
+#' #' simulate_result <- simmethods::CancerInSilico_simulation(
+#' #'   parameters = estimate_result[["estimate_result"]],
+#' #'   other_prior = NULL,
+#' #'   return_format = "list",
+#' #'   verbose = TRUE,
+#' #'   seed = 111
+#' #' )
+#' #' ## counts
+#' #' counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' #' dim(counts)
+#' #'
+#' #' # 2) 2000 cells
+#' #' simulate_result <- simmethods::CancerInSilico_simulation(
+#' #'   parameters = estimate_result[["estimate_result"]],
+#' #'   other_prior = list(nCells = 2000),
+#' #'   return_format = "list",
+#' #'   verbose = TRUE,
+#' #'   seed = 111
+#' #' )
+#' #'
+#' #' ## counts
+#' #' counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' #' dim(counts)
+#' #' }
+#' #'
+#' CancerInSilico_simulation <- function(parameters,
+#'                                       other_prior = NULL,
+#'                                       return_format,
+#'                                       verbose = FALSE,
+#'                                       seed
+#' ){
+#'   ##############################################################################
+#'   ####                            Environment                                ###
+#'   ##############################################################################
+#'   if(!requireNamespace("CancerInSilico", quietly = TRUE)){
+#'     message("CancerInSilico is not installed on your device...")
+#'     message("Installing CancerInSilico...")
+#'     BiocManager::install('CancerInSilico')
+#'   }
+#'   data_dim <- parameters[["data_dim"]]
+#'   if(is.null(other_prior[["nCells"]])){
+#'     nCells <- data_dim[2]
+#'   }else{
+#'     nCells <- other_prior[["nCells"]]
+#'   }
+#'   parameters[["data_dim"]] <- NULL
 #'
-#' @examples
-#' ref_data <- simmethods::data
-#' ## estimation
-#' estimate_result <- simmethods::CancerInSilico_estimation(
-#'   ref_data = ref_data,
-#'   verbose = TRUE,
-#'   seed = 111
-#' )
-CancerInSilico_estimation <- function(ref_data,
-                                      verbose = FALSE,
-                                      seed
-){
-  ##############################################################################
-  ####                            Environment                                ###
-  ##############################################################################
-  if(!requireNamespace("CancerInSilico", quietly = TRUE)){
-    message("CancerInSilico is not installed on your device...")
-    message("Installing CancerInSilico...")
-    BiocManager::install('CancerInSilico')
-  }
-  ##############################################################################
-  ####                               Check                                   ###
-  ##############################################################################
-  if(!is.matrix(ref_data)){
-    ref_data <- as.matrix(ref_data)
-  }
-  ## Filter
-  clust_result <- NbClust::NbClust(data = ref_data, index = "dunn", method = "kmeans")
-  gene_letter <- LETTERS[1:clust_result[["Best.nc"]][["Number_clusters"]]]
-
-  gene_pwy <- purrr::map(seq_len(length(gene_letter)), function(x){
-    gene_name <- rownames(ref_data)[clust_result[["Best.partition"]] == x]
-    assign(paste0(gene_letter[x], "_pwy"),
-           methods::new("Pathway",
-                        "genes" = gene_name,
-                        "expressionScale" = function(model, cell, time){
-                          ifelse(CancerInSilico::getCellType(model, time, cell)==1, 1, 0)
-                        }))
-    BiocGenerics::get(paste0(gene_letter[x], "_pwy"))
-  }) %>% setNames(paste0(gene_letter, "_pwy"))
-
-  ##############################################################################
-  ####                            Estimation                                 ###
-  ##############################################################################
-  if(verbose){
-    message("Estimating parameters using CancerInSilico")
-  }
-  # Seed
-  set.seed(seed)
-  # Estimation
-  estimate_detection <- peakRAM::peakRAM(
-    estimate_result <- purrr::map(gene_pwy, function(pwy){
-      CancerInSilico::calibratePathway(pwy, ref_data)
-    }) %>% setNames(names(gene_pwy))
-  )
-  estimate_result[["data_dim"]] <- dim(ref_data)
-  ##############################################################################
-  ####                           Ouput                                       ###
-  ##############################################################################
-  estimate_output <- list(estimate_result = estimate_result,
-                          estimate_detection = estimate_detection)
-  return(estimate_output)
-}
-
-
-
-#' Simulate Datasets by CancerInSilico
+#'   params <- methods::new("GeneExpressionParams")
+#'   params@randSeed <- seed
+#'   params@nCells <- nCells
+#'   params@sampleFreq <- 1
+#'   params@RNAseq <- TRUE
+#'   params@singleCell <- TRUE
+#'   params@dropoutPresent <- TRUE
 #'
-#' This function is used to simulate datasets from learned parameters by `inSilicoGeneExpression`
-#' function in CancerInSilico package.
+#'   cell_type <- purrr::map(seq_len(length(parameters)), function(x){
+#'     methods::new("CellType",
+#'                  name = stringr::str_sub(names(parameters)[x], start = 1, end = 1),
+#'                  size = 1,
+#'                  minCycle = 16,
+#'                  cycleLength = function() 16 + rexp(1, 1/4))
+#'   }) %>% stats::setNames(stringr::str_sub(names(parameters), start = 1, end = 1))
 #'
-#' @param parameters A object generated by `CancerInSilico::calibratePathway()`
-#' @param other_prior A list with names of certain parameters. Some methods need
-#' extra parameters to execute the estimation step, so you must input them. In
-#' simulation step, the number of cells, genes, groups, batches, the percent of
-#' DEGs are usually customed, so before simulating a dataset you must point it out.
-#' See `Details` below for more information.
-#' @param return_format A character. Alternatives choices: list, SingleCellExperiment,
-#' Seurat, h5ad
-#' @param verbose Logical. Whether to return messages or not.
-#' @param seed A random seed.
-#' @export
-#' @details
-#' In CancerInSilico, users can only set `nCells` to specify the number of cells. See `Examples`.
-#' For more unusually used parameters in CancerInSilico, see `CancerInSilico::inSilicoGeneExpression()`
-#' @references
-#' Sherman T D, Kagohara L T, Cao R, et al. CancerInSilico: An R/Bioconductor package for combining mathematical and statistical modeling to simulate time course bulk and single cell gene expression data in cancer. PLoS computational biology, 2019, 14(4): e1006935. <https://doi.org/10.1371/journal.pcbi.1006935>
+#'   mod <- suppressMessages(CancerInSilico::inSilicoCellModel(
+#'     initialNum = 1,
+#'     runTime = 1,
+#'     density = 0.1,
+#'     cellTypes = purrr::map(cell_type, .f = function(x) x),
+#'     cellTypeInitFreq = rep(1/length(cell_type), length(cell_type)),
+#'     outputIncrement = 24,
+#'     randSeed = seed)
+#'   )
 #'
-#' Bioconductor URL: <https://bioconductor.org/packages/release/bioc/html/CancerInSilico.html>
+#'   other_prior[["model"]] <- mod
+#'   other_prior[["pathways"]] <- parameters
+#'   other_prior[["params"]] <- params
 #'
-#' Github URL: <https://github.com/FertigLab/CancerInSilico>
+#'   ##############################################################################
+#'   ####                               Check                                   ###
+#'   ##############################################################################
 #'
-#' @examples
-#' ref_data <- simmethods::data
-#' ## estimation
-#' estimate_result <- simmethods::CancerInSilico_estimation(
-#'   ref_data = ref_data,
-#'   verbose = TRUE,
-#'   seed = 111
-#' )
+#'   simulate_formals <- simutils::change_parameters(function_expr = "CancerInSilico::inSilicoGeneExpression",
+#'                                                   other_prior = other_prior,
+#'                                                   step = "simulation")
+#'   # Return to users
+#'   message(paste0("nCells: ", nCells))
+#'   message(paste0("nGenes: ", data_dim[1]))
+#'   ##############################################################################
+#'   ####                            Simulation                                 ###
+#'   ##############################################################################
+#'   if(verbose){
+#'     message("Simulating datasets using CancerInSilico")
+#'   }
+#'   # Seed
+#'   set.seed(seed)
+#'   # Simulation
+#'   simulate_detection <- peakRAM::peakRAM(
+#'     simulate_result <- do.call(CancerInSilico::inSilicoGeneExpression , simulate_formals))
+#'   ##############################################################################
+#'   ####                        Format Conversion                              ###
+#'   ##############################################################################
+#'   ## counts
+#'   counts <- simulate_result[["expression"]][, 1:nCells]
+#'   colnames(counts) <- paste0("Cell", 1:ncol(counts))
+#'   rownames(counts) <- paste0("Gene", 1:nrow(counts))
+#'   ## col_data
+#'   col_data <- data.frame("cell_name" = colnames(counts))
+#'   ## row_data
+#'   row_data <- data.frame("gene_name" = rownames(counts))
+#'   # Establish SingleCellExperiment
+#'   simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
+#'                                                                 colData = col_data,
+#'                                                                 rowData = row_data)
 #'
-#' # 1) Simulate with default parameters
-#' simulate_result <- simmethods::CancerInSilico_simulation(
-#'   parameters = estimate_result[["estimate_result"]],
-#'   other_prior = NULL,
-#'   return_format = "list",
-#'   verbose = TRUE,
-#'   seed = 111
-#' )
-#' ## counts
-#' counts <- simulate_result[["simulate_result"]][["count_data"]]
-#' dim(counts)
+#'   simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
+#'                                                return_format = return_format)
 #'
-#' # 2) 2000 cells
-#' simulate_result <- simmethods::CancerInSilico_simulation(
-#'   parameters = estimate_result[["estimate_result"]],
-#'   other_prior = list(nCells = 2000),
-#'   return_format = "list",
-#'   verbose = TRUE,
-#'   seed = 111
-#' )
+#'   ##############################################################################
+#'   ####                           Ouput                                       ###
+#'   ##############################################################################
+#'   simulate_output <- list(simulate_result = simulate_result,
+#'                           simulate_detection = simulate_detection)
+#'   return(simulate_output)
+#' }
 #'
-#' ## counts
-#' counts <- simulate_result[["simulate_result"]][["count_data"]]
-#' dim(counts)
-CancerInSilico_simulation <- function(parameters,
-                                      other_prior = NULL,
-                                      return_format,
-                                      verbose = FALSE,
-                                      seed
-){
-  ##############################################################################
-  ####                            Environment                                ###
-  ##############################################################################
-  if(!requireNamespace("CancerInSilico", quietly = TRUE)){
-    message("CancerInSilico is not installed on your device...")
-    message("Installing CancerInSilico...")
-    BiocManager::install('CancerInSilico')
-  }
-  data_dim <- parameters[["data_dim"]]
-  if(is.null(other_prior[["nCells"]])){
-    nCells <- data_dim[2]
-  }else{
-    nCells <- other_prior[["nCells"]]
-  }
-  parameters[["data_dim"]] <- NULL
-
-  params <- new("GeneExpressionParams")
-  params@randSeed <- seed
-  params@nCells <- nCells
-  params@sampleFreq <- 1
-  params@RNAseq <- TRUE
-  params@singleCell <- TRUE
-  params@dropoutPresent <- TRUE
-
-  cell_type <- purrr::map(seq_len(length(parameters)), function(x){
-    methods::new("CellType",
-                 name = stringr::str_sub(names(parameters)[x], start = 1, end = 1),
-                 size = 1,
-                 minCycle = 16,
-                 cycleLength = function() 16 + rexp(1, 1/4))
-  }) %>% setNames(stringr::str_sub(names(parameters), start = 1, end = 1))
-
-  mod <- suppressMessages(CancerInSilico::inSilicoCellModel(
-    initialNum = 1,
-    runTime = 1,
-    density = 0.1,
-    cellTypes = purrr::map(cell_type, .f = function(x) x),
-    cellTypeInitFreq = rep(1/length(cell_type), length(cell_type)),
-    outputIncrement = 24,
-    randSeed = seed)
-  )
-
-  other_prior[["model"]] <- mod
-  other_prior[["pathways"]] <- parameters
-  other_prior[["params"]] <- params
-
-  ##############################################################################
-  ####                               Check                                   ###
-  ##############################################################################
-
-  simulate_formals <- simutils::change_parameters(function_expr = "CancerInSilico::inSilicoGeneExpression",
-                                                  other_prior = other_prior,
-                                                  step = "simulation")
-  # Return to users
-  message(glue::glue("nCells: {nCells}"))
-  message(glue::glue("nGenes: {data_dim[1]}"))
-  ##############################################################################
-  ####                            Simulation                                 ###
-  ##############################################################################
-  if(verbose){
-    message("Simulating datasets using CancerInSilico")
-  }
-  # Seed
-  set.seed(seed)
-  # Simulation
-  simulate_detection <- peakRAM::peakRAM(
-    simulate_result <- do.call(CancerInSilico::inSilicoGeneExpression , simulate_formals))
-  ##############################################################################
-  ####                        Format Conversion                              ###
-  ##############################################################################
-  ## counts
-  counts <- simulate_result[["expression"]][, 1:nCells]
-  colnames(counts) <- paste0("Cell", 1:ncol(counts))
-  rownames(counts) <- paste0("Gene", 1:nrow(counts))
-  ## col_data
-  col_data <- data.frame("cell_name" = colnames(counts))
-  ## row_data
-  row_data <- data.frame("gene_name" = rownames(counts))
-  # Establish SingleCellExperiment
-  simulate_result <- SingleCellExperiment::SingleCellExperiment(list(counts = counts),
-                                                                colData = col_data,
-                                                                rowData = row_data)
-
-  simulate_result <- simutils::data_conversion(SCE_object = simulate_result,
-                                               return_format = return_format)
-
-  ##############################################################################
-  ####                           Ouput                                       ###
-  ##############################################################################
-  simulate_output <- list(simulate_result = simulate_result,
-                          simulate_detection = simulate_detection)
-  return(simulate_output)
-}
-

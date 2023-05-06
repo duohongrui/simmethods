@@ -23,6 +23,7 @@ This function is used to estimate useful parameters from a real dataset by
 using \code{lunEstimate} function in Splatter package.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 estimate_result <- simmethods::Lun_estimation(ref_data = ref_data,
                                               verbose = TRUE,
@@ -30,6 +31,8 @@ estimate_result <- simmethods::Lun_estimation(ref_data = ref_data,
 estimate_result <- estimate_result[["estimate_result"]]
 ## Check the class
 class(estimate_result) == "LunParams"
+}
+
 }
 \references{
 Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. https://doi.org/10.1186/s13059-017-1305-0

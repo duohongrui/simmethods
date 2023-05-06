@@ -10,13 +10,15 @@ NULL
 #' @importFrom stringr str_split
 #' @importFrom stats setNames
 #' @importFrom utils lsf.str
-#' @importFrom crayon red
 #' @export
 #'
 #' @examples
 #' # get_method <- get_method()
 #' # get_method <- get_method(method = c("splat", "PROSSTT"))
 get_method <-function(method = "all"){
+  if(!requireNamespace("crayon", quietly = TRUE)){
+    utils::install.packages("crayon")
+  }
   env <- asNamespace("simmethods")
   func_name <- as.character(lsf.str(env, pattern = "_definition"))
   right_name <- stringr::str_split(func_name, pattern = "_", simplify = T)[,1]

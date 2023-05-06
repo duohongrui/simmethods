@@ -13,8 +13,6 @@
 #' DEGs are usually customed, so before simulating a dataset you must point it out.
 #' See `Details` below for more information.
 #' @importFrom dynwrap infer_trajectory wrap_expression add_grouping
-#' @importFrom NbClust NbClust
-#' @importFrom tislingshot ti_slingshot
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
@@ -31,6 +29,7 @@
 #'
 #' Github URL: <https://github.com/dynverse/dyngen>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' estimate_result <- simmethods::dyngen_estimation(
@@ -48,6 +47,8 @@
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 dyngen_estimation <- function(ref_data,
                               verbose = FALSE,
                               other_prior,
@@ -57,6 +58,10 @@ dyngen_estimation <- function(ref_data,
   ##############################################################################
   if(!is.matrix(ref_data)){
     ref_data <- as.matrix(ref_data)
+  }
+  if(!requireNamespace("NbClust", quietly = TRUE)){
+    message("Installing NbClust...")
+    utils::install.packages("NbClust")
   }
   if(is.null(other_prior[["group.condition"]])){
     message("Performing k-means and determin the best number of clusters...")
@@ -81,6 +86,10 @@ dyngen_estimation <- function(ref_data,
   ##############################################################################
   if(verbose){
     message("Estimating parameters using dyngen")
+  }
+  if(!requireNamespace("tislingshot", quietly = TRUE)){
+    message("Installing tislingshot...")
+    devtools::install_github("dynverse/ti_slingshot/package/")
   }
   # Estimation
   estimate_detection <- peakRAM::peakRAM(
@@ -116,8 +125,6 @@ dyngen_estimation <- function(ref_data,
 #' @param verbose Logical. Whether to return messages or not.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#' @importFrom dyngen backbone_linear backbone_bifurcating backbone_cycle backbone_trifurcating
-#' initialise_model simulation_type_wild_type simulation_default
 #' @importFrom tools R_user_dir
 #' @export
 #' @details
@@ -132,6 +139,7 @@ dyngen_estimation <- function(ref_data,
 #' Github URL: <https://github.com/dynverse/dyngen>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' ## estimation with cell group information
@@ -143,31 +151,33 @@ dyngen_estimation <- function(ref_data,
 #'   seed = 111
 #' )
 #'
-#' # # 1) Simulate with default parameters (need a lot of memory)
-#' # simulate_result <- simmethods::dyngen_simulation(
-#' #   parameters = estimate_result[["estimate_result"]],
-#' #   other_prior = NULL,
-#' #   return_format = "list",
-#' #   verbose = TRUE,
-#' #   seed = 111
-#' # )
-#' # ## counts
-#' # counts <- simulate_result[["simulate_result"]][["count_data"]]
-#' # dim(counts)
+#' # 1) Simulate with default parameters (need a lot of memory)
+#' simulate_result <- simmethods::dyngen_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = NULL,
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#' ## counts
+#' counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(counts)
 #'
-#' # 2) 100 cells and 100 genes
-#' # simulate_result <- simmethods::dyngen_simulation(
-#' #   parameters = estimate_result[["estimate_result"]],
-#' #   other_prior = list(nCells = 100,
-#' #                      nGenes = 100),
-#' #   return_format = "list",
-#' #   verbose = TRUE,
-#' #   seed = 111
-#' # )
+#' 2) 100 cells and 100 genes
+#' simulate_result <- simmethods::dyngen_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = list(nCells = 100,
+#'                      nGenes = 100),
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 #'
 #' ## counts
-#' # counts <- simulate_result[["simulate_result"]][["count_data"]]
-#' # dim(counts)
+#' counts <- simulate_result[["simulate_result"]][["count_data"]]
+#' dim(counts)
+#' }
+#'
 dyngen_simulation <- function(parameters,
                               other_prior = NULL,
                               return_format,
@@ -216,8 +226,8 @@ dyngen_simulation <- function(parameters,
   }
 
   # Return to users
-  message(glue::glue("nCells: {nCells}"))
-  message(glue::glue("nGenes: {nGenes}"))
+  message(paste0("nCells: ", nCells))
+  message(paste0("nGenes: ", nGenes))
   # TFs and HKs
   num_tfs <- nrow(backbone$module_info)
   num_targets <- round((nGenes - num_tfs) / 2)

@@ -35,6 +35,7 @@ a numeric vector to specify the groups that each cell belongs to, like
 and learn from it.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 group_condition <- as.numeric(simmethods::group_condition)
 
@@ -44,6 +45,8 @@ estimate_result <- simmethods::zinbwaveZinger_estimation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Github URL: \url{https://github.com/statOmics/zinbwaveZinger}

@@ -50,6 +50,7 @@ The customed parameters you can set are below:
 For more customed parameters in scDesign, please check \code{\link[scDesign:design_data]{scDesign::design_data()}}.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 
 ## Simulate datasets with default parameters
@@ -99,6 +100,8 @@ dim(counts)
 ## cell information
 col_data <- simulate_result[["simulate_result"]][["col_meta"]]
 table(col_data$group)
+}
+
 }
 \references{
 Li W V, Li J J. A statistical simulator scDesign for rational scRNA-seq experimental design. Bioinformatics, 2019, 35(14): i41-i50. \url{https://doi.org/10.1093/bioinformatics/btz321}

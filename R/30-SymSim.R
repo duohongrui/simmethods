@@ -13,7 +13,6 @@
 #' DEGs are usually customed, so before simulating a dataset you must point it out.
 #' See `Details` below for more information.
 #' @importFrom dynwrap infer_trajectory wrap_expression add_grouping
-#' @importFrom NbClust NbClust
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
@@ -29,6 +28,7 @@
 #' Github URL: <https://github.com/YosefLab/SymSim>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' estimate_result <- simmethods::SymSim_estimation(
@@ -46,6 +46,8 @@
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 SymSim_estimation <- function(ref_data,
                               verbose = FALSE,
                               other_prior = NULL,
@@ -106,7 +108,9 @@ SymSim_estimation <- function(ref_data,
 #' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
+#' @importFrom plyr alply
 #' @importFrom SymSim SimulateTrueCounts
+#' @importFrom stats quantile
 #' @export
 #' @details
 #' In SymSim, users can only set `nCells` and `nGenes` to specify the number of cells and genes in the
@@ -118,6 +122,7 @@ SymSim_estimation <- function(ref_data,
 #' Github URL: <https://github.com/YosefLab/SymSim>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' ## estimation with cell group information
@@ -154,6 +159,8 @@ SymSim_estimation <- function(ref_data,
 #' ## counts
 #' counts <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(counts)
+#' }
+#'
 SymSim_simulation <- function(parameters,
                               other_prior = NULL,
                               return_format,
@@ -169,6 +176,7 @@ SymSim_simulation <- function(parameters,
     message("Installing SymSim...")
     devtools::install_github("YosefLab/SymSim")
   }
+  a <- plyr::alply(matrix(c(1,1,1,1), 2), 2, stats::quantile)
   ##############################################################################
   ####                               Check                                   ###
   ##############################################################################
@@ -191,8 +199,8 @@ SymSim_simulation <- function(parameters,
   }
 
   # Return to users
-  message(glue::glue("nCells: {other_prior[['ncells_total']]}"))
-  message(glue::glue("nGenes: {other_prior[['ngenes']]}"))
+  message(paste0("nCells: ", other_prior[['ncells_total']]))
+  message(paste0("nGenes: ", other_prior[['ngenes']]))
 
   simulate_formals <- simutils::change_parameters(function_expr = "SymSim::SimulateTrueCounts",
                                                   other_prior = other_prior,

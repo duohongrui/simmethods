@@ -13,7 +13,6 @@
 #' See `Details` below for more information.
 #' @param seed An integer of a random seed.
 #' @importFrom stats model.matrix
-#' @importFrom scater normalizeCounts
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
@@ -29,6 +28,7 @@
 #' Gitlab URL: <https://gitlab.com/sysbiobig/sparsim>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' # 1) Estimation without cell group information
@@ -65,6 +65,8 @@
 #' )
 #' ## check spike-in parameters
 #' spikein_params <- estimate_result[["estimate_result"]][["SPARSim_spikein_parameter"]]
+#' }
+#'
 SPARSim_estimation <- function(ref_data,
                                verbose = FALSE,
                                other_prior = NULL,
@@ -77,6 +79,16 @@ SPARSim_estimation <- function(ref_data,
     message("SPARSim is not installed on your device...")
     message("Installing SPARSim...")
     devtools::install_gitlab("sysbiobig/sparsim")
+  }
+  if(!requireNamespace("scater", quietly = TRUE)){
+    message("scater is not installed on your device...")
+    message("Installing scater...")
+    BiocManager::install("scater")
+  }
+  if(!requireNamespace("S4Vectors", quietly = TRUE)){
+    message("S4Vectors is not installed on your device...")
+    message("Installing S4Vectors...")
+    BiocManager::install("S4Vectors")
   }
   ##############################################################################
   ####                               Check                                   ###
@@ -172,7 +184,7 @@ SPARSim_estimation <- function(ref_data,
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
 #' @importFrom stats runif
-#' @importFrom BiocGenerics get
+#' @importFrom BiocGenerics get append grep
 #' @export
 #' @details
 #' In addtion to simulate datasets with default parameters, users want to simulate
@@ -194,6 +206,7 @@ SPARSim_estimation <- function(ref_data,
 #' Gitlab URL: <https://gitlab.com/sysbiobig/sparsim>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' ## Estimation
 #' group_condition <- as.numeric(simmethods::group_condition)
@@ -265,6 +278,8 @@ SPARSim_estimation <- function(ref_data,
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 SPARSim_simulation <- function(parameters,
                                other_prior = NULL,
                                return_format,
@@ -437,12 +452,12 @@ SPARSim_simulation <- function(parameters,
   }
   groups <- length(simulate_formals[["dataset_parameter"]])
   # Return to users
-  message(glue::glue("nCells: {cell_num}"))
-  message(glue::glue("nGenes: {length(parameters[[1]][['intensity']])}"))
-  message(glue::glue("nGroups: {groups}"))
-  message(glue::glue("fc.group: {fc.group}"))
-  message(glue::glue("de.prob: {de.prob}"))
-  message(glue::glue("nBatches: {nBatches}"))
+  message(paste0("nCells: ", cell_num))
+  message(paste0("nGenes: ", length(parameters[[1]][['intensity']])))
+  message(paste0("nGroups: ", groups))
+  message(paste0("fc.group: ", fc.group))
+  message(paste0("de.prob: ", de.prob))
+  message("nBatches: ", nBatches)
 
   ##############################################################################
   ####                            Simulation                                 ###
@@ -461,7 +476,7 @@ SPARSim_simulation <- function(parameters,
   ## counts
   counts <- simulate_result[["count_matrix"]]
   if(!is.null(other_prior[["spikein_parameter"]])){
-    spikein_index <- grep(rownames(counts), pattern = "^spikein")
+    spikein_index <- BiocGenerics::grep(rownames(counts), pattern = "^spikein")
     filter_index <- (nrow(counts)-2*length(spikein_index)+1):(nrow(counts)-length(spikein_index))
     counts <- counts[-filter_index, ]
   }

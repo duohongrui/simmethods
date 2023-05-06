@@ -19,6 +19,7 @@
 #'
 #' Github URL: <https://github.com/Oshlack/splatter>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' estimate_result <- simmethods::Lun_estimation(ref_data = ref_data,
 #'                                               verbose = TRUE,
@@ -26,6 +27,8 @@
 #' estimate_result <- estimate_result[["estimate_result"]]
 #' ## Check the class
 #' class(estimate_result) == "LunParams"
+#' }
+#'
 Lun_estimation <- function(ref_data,
                            verbose = FALSE,
                            seed
@@ -97,6 +100,7 @@ Lun_estimation <- function(ref_data,
 #' Github URL: <https://github.com/Oshlack/splatter>
 #'
 #' @examples
+#' \dontrun{
 #' # Load data
 #' ref_data <- simmethods::data
 #' # Estimate parameters
@@ -178,6 +182,8 @@ Lun_estimation <- function(ref_data,
 #' max(row_data$DEFacGroup1)
 #' ### fc.down.group
 #' min(row_data$DEFacGroup1)
+#' }
+#'
 Lun_simulation <- function(parameters,
                            other_prior = NULL,
                            return_format,
@@ -233,12 +239,12 @@ Lun_simulation <- function(parameters,
                                                     "de.downFC"))
 
   # Return to users
-  message(glue::glue("nCells: {params_check[['nCells']]}"))
-  message(glue::glue("nGenes: {params_check[['nGenes']]}"))
-  message(glue::glue("nGroups: {params_check[['nGroups']]}"))
-  message(glue::glue("de.prob: {params_check[['de.nGenes']]/params_check[['nGenes']]*params_check[['nGroups']]}"))
-  message(glue::glue("fc.up.group: {params_check[['de.upFC']]}"))
-  message(glue::glue("fc.down.group: {params_check[['de.downFC']]}"))
+  message(paste0("nCells: ", params_check[['nCells']]))
+  message(paste0("nGenes: ", params_check[['nGenes']]))
+  message(paste0("nGroups: ", params_check[['nGroups']]))
+  message(paste0("de.prob: ", params_check[['de.nGenes']]/params_check[['nGenes']]*params_check[['nGroups']]))
+  message(paste0("fc.up.group: ", params_check[['de.upFC']]))
+  message(paste0("fc.down.group: ", params_check[['de.downFC']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -279,7 +285,7 @@ Lun_simulation <- function(parameters,
     de_gene <- ifelse(total_sum == params_check[['nGroups']], "no", "yes")
     row_data[, 2] <- de_gene
     row_data <- row_data[, 1:2]
-    row_data <- cbind(row_data, group_fac)
+    row_data <- BiocGenerics::cbind(row_data, group_fac)
     colnames(row_data) <- c("gene_name", "de_gene", colnames(group_fac))
   }
   # Establish SingleCellExperiment

@@ -12,14 +12,10 @@
 #' you use BEARscc, you must input the `dilution.factor` and the `volume`
 #' information to calculate the number of molecules of spike-ins.
 #' @importFrom assertthat not_empty
-#' @importFrom S4Vectors metadata
-#' @importFrom biomaRt useEnsembl getBM
-#' @importFrom SummarizedExperiment assay
 #' @importFrom SingleCellExperiment altExp
 #' @importFrom methods as
 #' @importFrom BiocGenerics do.call
 #' @importFrom stats na.omit
-#' @importFrom S4Vectors isEmpty
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
@@ -49,18 +45,21 @@
 #' Github URL: <https://github.com/seversond12/BEARscc>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' other_prior = list(dilution.factor = 50000,
 #'                    volume = 0.1,
 #'                    species = "mouse")
 #'
-#' # estimate_result <- simmethods::BEARscc_estimation(
-#' #   ref_data = ref_data,
-#' #   other_prior = other_prior,
-#' #   verbose = TRUE,
-#' #   seed = 111
-#' # )
+#' estimate_result <- simmethods::BEARscc_estimation(
+#'   ref_data = ref_data,
+#'   other_prior = other_prior,
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#' }
+#'
 BEARscc_estimation <- function(ref_data,
                                verbose = FALSE,
                                other_prior = NULL,
@@ -73,6 +72,21 @@ BEARscc_estimation <- function(ref_data,
     message("BEARscc is not installed on your device...")
     message("Installing BEARscc...")
     BiocManager::install("BEARscc")
+  }
+  if(!requireNamespace("S4Vectors", quietly = TRUE)){
+    message("S4Vectors is not installed on your device...")
+    message("Installing S4Vectors...")
+    BiocManager::install("S4Vectors")
+  }
+  if(!requireNamespace("SummarizedExperiment", quietly = TRUE)){
+    message("SummarizedExperiment is not installed on your device...")
+    message("Installing SummarizedExperiment...")
+    BiocManager::install("SummarizedExperiment")
+  }
+  if(!requireNamespace("biomaRt", quietly = TRUE)){
+    message("biomaRt is not installed on your device...")
+    message("Installing biomaRt...")
+    BiocManager::install("biomaRt")
   }
   ##############################################################################
   ####                               Check                                   ###
@@ -118,7 +132,11 @@ BEARscc_estimation <- function(ref_data,
       dplyr::filter("external_gene_name" != "")
     gene_filter <- id_convert$external_gene_name[stats::na.omit(match(rownames(ref_data),
                                                                       id_convert$external_gene_name))]
-    cat(glue::glue("In gene id conversion step, {nrow(ref_data)-(length(gene_filter)+nrow(ERCC_count))} are filtered, {length(gene_filter)+nrow(ERCC_count)} genes are retained."), "\n")
+    cat(paste0("In gene id conversion step, ",
+               nrow(ref_data)-(length(gene_filter)+nrow(ERCC_count)),
+               " are filtered",
+               length(gene_filter)+nrow(ERCC_count),
+               " genes are retained."), "\n")
     ref_data <- ref_data[gene_filter, ]
     rownames(ref_data) <- id_convert$ensembl_gene_id[stats::na.omit(match(rownames(ref_data),
                                                                           id_convert$external_gene_name))]
@@ -188,26 +206,29 @@ BEARscc_estimation <- function(ref_data,
 #' Github URL: <https://github.com/seversond12/BEARscc>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' other_prior = list(dilution.factor = 50000,
 #'                    volume = 0.1,
 #'                    species = "mouse")
 #'
-#' # estimate_result <- simmethods::BEARscc_estimation(
-#' #   ref_data = ref_data,
-#' #   other_prior = other_prior,
-#' #   verbose = TRUE,
-#' #   seed = 111
-#' # )
-#' #
-#' # simulate_result <- simmethods::BEARscc_simulation(
-#' #   parameters = estimate_result[["estimate_result"]],
-#' #   other_prior = NULL,
-#' #   return_format = "list",
-#' #   verbose = TRUE,
-#' #   seed = 111
-#' # )
+#' estimate_result <- simmethods::BEARscc_estimation(
+#'   ref_data = ref_data,
+#'   other_prior = other_prior,
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#'
+#' simulate_result <- simmethods::BEARscc_simulation(
+#'   parameters = estimate_result[["estimate_result"]],
+#'   other_prior = NULL,
+#'   return_format = "list",
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
+#' }
+#'
 BEARscc_simulation <- function(parameters,
                                other_prior = NULL,
                                return_format,
@@ -228,8 +249,8 @@ BEARscc_simulation <- function(parameters,
   # Return to users
   other_prior[["n"]] <- 1
   other_prior[["SCEList"]] <- parameters
-  cat(glue::glue("nCells: {ncol(parameters)}"), "\n")
-  cat(glue::glue("nGenes: {nrow(parameters)}"), "\n")
+  message(paste0("nCells: ", ncol(parameters)))
+  message(paste0("nGenes: ", nrow(parameters)))
 
   simulate_formals <- simutils::change_parameters(function_expr = "BEARscc::simulate_replicates",
                                                   other_prior = other_prior,
@@ -244,7 +265,7 @@ BEARscc_simulation <- function(parameters,
   set.seed(seed)
   # Simulation
   simulate_detection <- peakRAM::peakRAM(
-    simulate_result <- do.call(BEARscc::simulate_replicates, simulate_formals)
+    simulate_result <- BiocGenerics::do.call(BEARscc::simulate_replicates, simulate_formals)
   )
   ##############################################################################
   ####                        Format Conversion                              ###

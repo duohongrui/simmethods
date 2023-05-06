@@ -21,6 +21,7 @@ This function is used to simulate datasets from learned parameters by \code{zinb
 function in Splatter package.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 
 estimate_result <- simmethods::zinbwave_estimation(ref_data = ref_data,
@@ -35,6 +36,8 @@ simulate_result <- simmethods::zinbwave_simulation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. \url{https://doi.org/10.1186/s13059-017-1305-0}

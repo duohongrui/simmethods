@@ -30,6 +30,7 @@
 #'
 #' Github URL: <https://github.com/Oshlack/splatter>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' # Estimate parameters
 #' estimate_result <- SplatPop_estimation(ref_data = ref_data,
@@ -38,6 +39,8 @@
 #' estimate_result <- estimate_result[["estimate_result"]]
 #' ## Check the class
 #' class(estimate_result) == "SplatPopParams"
+#' }
+#'
 SplatPop_estimation <- function(ref_data,
                                 verbose = FALSE,
                                 other_prior = NULL,
@@ -88,6 +91,8 @@ SplatPop_estimation <- function(ref_data,
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
 #' @importFrom splatter splatPopSimulate mockVCF
+#' @importFrom BiocGenerics as.data.frame
+#'
 #' @details
 #' In addtion to simulate datasets with default parameters, users want to simulate
 #' other kinds of datasets, e.g. a counts matrix with 2 or more cell groups. In
@@ -114,6 +119,7 @@ SplatPop_estimation <- function(ref_data,
 #' Github URL: <https://github.com/Oshlack/splatter>
 #'
 #' @examples
+#' \dontrun{
 #' # Load data
 #' ref_data <- simmethods::data
 #' # Estimate parameters
@@ -255,6 +261,8 @@ SplatPop_estimation <- function(ref_data,
 #' result <- scater::logNormCounts(simulate_result[["simulate_result"]])
 #' result <- scater::runPCA(result)
 #' plotPCA(result, colour_by = "group")
+#' }
+#'
 SplatPop_simulation <- function(parameters,
                                 other_prior = NULL,
                                 return_format,
@@ -300,11 +308,11 @@ SplatPop_simulation <- function(parameters,
   # DEGs proportion
   de.prob <- params_check[["de.prob"]]
   # Return to users
-  message(glue::glue("nCells: {params_check[['nCells']]}"))
-  message(glue::glue("nGenes: {params_check[['nGenes']]}"))
-  message(glue::glue("nGroups: {params_check[['nGroups']]}"))
-  message(glue::glue("de.prob: {de.prob}"))
-  message(glue::glue("nBatches: {params_check[['nBatches']]}"))
+  message(paste0("nCells: ", params_check[['nCells']]))
+  message(paste0("nGenes: ", params_check[['nGenes']]))
+  message(paste0("nGroups: ", params_check[['nGroups']]))
+  message(paste0("de.prob: ", de.prob))
+  message(paste0("nBatches: ", params_check[['nBatches']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -372,7 +380,7 @@ SplatPop_simulation <- function(parameters,
       dplyr::mutate("n" = 1:nrow(col_data)) %>%
       dplyr::group_by("Group") %>%
       dplyr::slice_sample(prop = 0.1) %>%
-      as.data.frame()
+      BiocGenerics::as.data.frame()
     cell_index <- col_data$n
   }
   col_data <- col_data[, c("Cell", "Batch", "Group")]

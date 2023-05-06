@@ -36,6 +36,7 @@ In TedSim, users can only set \code{nGenes} to specify the number of genes in th
 simulated dataset. See \code{Examples} for instructions.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 
 ## estimation with cell group information
@@ -71,6 +72,8 @@ simulate_result <- simmethods::TedSim_simulation(
 ## counts
 counts <- simulate_result[["simulate_result"]][["count_data"]]
 dim(counts)
+}
+
 }
 \references{
 Pan X, Li H, Zhang X. TedSim: temporal dynamics simulation of single-cell RNA sequencing data and cell division history. Nucleic acids research, 2022, 50(8): 4272-4288. \url{https://doi.org/10.1093/nar/gkac235}

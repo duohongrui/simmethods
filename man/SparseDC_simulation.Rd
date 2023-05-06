@@ -40,6 +40,7 @@ cells and genes. But note that the total cell number is equal to \code{nCells} m
 For more unusually used parameters and instructions, see \code{Examples} and \code{\link[splatter:SparseDCParams]{splatter::SparseDCParams()}}
 }
 \examples{
+\dontrun{
 ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 ## cell groups
 set.seed(111)
@@ -89,6 +90,8 @@ simulate_result <- simmethods::SparseDC_simulation(
 ## counts
 counts <- simulate_result[["simulate_result"]][["count_data"]]
 dim(counts)
+}
+
 }
 \references{
 Barron M, Zhang S, Li J. A sparse differential clustering algorithm for tracing cell type changes via single-cell RNA-sequencing data. Nucleic acids research, 2018, 46(3): e14-e14. \url{https://doi.org/10.1093/nar/gkx1113}

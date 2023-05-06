@@ -33,12 +33,15 @@ In zinbwave, users do not input other extra information usually. If users want
 to check the parameters, please see \code{\link[splatter:zinbEstimate]{splatter::zinbEstimate()}} or \code{\link[splatter:ZINBParams]{splatter::ZINBParams()}}.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 ## maybe it will take a long time
 estimate_result <- simmethods::zinbwave_estimation(ref_data = ref_data,
                                                    other_prior = NULL,
                                                    verbose = TRUE,
                                                    seed = 111)
+}
+
 }
 \references{
 Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. \url{https://doi.org/10.1186/s13059-017-1305-0}

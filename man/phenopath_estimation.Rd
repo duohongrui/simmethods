@@ -23,6 +23,7 @@ This function is used to estimate useful parameters from a real dataset by
 using \code{phenoEstimate} function in Splatter package.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 ## estimation
 estimate_result <- simmethods::phenopath_estimation(
@@ -30,6 +31,8 @@ estimate_result <- simmethods::phenopath_estimation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Campbell K, Yau C. Uncovering genomic trajectories with heterogeneous genetic and environmental backgrounds across single-cells and populations. bioRxiv, 2017: 159913. \url{https://doi.org/10.1101/159913}

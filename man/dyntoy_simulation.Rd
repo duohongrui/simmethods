@@ -36,6 +36,7 @@ In dyntoy, users can only set \code{nCells} and \code{nGenes} to specify the num
 simulated dataset. See \code{Examples} for instructions.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 
 ## estimation with cell group information
@@ -72,6 +73,8 @@ simulate_result <- simmethods::dyntoy_simulation(
 ## counts
 counts <- simulate_result[["simulate_result"]][["count_data"]]
 dim(counts)
+}
+
 }
 \references{
 Github URL: \url{https://github.com/dynverse/dyntoy}

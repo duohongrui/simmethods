@@ -39,6 +39,7 @@ simulated dataset. See \code{Examples} for instructions.
 For more customed parameters, see \code{\link[splatter:MFAParams]{splatter::MFAParams()}} and \code{\link[splatter:mfaSimulate]{splatter::mfaSimulate()}}.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 ## estimation
 estimate_result <- simmethods::MFA_estimation(
@@ -72,6 +73,8 @@ simulate_result <- simmethods::MFA_simulation(
 ## counts
 counts <- simulate_result[["simulate_result"]][["count_data"]]
 dim(counts)
+}
+
 }
 \references{
 Campbell K R, Yau C. Probabilistic modeling of bifurcations in single-cell gene expression data using a Bayesian mixture of factor analyzers. Wellcome open research, 2017, 2. \url{https://doi.org/10.12688/wellcomeopenres.11087.1}

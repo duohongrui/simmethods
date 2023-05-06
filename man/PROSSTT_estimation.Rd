@@ -34,6 +34,7 @@ If this information is not available, we will detect the potential groups in ref
 For more information about PROSSTT, see \code{Examples} and \code{References}.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 ## estimation
 estimate_result <- simmethods::PROSSTT_estimation(
@@ -42,6 +43,8 @@ estimate_result <- simmethods::PROSSTT_estimation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Papadopoulos N, Gonzalo P R, Söding J. PROSSTT: probabilistic simulation of single-cell RNA-seq data for complex differentiation processes. Bioinformatics, 2019, 35(18): 3517-3519. \url{https://doi.org/10.1093/bioinformatics/btz078}

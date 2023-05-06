@@ -13,8 +13,6 @@
 #' DEGs are usually customed, so before simulating a dataset you must point it out.
 #' See `Details` below for more information.
 #' @importFrom dynwrap infer_trajectory wrap_expression add_grouping
-#' @importFrom NbClust NbClust
-#' @importFrom tislingshot ti_slingshot
 #' @return A list contains the estimated parameters and the results of execution
 #' detection.
 #' @export
@@ -27,6 +25,7 @@
 #' @references
 #' Github URL: <https://github.com/dynverse/dyntoy>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' estimate_result <- simmethods::dyntoy_estimation(
@@ -44,6 +43,8 @@
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 dyntoy_estimation <- function(ref_data,
                               verbose = FALSE,
                               other_prior = NULL,
@@ -55,6 +56,11 @@ dyntoy_estimation <- function(ref_data,
     message("tislingshot is not installed on your device...")
     message("Installing tislingshot...")
     devtools::install_github("dynverse/ti_slingshot/package/")
+  }
+  if(!requireNamespace("NbClust", quietly = TRUE)){
+    message("NbClust is not installed on your device...")
+    message("Installing NbClust...")
+    utils::install.packages("NbClust")
   }
   if(!is.matrix(ref_data)){
     ref_data <- as.matrix(ref_data)
@@ -116,7 +122,6 @@ dyntoy_estimation <- function(ref_data,
 #' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
-#' @import dyntoy
 #' @export
 #' @details
 #' In dyntoy, users can only set `nCells` and `nGenes` to specify the number of cells and genes in the
@@ -125,6 +130,7 @@ dyntoy_estimation <- function(ref_data,
 #' @references
 #' Github URL: <https://github.com/dynverse/dyntoy>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' ## estimation with cell group information
@@ -161,6 +167,8 @@ dyntoy_estimation <- function(ref_data,
 #' ## counts
 #' counts <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(counts)
+#' }
+#'
 dyntoy_simulation <- function(parameters,
                               other_prior = NULL,
                               return_format,
@@ -200,9 +208,9 @@ dyntoy_simulation <- function(parameters,
   }
 
   # Return to users
-  message(glue::glue("nCells: {nCells}"))
-  message(glue::glue("nGenes: {nGenes}"))
-  message(glue::glue("de.prob: {de.prob}"))
+  message(paste0("nCells: ", nCells))
+  message(paste0("nGenes: ", nGenes))
+  message(paste0("de.prob: ", de.prob))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################

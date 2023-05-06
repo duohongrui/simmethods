@@ -48,6 +48,7 @@ The customed parameters you can set are below:
 For more customed parameters in Lun2, please check \code{\link[splatter:Lun2Params]{splatter::Lun2Params()}}.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 group_condition <- simmethods::group_condition
 ## group_condition must be a numeric vector
@@ -107,6 +108,8 @@ fc_ingroup_to_outgroup <- row_data$DEFacIngroup/row_data$DEFacOutgroup
 table(fc_ingroup_to_outgroup != 1)[2]/10000 ## de.prob = 0.2
 ### number of all DEGs
 table(row_data$de_gene)[2]/10000 ## de.prob = 0.2
+}
+
 }
 \references{
 Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. \url{https://doi.org/10.1186/s13059-017-1305-0}

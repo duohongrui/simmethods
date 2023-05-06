@@ -44,6 +44,7 @@ There are some notes that users should know:
 For more information, see \code{Examples} and \link[hierarchicell:simulate_hierarchicell]{hierarchicell::simulate_hierarchicell}
 }
 \examples{
+\dontrun{
 ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 ## estimation
 estimate_result <- simmethods::hierarchicell_estimation(
@@ -82,8 +83,11 @@ simulate_result <- simmethods::hierarchicell_simulation(
 counts <- simulate_result[["simulate_result"]][["count_data"]]
 dim(counts)
 ## Remove NA cells
+if(!requireNamespace("tidyr", quietly = TRUE)){utils::install.packages("tidyr")}
 filter_counts <- as.matrix(t(tidyr::drop_na(as.data.frame(t(counts)))))
 dim(filter_counts)
+}
+
 }
 \references{
 Zimmerman K D, Langefeld C D. Hierarchicell: an R-package for estimating power for tests of differential expression with single-cell data. BMC genomics, 2021, 22(1): 1-8. \url{https://doi.org/10.1186/s12864-021-07635-w}

@@ -33,6 +33,7 @@ When you use POWSC to estimate parameters from a real dataset, the default setti
 are recommended.
 }
 \examples{
+\dontrun{
 ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 
 ## estimation
@@ -40,4 +41,6 @@ estimate_result <- simmethods::POWSC_estimation(ref_data = ref_data,
                                                 other_prior = NULL,
                                                 verbose = TRUE,
                                                 seed = 111)
+}
+
 }

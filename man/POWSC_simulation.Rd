@@ -39,6 +39,7 @@ The customed parameters you can set are below:
 }
 }
 \examples{
+\dontrun{
 ref_data <- SingleCellExperiment::counts(scater::mockSCE())
 
 ## estimation
@@ -84,4 +85,6 @@ table(col_data$group)
 ## gene information
 row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 table(row_data$de_gene)
+}
+
 }

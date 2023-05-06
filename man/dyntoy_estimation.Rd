@@ -35,6 +35,7 @@ kmeans automatically.
 See \code{Examples} for more instructions.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 
 estimate_result <- simmethods::dyntoy_estimation(
@@ -52,6 +53,8 @@ estimate_result <- simmethods::dyntoy_estimation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Github URL: \url{https://github.com/dynverse/dyntoy}

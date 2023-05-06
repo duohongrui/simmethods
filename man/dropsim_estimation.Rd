@@ -23,6 +23,7 @@ This function is used to estimate useful parameters from a real dataset by
 using \code{fit_parameters} function in dropsim package.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 ## estimation
 estimate_result <- simmethods::dropsim_estimation(
@@ -30,6 +31,8 @@ estimate_result <- simmethods::dropsim_estimation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Github URL: \url{https://github.com/marchinilab/dropsim}

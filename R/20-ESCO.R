@@ -27,22 +27,23 @@
 #' Github URL: <https://github.com/JINJINT/ESCO>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' estimate_result <- simmethods::ESCO_estimation(ref_data = ref_data,
 #'                                                other_prior = NULL,
 #'                                                verbose = TRUE,
 #'                                                seed = 111)
-#' # If cell group information is available, it can be another prior information.
-#' # But there is a bug in ESCO, and some datasets can not be estimated due to the
-#' # failing estimation of distribution parameters.
-#' # group_condition <- as.numeric(simmethods::group_condition)
-#' # estimate_result <- simmethods::ESCO_estimation(
-#' #   ref_data = ref_data,
-#' #   other_prior = list(group.condition = group_condition),
-#' #   verbose = TRUE,
-#' #   seed = 111
-#' # )
+#' If cell group information is available, it can be another prior information.
+#' But there is a bug in ESCO, and some datasets can not be estimated due to the
+#' failing estimation of distribution parameters.
+#' group_condition <- as.numeric(simmethods::group_condition)
+#' estimate_result <- simmethods::ESCO_estimation(
+#'   ref_data = ref_data,
+#'   other_prior = list(group.condition = group_condition),
+#'   verbose = TRUE,
+#'   seed = 111
+#' )
 #'
 #' # ----------------- Estimate tree or trajectory structured data -------------
 #' # Load data
@@ -52,6 +53,8 @@
 #'                                                other_prior = list(tree = TRUE),
 #'                                                verbose = TRUE,
 #'                                                seed = 10)
+#' }
+#'
 ESCO_estimation <- function(ref_data,
                             other_prior = NULL,
                             verbose = FALSE,
@@ -159,6 +162,7 @@ ESCO_estimation <- function(ref_data,
 #' Github URL: <https://github.com/JINJINT/ESCO>
 #'
 #' @examples
+#' \dontrun{
 #' ## Estimation
 #' ref_data <- simmethods::data
 #'
@@ -266,6 +270,8 @@ ESCO_estimation <- function(ref_data,
 #' result <- scater::logNormCounts(simulate_result[["simulate_result"]])
 #' result <- scater::runPCA(result)
 #' plotPCA(result, colour_by = "group")
+#' }
+#'
 ESCO_simulation <- function(parameters,
                             return_format,
                             other_prior = NULL,
@@ -339,10 +345,10 @@ ESCO_simulation <- function(parameters,
                                                     "de.prob"))
 
   # Return to users
-  message(glue::glue("nCells: {params_check[['nCells']]}"))
-  message(glue::glue("nGenes: {params_check[['nGenes']]}"))
-  message(glue::glue("nGroups: {params_check[['nGroups']]}"))
-  message(glue::glue("de.group: {params_check[['de.prob']]}"))
+  message(paste0("nCells: ", params_check[['nCells']]))
+  message(paste0("nGenes: ", params_check[['nGenes']]))
+  message(paste0("nGroups: ", params_check[['nGroups']]))
+  message(paste0("de.group: ", params_check[['de.prob']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################

@@ -18,6 +18,7 @@
 #' Github URL: <https://github.com/kieranrcampbell/mfa>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' ## estimation
 #' estimate_result <- simmethods::MFA_estimation(
@@ -25,6 +26,8 @@
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 MFA_estimation <- function(ref_data,
                            verbose = FALSE,
                            seed){
@@ -91,6 +94,7 @@ MFA_estimation <- function(ref_data,
 #' Github URL: <https://github.com/kieranrcampbell/mfa>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' ## estimation
 #' estimate_result <- simmethods::MFA_estimation(
@@ -124,6 +128,8 @@ MFA_estimation <- function(ref_data,
 #' ## counts
 #' counts <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(counts)
+#' }
+#'
 MFA_simulation <- function(parameters,
                            other_prior = NULL,
                            return_format,
@@ -154,8 +160,8 @@ MFA_simulation <- function(parameters,
                                                     "nGenes"))
 
   # Return to users
-  message(glue::glue("nCells: {params_check[['nCells']]}"))
-  message(glue::glue("nGenes: {params_check[['nGenes']]}"))
+  message(paste0("nCells: ", params_check[['nCells']]))
+  message(paste0("nGenes: ", params_check[['nGenes']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################

@@ -49,6 +49,7 @@ If users want to simulate groups, they should estimate group parameters by input
 For more customed parameters in SPARSim, please check \code{\link[SPARSim:SPARSim_simulation]{SPARSim::SPARSim_simulation()}}.
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 ## Estimation
 group_condition <- as.numeric(simmethods::group_condition)
@@ -120,6 +121,8 @@ simulate_result <- simmethods::SPARSim_simulation(
   verbose = TRUE,
   seed = 111
 )
+}
+
 }
 \references{
 Baruzzo G, Patuzzi I, Di Camillo B. SPARSim single cell: a count data simulator for scRNA-seq data. Bioinformatics, 2020, 36(5): 1468-1475. \url{https://doi.org/10.1093/bioinformatics/btz752}

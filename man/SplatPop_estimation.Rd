@@ -37,6 +37,7 @@ For more information, please check \link[splatter:splatPopEstimate]{splatter::sp
 }
 }
 \examples{
+\dontrun{
 ref_data <- simmethods::data
 # Estimate parameters
 estimate_result <- SplatPop_estimation(ref_data = ref_data,
@@ -45,6 +46,8 @@ estimate_result <- SplatPop_estimation(ref_data = ref_data,
 estimate_result <- estimate_result[["estimate_result"]]
 ## Check the class
 class(estimate_result) == "SplatPopParams"
+}
+
 }
 \references{
 Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. \url{https://doi.org/10.1186/s13059-017-1305-0}

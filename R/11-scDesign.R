@@ -36,6 +36,7 @@
 #'
 #' Github URL: <https://github.com/Vivianstats/scDesign>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #'
 #' ## Simulate datasets with default parameters
@@ -85,6 +86,8 @@
 #' ## cell information
 #' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
 #' table(col_data$group)
+#' }
+#'
 scDesign_simulation <- function(ref_data,
                                 other_prior = NULL,
                                 return_format,
@@ -166,12 +169,12 @@ scDesign_simulation <- function(ref_data,
   ####                               Check                                   ###
   ##############################################################################
   # Return to users
-  message(glue::glue("nCells: {sum(simulate_formals[['ncell']])}"))
-  message(glue::glue("nGenes: {nrow(simulate_formals[['realcount']])}"))
-  message(glue::glue("nGroups: {simulate_formals[['ngroup']]}"))
-  message(glue::glue("de.prob: {simulate_formals[['pUp']] + simulate_formals[['pDown']]}"))
-  message(glue::glue("fc.group: up--{simulate_formals[['fU']]}"))
-  message(glue::glue("fc.group: down--{simulate_formals[['fL']]}"))
+  message(paste0("nCells: ", sum(simulate_formals[['ncell']])))
+  message(paste0("nGenes: ", nrow(simulate_formals[['realcount']])))
+  message(paste0("nGroups: ", simulate_formals[['ngroup']]))
+  message(paste0("de.prob: ", simulate_formals[['pUp']] + simulate_formals[['pDown']]))
+  message(paste0("fc.group: up--", simulate_formals[['fU']]))
+  message(paste0("fc.group: down--", simulate_formals[['fL']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -182,7 +185,7 @@ scDesign_simulation <- function(ref_data,
   set.seed(seed)
   # Estimation
   simulate_detection <- peakRAM::peakRAM(
-    simulate_result <- do.call(scDesign::design_data, simulate_formals)
+    simulate_result <- BiocGenerics::do.call(scDesign::design_data, simulate_formals)
   )
   ##############################################################################
   ####                        Format Conversion                              ###

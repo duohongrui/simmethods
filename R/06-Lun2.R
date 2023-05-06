@@ -30,6 +30,7 @@
 #'
 #' Github URL: <https://github.com/Oshlack/splatter>
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' group_condition <- simmethods::group_condition
 #' ## group_condition can must be a numeric vector.
@@ -42,6 +43,8 @@
 #' estimate_result <- estimate_result[["estimate_result"]]
 ## Check the class
 #' class(estimate_result) == "Lun2Params"
+#' }
+#'
 Lun2_estimation <- function(ref_data,
                             verbose = FALSE,
                             other_prior = NULL,
@@ -122,6 +125,7 @@ Lun2_estimation <- function(ref_data,
 #' Github URL: <https://github.com/Oshlack/splatter>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' group_condition <- simmethods::group_condition
 #' ## group_condition must be a numeric vector
@@ -181,6 +185,8 @@ Lun2_estimation <- function(ref_data,
 #' table(fc_ingroup_to_outgroup != 1)[2]/10000 ## de.prob = 0.2
 #' ### number of all DEGs
 #' table(row_data$de_gene)[2]/10000 ## de.prob = 0.2
+#' }
+#'
 Lun2_simulation <- function(parameters,
                             other_prior = NULL,
                             return_format,
@@ -221,11 +227,11 @@ Lun2_simulation <- function(parameters,
                                                     "de.fc"))
 
   # Return to users
-  message(glue::glue("nCells: {params_check[['nCells']]}"))
-  message(glue::glue("nGenes: {params_check[['nGenes']]}"))
-  message(glue::glue("nPlates: {params_check[['nPlates']]}"))
-  message(glue::glue("de.prob: {de.prob}"))
-  message(glue::glue("fc.group: {params_check[['de.fc']]}"))
+  message(paste0("nCells: ", params_check[['nCells']]))
+  message(paste0("nGenes: ", params_check[['nGenes']]))
+  message(paste0("nPlates: ", params_check[['nPlates']]))
+  message(paste0("de.prob: ", de.prob))
+  message(paste0("fc.group: ", params_check[['de.fc']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -270,7 +276,7 @@ Lun2_simulation <- function(parameters,
     de_gene <- ifelse(total_sum == 2, "no", "yes")
     row_data[, 2] <- de_gene
     row_data <- row_data[, 1:2]
-    row_data <- cbind(row_data, group_fac)
+    row_data <- BiocGenerics::cbind(row_data, group_fac)
     colnames(row_data) <- c("gene_name", "de_gene", colnames(group_fac))
   }
 

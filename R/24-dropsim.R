@@ -14,6 +14,7 @@
 #' Github URL: <https://github.com/marchinilab/dropsim>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' ## estimation
 #' estimate_result <- simmethods::dropsim_estimation(
@@ -21,6 +22,8 @@
 #'   verbose = TRUE,
 #'   seed = 111
 #' )
+#' }
+#'
 dropsim_estimation <- function(ref_data,
                                verbose = FALSE,
                                seed
@@ -76,6 +79,7 @@ dropsim_estimation <- function(ref_data,
 #' Seurat, h5ad. If you select `h5ad`, you will get a path where the .h5ad file saves to.
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
+#' @importFrom methods slot<-
 #' @export
 #' @details
 #' In dropsim, users can only set `nCells` and `nGenes` directly.
@@ -86,6 +90,7 @@ dropsim_estimation <- function(ref_data,
 #' Github URL: <https://github.com/marchinilab/dropsim>
 #'
 #' @examples
+#' \dontrun{
 #' ref_data <- simmethods::data
 #' ## estimation
 #' estimate_result <- simmethods::dropsim_estimation(
@@ -119,6 +124,8 @@ dropsim_estimation <- function(ref_data,
 #' ## counts
 #' counts <- simulate_result[["simulate_result"]][["count_data"]]
 #' dim(counts)
+#' }
+#'
 dropsim_simulation <- function(parameters,
                                other_prior = NULL,
                                return_format,
@@ -136,11 +143,11 @@ dropsim_simulation <- function(parameters,
   other_prior[["parameters"]] <- parameters
   ## nCells
   if(!is.null(other_prior[["nCells"]])){
-    slot(other_prior[["parameters"]], "n_cells") <- as.integer(other_prior[["nCells"]])
+    methods::slot(other_prior[["parameters"]], "n_cells") <- as.integer(other_prior[["nCells"]])
   }
   ## nGenes
   if(!is.null(other_prior[["nGenes"]])){
-    slot(other_prior[["parameters"]], "n_genes") <- as.integer(other_prior[["nGenes"]])
+    methods::slot(other_prior[["parameters"]], "n_genes") <- as.integer(other_prior[["nGenes"]])
   }
   ##############################################################################
   ####                               Check                                   ###
@@ -149,8 +156,8 @@ dropsim_simulation <- function(parameters,
                                                   other_prior = other_prior,
                                                   step = "simulation")
   # Return to users
-  message(glue::glue("nCells: {other_prior[['parameters']]@n_cells}"))
-  message(glue::glue("nGenes: {other_prior[['parameters']]@n_genes}"))
+  message(paste0("nCells: ", other_prior[['parameters']]@n_cells))
+  message(paste0("nGenes: ", other_prior[['parameters']]@n_genes))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
