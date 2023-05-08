@@ -16,13 +16,13 @@ Description: A package contains the information and core execution functions of
     simulation methods for singlce-cell RNA seqencing data.
 License: GPL (>= 3)
 Depends: R (>= 4.0),
+         SingleCellExperiment,
          TedSim,
          gamlss.dist,
          gamlss.tr,
          plyr
 Imports: 
     simutils (>= 0.0.0.9000),
-    SingleCellExperiment,
     BiocManager,
     methods,
     tislingshot,
@@ -74,7 +74,8 @@ Suggests:
     biomaRt,
     reticulate,
     NbClust,
-    crayon
+    crayon,
+    CancerInSilico
 Remotes: 
     duohongrui/simutils@master,
     kdzimm/hierarchicell@master,
