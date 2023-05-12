@@ -84,7 +84,7 @@ phenopath_estimation <- function(ref_data,
 #' @importFrom splatter getParams setParam
 #' @export
 #' @details
-#' In phenopath, users can only set `nCells` to specify the number of cells in the
+#' In phenopath, users can only set `nCells` and `nGenes` to specify the number of cells and genes in the
 #' simulated dataset. See `Examples` for instructions.
 #'
 #' For more customed parameters, see [splatter::PhenoParams()] and [splatter::phenoSimulate()].

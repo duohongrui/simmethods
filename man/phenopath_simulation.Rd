@@ -32,7 +32,7 @@ Seurat, h5ad. If you select \code{h5ad}, you will get a path where the .h5ad fil
 Simulate Datasets by phenopath
 }
 \details{
-In phenopath, users can only set \code{nCells} to specify the number of cells in the
+In phenopath, users can only set \code{nCells} and \code{nGenes} to specify the number of cells and genes in the
 simulated dataset. See \code{Examples} for instructions.
 
 For more customed parameters, see \code{\link[splatter:PhenoParams]{splatter::PhenoParams()}} and \code{\link[splatter:phenoSimulate]{splatter::phenoSimulate()}}.
