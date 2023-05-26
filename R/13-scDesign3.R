@@ -5,6 +5,11 @@
 #'
 #' @param ref_data A count matrix. Each row represents a gene and each column
 #' represents a cell.
+#' @param other_prior A list with names of certain parameters. Some methods need
+#' extra parameters to execute the estimation step, so you must input them. In
+#' simulation step, the number of cells, genes, groups, batches, the percent of
+#' DEGs are usually customed, so before simulating a dataset you must point it out.
+#' See `Details` below for more information.
 #' @param verbose Logical.
 #' @param seed An integer of a random seed.
 #' @importFrom peakRAM peakRAM

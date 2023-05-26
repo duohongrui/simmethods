@@ -10,6 +10,12 @@ scDesign3_estimation(ref_data, other_prior = NULL, verbose = FALSE, seed)
 \item{ref_data}{A count matrix. Each row represents a gene and each column
 represents a cell.}
 
+\item{other_prior}{A list with names of certain parameters. Some methods need
+extra parameters to execute the estimation step, so you must input them. In
+simulation step, the number of cells, genes, groups, batches, the percent of
+DEGs are usually customed, so before simulating a dataset you must point it out.
+See \code{Details} below for more information.}
+
 \item{verbose}{Logical.}
 
 \item{seed}{An integer of a random seed.}

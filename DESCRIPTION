@@ -75,7 +75,9 @@ Suggests:
     reticulate,
     NbClust,
     crayon,
-    CancerInSilico
+    CancerInSilico,
+    SimBPDD,
+    scDesign3
 Remotes: 
     duohongrui/simutils@master,
     kdzimm/hierarchicell@master,
