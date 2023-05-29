@@ -160,7 +160,6 @@ scDesign3_method_definition <- function(...){
       first = "Dongyuan",
       last = "Song",
       email = "dongyuansong@ucla.edu",
-      github = "https://github.com/SONGDONGYUAN1994",
       orcid = NULL
     ),
     manuscript = manuscript_definition(

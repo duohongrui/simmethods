@@ -66,7 +66,6 @@ SimBPDD_method_definition <- function(...){
       first = "Roman",
       last = "Schefzik",
       email = "Roman.Schefzik@medma.uni-heidelberg.de",
-      github = "https://github.com/RomanSchefzik",
       orcid = NULL
     ),
     manuscript = manuscript_definition(
