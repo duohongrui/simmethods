@@ -13,16 +13,17 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, error = FALSE, message = FA
 ```{r echo=FALSE}
 method_expand <- function(method_name){
   method_name <- c(method_name,
-                   "ESCO_tree",
-                   "ESCO_traj",
-                   "SCRIP_GP-trendedBCV",
-                   "SCRIP_GP-commonBCV",
-                   "SCRIP_BGP-commonBCV",
-                   "SCRIP_BP",
-                   "SCRIP_BGP-trendedBCV",
-                   "Splat_paths",
-                   "SplatPop_paths")
-  method_name <- method_name[-22]
+                   "ESCO-tree",
+                   "ESCO-traj",
+                   "SCRIP-GP-trendedBCV",
+                   "SCRIP-GP-commonBCV",
+                   "SCRIP-BGP-commonBCV",
+                   "SCRIP-BP",
+                   "SCRIP-BGP-trendedBCV",
+                   "Splat-paths",
+                   "SplatPop-paths",
+                   "SCRIP-paths")
+  method_name <- method_name[-23]
   return(method_name)
 }
 ```
@@ -34,9 +35,9 @@ methods <- simmethods::get_method()
 
 <img src="man/figures/simmethods_logo.png" align="right" width = "193px" height="223px"/>
 
-# A collection of 42 simulation methods for single-cell RNA-seq data
+# A collection of 45 simulation methods for single-cell RNA-seq data
 
-Simmethods collects and documents 42 popular and common simulation methods for single-cell transcriptomics data. To satisfy user's requirements in different scenarios, we bundled the simulators comprehensively and users can simulate many kinds of single-cell RNA-seq data (different number of groups, batches, differential expressed genes and even data with **differentiation trajectory**) using certain methods. If you want to learn how to use a certain simulation method, please check the following chart and commit an issue or send an Email to us when you have any question.
+Simmethods collects and documents 45 popular and common simulation methods for single-cell transcriptomics data. To satisfy user's requirements in different scenarios, we bundled the simulators comprehensively and users can simulate many kinds of single-cell RNA-seq data (different number of groups, batches, differential expressed genes and even data with **differentiation trajectory**) using certain methods. If you want to learn how to use a certain simulation method, please check the following chart and commit an issue or send an Email to us when you have any question.
 
 ## The Table of Simulation Methods
 
@@ -45,7 +46,7 @@ method_name <- names(methods)
 method_name <- method_expand(method_name)
 
 method_table <- purrr::map_dfr(method_name, .f = function(x){
-  real_name <- stringr::str_split(x, pattern = "_", simplify = TRUE)[1]
+  real_name <- stringr::str_split(x, pattern = "-", simplify = TRUE)[1]
   method_definition <- methods[[real_name]][[paste0(real_name, "_method")]]
   
   ## Language
