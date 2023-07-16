@@ -77,7 +77,8 @@ Suggests:
     crayon,
     CancerInSilico,
     SimBPDD,
-    scDesign3
+    scDesign3,
+    SRTsim
 Remotes: 
     duohongrui/simutils@master,
     kdzimm/hierarchicell@master,
