@@ -62,6 +62,8 @@ scDesign3_estimation <- function(ref_data,
   }else{
     col_data <- data.frame("cell_type" = rep("A", ncol(ref_data)))
   }
+  rownames(col_data) <- colnames(ref_data)
+  col_data$"cell_name" <- colnames(ref_data)
   ### batch
   if(!is.null(other_prior[["batch.condition"]])){
     col_data$batch.condition <- paste0("Batch", as.numeric(other_prior[["batch.condition"]]))
@@ -73,8 +75,22 @@ scDesign3_estimation <- function(ref_data,
   }else{
     spatial <- NULL
   }
+  ### trajectory
+  if(!is.null(other_prior[["traj"]])){
+    if(!requireNamespace("dyndimred", quietly = TRUE)){
+      devtools::install_github("dynverse/dyndimred")
+    }
+    traj_info <- pseudotime_info(ref_data = ref_data, other_prior = other_prior, col_data = col_data, seed = seed)
+    col_data <- traj_info$col_data
+    mu_formula <- traj_info$mu_formula
+    pseudotime <- traj_info$pseudotime
+  }else{
+    pseudotime <- NULL
+  }
+
   # Establish SingleCellExperiment
-  sce <- SingleCellExperiment::SingleCellExperiment(list(counts = ref_data), colData = col_data)
+  sce <- SingleCellExperiment::SingleCellExperiment(list(counts = ref_data),
+                                                         colData = col_data)
   ### step by step
   #### other_covariates
   other_covariates <- NULL
@@ -85,7 +101,7 @@ scDesign3_estimation <- function(ref_data,
     sce = sce,
     assay_use = "counts",
     celltype = "cell_type",
-    pseudotime = NULL,
+    pseudotime = pseudotime,
     spatial = spatial,
     other_covariates = other_covariates,
     corr_by = "cell_type",
@@ -108,6 +124,9 @@ scDesign3_estimation <- function(ref_data,
     }
     if(!is.null(other_prior[["spatial.x"]]) & !is.null(other_prior[["spatial.y"]])){
       mu_formula <- "s(spatial.x, spatial.y, bs = 'gp')"
+    }
+    if(!is.null(other_prior[["traj"]])){
+      mu_formula <- traj_info$mu_formula
     }
   }
   scDesign3_est <- function(){

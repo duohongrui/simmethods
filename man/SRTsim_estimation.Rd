@@ -30,8 +30,8 @@ using \code{srtsim_fit} function in SRTsim package.
 In SRTsim, users should input the spatial coordinates of spots or cells in the
 spatial transcriptome data.
 \enumerate{
-\item imagecol. The x-axis coordinates.
-\item imagerow. The y-axis coordinates.
+\item spatial.x. The x-axis coordinates.
+\item spatial.y. The y-axis coordinates.
 \item group.condition. Users can also input a numeric vector to specify the tissues or domains that each cell/spot comes from,
 like \verb{other_prior = list(group.condition = the numeric vector)}.
 \item sim_scheme. If the labels of cells/spots represents the tissue layers or slices, \code{sim_scheme} should be set as \code{tissue}.

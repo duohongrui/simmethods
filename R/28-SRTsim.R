@@ -18,8 +18,8 @@
 #' In SRTsim, users should input the spatial coordinates of spots or cells in the
 #' spatial transcriptome data.
 #'
-#' 1. imagecol. The x-axis coordinates.
-#' 2. imagerow. The y-axis coordinates.
+#' 1. spatial.x. The x-axis coordinates.
+#' 2. spatial.y. The y-axis coordinates.
 #' 3. group.condition. Users can also input a numeric vector to specify the tissues or domains that each cell/spot comes from,
 #' like `other_prior = list(group.condition = the numeric vector)`.
 #' 4. sim_scheme. If the labels of cells/spots represents the tissue layers or slices, `sim_scheme` should be set as `tissue`.
@@ -49,8 +49,8 @@ SRTsim_estimation <- function(ref_data,
   }
 
   ### image col and row
-  if(is.null(other_prior[["imagecol"]]) |
-     is.null(other_prior[["imagerow"]])){
+  if(is.null(other_prior[["spatial.x"]]) |
+     is.null(other_prior[["spatial.y"]])){
     stop("Please input the spatial coordinates of spots in other_prior")
   }
   ### scheme
@@ -64,8 +64,8 @@ SRTsim_estimation <- function(ref_data,
     other_prior[["group.condition"]] <- LETTERS[other_prior[["group.condition"]]]
   }
   ## create a SRT object
-  metadata <- data.frame("x" = other_prior[["imagecol"]],
-                         "y" = other_prior[["imagerow"]],
+  metadata <- data.frame("x" = other_prior[["spatial.x"]],
+                         "y" = other_prior[["spatial.y"]],
                          "label" = other_prior[["group.condition"]])
   rownames(metadata) <- colnames(ref_data)
   simSRT <- SRTsim::createSRT(count_in = ref_data,
