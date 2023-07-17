@@ -201,6 +201,11 @@ scMultiSim_simulation <- function(parameters,
     other_prior <- other_prior[-which(names(other_prior) == "nBatches")]
   }
 
+  # Return to users
+  message(paste0("nCells: ", other_prior[["num.cells"]]))
+  message(paste0("nGenes: ", other_prior[["num.genes"]]))
+  message(paste0("nGroups: ", length(unique(as.numeric(other_prior[["tree"]][["edge"]])))))
+  message(paste0("nBatches: ", nBatches))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################
@@ -219,8 +224,7 @@ scMultiSim_simulation <- function(parameters,
       simulate_detection <- peakRAM::peakRAM(
         simulate_result <- excution_function(options = other_prior,
                                              seed = seed)
-      ),
-      silent = TRUE
+      )
     )
   }else{
     excution_function <- function(options, seed, nbatch){
@@ -234,12 +238,8 @@ scMultiSim_simulation <- function(parameters,
         simulate_result <- excution_function(options = other_prior,
                                              seed = seed,
                                              nbatch = nBatches)
-      ),
-      silent = TRUE
+      )
     )
-  }
-  if(methods::is(try_error, "try-error")){
-    stop("The phylo tree is not suitable for simulating datasets")
   }
   ##############################################################################
   ####                        Format Conversion                              ###
