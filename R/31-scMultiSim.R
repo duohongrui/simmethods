@@ -22,7 +22,7 @@
 #' For more information about scMultiSim, see `Examples` and `References`.
 #'
 #' @references
-#' Li H, Zhang Z, Squires M, et al. scMultiSim: simulation of multi-modality single cell data guided by cell-cell interactions and gene regulatory networks[J]. bioRxiv, 2022: 2022.10. 15.512320. <https://doi.org/10.1101/2022.10.15.512320>
+#' Li H, Zhang Z, Squires M, et al. scMultiSim: simulation of multi-modality single cell data guided by cell-cell interactions and gene regulatory networks. bioRxiv, 2022: 2022.10. 15.512320. <https://doi.org/10.1101/2022.10.15.512320>
 #'
 #' Github URL: <https://github.com/ZhangLabGT/scMultiSim>
 #'
@@ -113,7 +113,7 @@ scMultiSim_estimation <- function(ref_data,
 #'
 #'
 #' @references
-#' Li H, Zhang Z, Squires M, et al. scMultiSim: simulation of multi-modality single cell data guided by cell-cell interactions and gene regulatory networks[J]. bioRxiv, 2022: 2022.10. 15.512320. <https://doi.org/10.1101/2022.10.15.512320>
+#' Li H, Zhang Z, Squires M, et al. scMultiSim: simulation of multi-modality single cell data guided by cell-cell interactions and gene regulatory networks. bioRxiv, 2022: 2022.10. 15.512320. <https://doi.org/10.1101/2022.10.15.512320>
 #'
 #' Github URL: <https://github.com/ZhangLabGT/scMultiSim>
 #'
@@ -208,11 +208,6 @@ scMultiSim_simulation <- function(parameters,
   # Estimation
   set.seed(seed)
   if(nBatches == 1){
-    excution_function <- function(options, seed){
-      simulate_result <- scMultiSim::sim_true_counts(options)
-      scMultiSim::add_expr_noise(simulate_result, randseed = seed)
-      return(simulate_result)
-    }
     try_error <- try(
       simulate_detection <- peakRAM::peakRAM(
         simulate_result <- excution_function(options = other_prior,
@@ -220,17 +215,11 @@ scMultiSim_simulation <- function(parameters,
       )
     )
   }else{
-    excution_function <- function(options, seed, nbatch){
-      simulate_result <- scMultiSim::sim_true_counts(options)
-      scMultiSim::add_expr_noise(simulate_result, randseed = seed)
-      scMultiSim::divide_batches(simulate_result, nbatch = nbatch, randseed = seed)
-      return(simulate_result)
-    }
     try_error <- try(
       simulate_detection <- peakRAM::peakRAM(
-        simulate_result <- excution_function(options = other_prior,
-                                             seed = seed,
-                                             nbatch = nBatches)
+        simulate_result <- excution_batch_function(options = other_prior,
+                                                   seed = seed,
+                                                   nbatch = nBatches)
       )
     )
   }

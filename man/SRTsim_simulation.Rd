@@ -33,7 +33,7 @@ For more customed parameters in SRTsim, please check \code{\link[SRTsim:srtsim_f
 For detailed information about SRTsim, go to \url{https://cran.r-project.org/web/packages/SRTsim/index.html}.
 }
 \references{
-Zhu J, Shang L, Zhou X. SRTsim: spatial pattern preserving simulations for spatially resolved transcriptomics\link{J}. Genome Biology, 2023, 24(1): 39. \url{https://doi.org/10.1186/s13059-023-02879-z}
+Zhu J, Shang L, Zhou X. SRTsim: spatial pattern preserving simulations for spatially resolved transcriptomics. Genome Biology, 2023, 24(1): 39. \url{https://doi.org/10.1186/s13059-023-02879-z}
 
 URL: \url{https://cran.r-project.org/web/packages/SRTsim/index.html}
 }

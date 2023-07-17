@@ -60,7 +60,7 @@ dim(counts)
 
 }
 \references{
-Li H, Zhang Z, Squires M, et al. scMultiSim: simulation of multi-modality single cell data guided by cell-cell interactions and gene regulatory networks\link{J}. bioRxiv, 2022: 2022.10. 15.512320. \url{https://doi.org/10.1101/2022.10.15.512320}
+Li H, Zhang Z, Squires M, et al. scMultiSim: simulation of multi-modality single cell data guided by cell-cell interactions and gene regulatory networks. bioRxiv, 2022: 2022.10. 15.512320. \url{https://doi.org/10.1101/2022.10.15.512320}
 
 Github URL: \url{https://github.com/ZhangLabGT/scMultiSim}
 }

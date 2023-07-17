@@ -109,5 +109,22 @@ pseudotime_info <- function(ref_data, other_prior, col_data, seed){
   return(
     dplyr::lst(col_data, mu_formula, pseudotime)
   )
+}
 
+
+
+#' @importFrom scMultiSim sim_true_counts add_expr_noise
+excution_function <- function(options, seed){
+  simulate_result <- scMultiSim::sim_true_counts(options)
+  scMultiSim::add_expr_noise(simulate_result, randseed = seed)
+  return(simulate_result)
+}
+
+
+#' @importFrom scMultiSim divide_batches
+excution_batch_function <- function(options, seed, nbatch){
+  simulate_result <- scMultiSim::sim_true_counts(options)
+  scMultiSim::add_expr_noise(simulate_result, randseed = seed)
+  scMultiSim::divide_batches(simulate_result, nbatch = nbatch, randseed = seed)
+  return(simulate_result)
 }

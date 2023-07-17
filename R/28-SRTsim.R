@@ -26,7 +26,7 @@
 #' `sim_scheme` is set as `domain` by default.
 #'
 #' @references
-#' Zhu J, Shang L, Zhou X. SRTsim: spatial pattern preserving simulations for spatially resolved transcriptomics[J]. Genome Biology, 2023, 24(1): 39. <https://doi.org/10.1186/s13059-023-02879-z>
+#' Zhu J, Shang L, Zhou X. SRTsim: spatial pattern preserving simulations for spatially resolved transcriptomics. Genome Biology, 2023, 24(1): 39. <https://doi.org/10.1186/s13059-023-02879-z>
 #'
 #' URL: <https://cran.r-project.org/web/packages/SRTsim/index.html>
 #'
@@ -115,7 +115,7 @@ SRTsim_estimation <- function(ref_data,
 #'
 #' @export
 #' @references
-#' Zhu J, Shang L, Zhou X. SRTsim: spatial pattern preserving simulations for spatially resolved transcriptomics[J]. Genome Biology, 2023, 24(1): 39. <https://doi.org/10.1186/s13059-023-02879-z>
+#' Zhu J, Shang L, Zhou X. SRTsim: spatial pattern preserving simulations for spatially resolved transcriptomics. Genome Biology, 2023, 24(1): 39. <https://doi.org/10.1186/s13059-023-02879-z>
 #'
 #' URL: <https://cran.r-project.org/web/packages/SRTsim/index.html>
 #'
