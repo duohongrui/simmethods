@@ -1,6 +1,5 @@
 #' @importFrom dynwrap is_wrapper_with_expression
 #' @importFrom dplyr full_join across case_when pull
-#' @return
 #'
 pseudotime_info <- function(ref_data, other_prior, col_data, seed){
   if(!requireNamespace("parallelDist", quietly = TRUE)){
