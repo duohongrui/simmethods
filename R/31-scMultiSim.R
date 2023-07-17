@@ -103,6 +103,7 @@ scMultiSim_estimation <- function(ref_data,
 #' @param verbose Logical. Whether to return messages or not.
 #' @param seed A random seed.
 #' @importFrom stringr str_split str_count str_extract_all str_replace
+#' @importFrom dplyr select
 #' @export
 #' @details
 #' In scMultiSim, `nCells` and `nGenes` are usually customed and users can set
@@ -249,7 +250,7 @@ scMultiSim_simulation <- function(parameters,
     mutate(
       group = paste0("group", rep(c(1:length(table(cell_meta$pop))), table(cell_meta$pop)))
     ) %>%
-    select("cell_id", "group")
+    dplyr::select("cell_id", "group")
   if(nBatches > 1){
     col_data$"batch" <- paste0("Batch", cell_meta$batch)
     counts <- simulate_result$counts_with_batches
