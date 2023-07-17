@@ -104,6 +104,7 @@ scMultiSim_estimation <- function(ref_data,
 #' @param seed A random seed.
 #' @importFrom stringr str_split str_count str_extract_all str_replace
 #' @importFrom dplyr select
+#' @importFrom scMultiSim sim_true_counts add_expr_noise divide_batches
 #' @export
 #' @details
 #' In scMultiSim, `nCells` and `nGenes` are usually customed and users can set
@@ -145,14 +146,6 @@ scMultiSim_simulation <- function(parameters,
                                   seed
 ){
 
-  ##############################################################################
-  ####                            Environment                                ###
-  ##############################################################################
-  if(!requireNamespace("simutils", quietly = TRUE)){
-    message("Splatter is not installed on your device")
-    message("Installing simutils...")
-    devtools::install_github("duohongrui/simutils")
-  }
   ##############################################################################
   ####                               Check                                   ###
   ##############################################################################

@@ -20,7 +20,8 @@ Depends: R (>= 4.0),
          TedSim,
          gamlss.dist,
          gamlss.tr,
-         plyr
+         plyr,
+         scMultiSim
 Imports: 
     simutils (>= 0.0.0.9000),
     BiocManager,
@@ -88,7 +89,8 @@ Remotes:
     dynverse/dyntoy@master,
     YosefLab/SymSim@master,
     PeterZZQ/VeloSim@master,
-    dynverse/dyngen@master
+    dynverse/dyngen@master,
+    ZhangLabGT/scMultiSim@bioconductor
 URL: https://github.com/duohongrui/simmethods
 BugReports: https://github.com/duohongrui/simmethods/issues
 Encoding: UTF-8
