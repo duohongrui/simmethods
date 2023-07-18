@@ -169,13 +169,13 @@ scMultiSim_simulation <- function(parameters,
 
   ### trajectory
   if(is.null(other_prior[["traj"]])){
-    other_prior[["discrete.cif"]] <- FALSE
+    other_prior[["discrete.cif"]] <- TRUE
   }else{
-    other_prior[["discrete.cif"]] <- other_prior[["traj"]]
+    other_prior[["discrete.cif"]] <- FALSE
   }
 
   ### group
-  other_prior[["discrete.min.pop.size"]] <- 1
+  other_prior[["discrete.min.pop.size"]] <- 3
   if(is.null(other_prior[["prob.group"]])){
     other_prior[["discrete.pop.size"]] <- NA
   }else{
@@ -184,6 +184,7 @@ scMultiSim_simulation <- function(parameters,
                                                                   prop = other_prior[["prob.group"]],
                                                                   prop_sum_strict = 1,
                                                                   digits = 0)
+    other_prior[["discrete.pop.size"]] <- as.integer(other_prior[["discrete.pop.size"]])
   }
 
   ### batch
@@ -197,7 +198,7 @@ scMultiSim_simulation <- function(parameters,
   # Return to users
   message(paste0("nCells: ", other_prior[["num.cells"]]))
   message(paste0("nGenes: ", other_prior[["num.genes"]]))
-  message(paste0("nGroups: ", length(unique(as.numeric(other_prior[["tree"]][["edge"]])))))
+  message(paste0("nGroups: ", nrow(parameters$phylo$edge)))
   message(paste0("nBatches: ", nBatches))
   ##############################################################################
   ####                            Simulation                                 ###
