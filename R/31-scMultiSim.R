@@ -171,6 +171,7 @@ scMultiSim_simulation <- function(parameters,
   if(is.null(other_prior[["traj"]])){
     other_prior[["discrete.cif"]] <- TRUE
   }else{
+    cat("Simulating datasets with trajectory.../n")
     other_prior[["discrete.cif"]] <- FALSE
   }
 

@@ -68,7 +68,6 @@ pseudotime_info <- function(ref_data, other_prior, col_data, seed){
                                "pseudotime" = unname(dist[, start_cell_id]))
       col_data <- col_data %>%
         dplyr::full_join(pseudotime, by = "cell_name")
-      col_data$l <- factor(col_data$l)
       mu_formula = "s(pseudotime, k = 10, bs = 'cr')"
       pseudotime <- c("pseudotime")
     }
@@ -97,11 +96,7 @@ pseudotime_info <- function(ref_data, other_prior, col_data, seed){
     pseudotime <- data.frame("cell_name" = names(dist[, start_cell_id]),
                              "pseudotime" = unname(dist[, start_cell_id]))
     col_data <- col_data %>%
-      dplyr::full_join(pseudotime, by = "cell_name") %>%
-      mutate(
-        l = TRUE
-      )
-    col_data$l <- factor(col_data$l)
+      dplyr::full_join(pseudotime, by = "cell_name")
     mu_formula = "s(pseudotime, k = 10, bs = 'cr')"
     pseudotime <- c("pseudotime")
   }
