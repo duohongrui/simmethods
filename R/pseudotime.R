@@ -23,7 +23,14 @@ pseudotime_info <- function(ref_data, other_prior, col_data, seed){
     traj_type <- dynwrap_data$trajectory_type
     milestone_network <- dynwrap_data$milestone_network
     start_milestone <- dynwrap_data$root_milestone_id
-    start_cell <- names(dynwrap_data$grouping)[which(dynwrap_data$grouping %in% start_milestone)]
+    if(is.null(start_milestone)){
+      start_milestone <- milestone_network$from[1]
+    }
+    if(is.null(dynwrap_data$grouping)){
+      start_cell <- col_data$cell_name[which(other_prior$group.condition %in% start_milestone)]
+    }else{
+      start_cell <- names(dynwrap_data$grouping)[which(dynwrap_data$grouping %in% start_milestone)]
+    }
     set.seed(seed)
     start_cell_id <- start_cell[sample(1:length(start_cell), size = 1)]
     if(traj_type == "bifurcation"){

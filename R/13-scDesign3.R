@@ -80,8 +80,11 @@ scDesign3_estimation <- function(ref_data,
     if(!requireNamespace("dyndimred", quietly = TRUE)){
       devtools::install_github("dynverse/dyndimred")
     }
-    cat("Constructing lineages for the data.../n")
-    traj_info <- pseudotime_info(ref_data = ref_data, other_prior = other_prior, col_data = col_data, seed = seed)
+    cat("Constructing lineages for the data...\n")
+    traj_info <- pseudotime_info(ref_data = ref_data,
+                                 other_prior = other_prior,
+                                 col_data = col_data,
+                                 seed = seed)
     col_data <- traj_info$col_data
     mu_formula <- traj_info$mu_formula
     pseudotime <- traj_info$pseudotime
