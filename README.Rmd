@@ -22,8 +22,10 @@ method_expand <- function(method_name){
                    "SCRIP-BGP-trendedBCV",
                    "Splat-paths",
                    "SplatPop-paths",
-                   "SCRIP-paths")
-  method_name <- method_name[-23]
+                   "SCRIP-paths",
+                   "scDesign3-tree",
+                   "scMultiSim-tree")
+  method_name <- method_name[-24]
   return(method_name)
 }
 ```
@@ -35,9 +37,9 @@ methods <- simmethods::get_method()
 
 <img src="man/figures/simmethods_logo.png" align="right" width = "193px" height="223px"/>
 
-# A collection of 45 simulation methods for single-cell RNA-seq data
+# A collection of 49 simulation methods for single-cell and spatial transcriptome data
 
-Simmethods collects and documents 45 popular and common simulation methods for single-cell transcriptomics data. To satisfy user's requirements in different scenarios, we bundled the simulators comprehensively and users can simulate many kinds of single-cell RNA-seq data (different number of groups, batches, differential expressed genes and even data with **differentiation trajectory**) using certain methods. If you want to learn how to use a certain simulation method, please check the following chart and commit an issue or send an Email to us when you have any question.
+Simmethods collects and documents 49 popular and common simulation methods for single-cell and spatial transcriptome data. To satisfy user's requirements in different scenarios, we bundled the simulators comprehensively and users can simulate many kinds of single-cell RNA-seq data (different number of groups, batches, differential expressed genes and even data with **differentiation trajectory**) using certain methods. If you want to learn how to use a certain simulation method, please check the following chart and commit an issue or send an Email to us when you have any question.
 
 ## The Table of Simulation Methods
 
