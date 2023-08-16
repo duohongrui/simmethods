@@ -353,23 +353,28 @@ SplatPop_simulation <- function(parameters,
                                        name = "path.from",
                                        value = seq(1:params_check[['nGroups']])-1)
     }
+    simulate_detection <- peakRAM::peakRAM(
+      simulate_result <- splatter::splatPopSimulate(parameters,
+                                                    method = "paths",
+                                                    vcf = vcf,
+                                                    gff = gff,
+                                                    eqtl = other_prior[["eqtl"]],
+                                                    means = other_prior[["means"]],
+                                                    key = other_prior[["key"]],
+                                                    verbose = verbose)
+    )
   }else{
-    if(params_check[["nGroups"]] == 1){
-      submethod <- "single"
-    }else if(params_check[["nGroups"]] != 1){
-      submethod <- "groups"
-    }
+    simulate_detection <- peakRAM::peakRAM(
+      simulate_result <- splatter::splatPopSimulate(parameters,
+                                                    vcf = vcf,
+                                                    gff = gff,
+                                                    eqtl = other_prior[["eqtl"]],
+                                                    means = other_prior[["means"]],
+                                                    key = other_prior[["key"]],
+                                                    verbose = verbose)
+    )
   }
-  simulate_detection <- peakRAM::peakRAM(
-    simulate_result <- splatter::splatPopSimulate(parameters,
-                                                  method = submethod,
-                                                  vcf = vcf,
-                                                  gff = gff,
-                                                  eqtl = other_prior[["eqtl"]],
-                                                  means = other_prior[["means"]],
-                                                  key = other_prior[["key"]],
-                                                  verbose = verbose)
-  )
+
   ##############################################################################
   ####                        Format Conversion                              ###
   ##############################################################################
