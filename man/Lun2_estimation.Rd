@@ -30,8 +30,8 @@ using \code{lun2Estimate} function in Splatter package.
 }
 \details{
 When you use Lun2 to estimate parameters from a real dataset, you must input
-a numeric vector to specify the groups or plates that each cell comes from,
-like \verb{other_prior = list(group.condition = the numeric vector)}. See \code{Examples}
+a numeric vector to specify the batches or plates that each cell comes from,
+like \verb{other_prior = list(batch.condition = the numeric vector)}. See \code{Examples}
 and learn from it.
 }
 \examples{
@@ -39,7 +39,7 @@ and learn from it.
 ref_data <- simmethods::data
 group_condition <- simmethods::group_condition
 ## group_condition can must be a numeric vector.
-other_prior <- list(group.condition = as.numeric(group_condition))
+other_prior <- list(batch.condition = as.numeric(group_condition))
 ## Estimation
 estimate_result <- simmethods::Lun2_estimation(ref_data = ref_data,
                                                other_prior = other_prior,

@@ -20,8 +20,8 @@
 #' @export
 #' @details
 #' When you use Lun2 to estimate parameters from a real dataset, you must input
-#' a numeric vector to specify the groups or plates that each cell comes from,
-#' like `other_prior = list(group.condition = the numeric vector)`. See `Examples`
+#' a numeric vector to specify the batches or plates that each cell comes from,
+#' like `other_prior = list(batch.condition = the numeric vector)`. See `Examples`
 #' and learn from it.
 #' @references
 #' Zappia L, Phipson B, Oshlack A. Splatter: simulation of single-cell RNA sequencing data. Genome biology, 2017, 18(1): 1-15. https://doi.org/10.1186/s13059-017-1305-0
@@ -34,7 +34,7 @@
 #' ref_data <- simmethods::data
 #' group_condition <- simmethods::group_condition
 #' ## group_condition can must be a numeric vector.
-#' other_prior <- list(group.condition = as.numeric(group_condition))
+#' other_prior <- list(batch.condition = as.numeric(group_condition))
 #' ## Estimation
 #' estimate_result <- simmethods::Lun2_estimation(ref_data = ref_data,
 #'                                                other_prior = other_prior,
@@ -56,10 +56,10 @@ Lun2_estimation <- function(ref_data,
   if(!is.matrix(ref_data)){
     ref_data <- as.matrix(ref_data)
   }
-  if(is.null(other_prior[["group.condition"]])){
-    stop("Please input the information of group condition")
+  if(is.null(other_prior[["batch.condition"]])){
+    stop("Please input the information of batch condition")
   }else{
-    other_prior[["plates"]] <- other_prior[["group.condition"]]
+    other_prior[["plates"]] <- other_prior[["batch.condition"]]
   }
   if(is.null(other_prior[["min.size"]])){
     min.size <- 50
@@ -113,8 +113,6 @@ Lun2_estimation <- function(ref_data,
 #' The customed parameters you can set are below:
 #' 1. nCells. In Lun2, you can not set nCells directly and should set cell.plates instead. For example, if you want to simulate 1000 cells, you can type `other_prior = list(cell.plates = sample(1:3, 1000, replace = TRUE))` and you will get three plates or groups of cells. If you only want to simulate one plate or group, just type `other_prior = list(cell.plates = rep(1, 1000))`
 #' 2. nGenes. You can directly set `other_prior = list(nGenes = 5000)` to simulate 5000 genes.
-#' 3. de.prob. You can directly set `other_prior = list(de.prob = 0.2)` to simulate DEGs that account for 20 percent of all genes.
-#' 4. fc.group. You can directly set `other_prior = list(fc.group. = 2)` to specify the foldchange of DEGs.
 #'
 #' For more customed parameters in Lun2, please check [splatter::Lun2Params()].
 #' @references
@@ -129,7 +127,7 @@ Lun2_estimation <- function(ref_data,
 #' ref_data <- simmethods::data
 #' group_condition <- simmethods::group_condition
 #' ## group_condition must be a numeric vector
-#' other_prior <- list(group.condition = as.numeric(group_condition))
+#' other_prior <- list(batch.condition = as.numeric(group_condition))
 #' ## Estimation
 #' estimate_result <- simmethods::Lun2_estimation(ref_data = ref_data,
 #'                                                other_prior = other_prior,
@@ -155,36 +153,6 @@ Lun2_estimation <- function(ref_data,
 #' ## row_data
 #' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 #' head(row_data)
-#'
-#'
-#' # (2) Simulate two groups (de.prob = 0.2, fc.group = 2)
-#' simulate_result <- simmethods::Lun2_simulation(
-#'   parameters = estimate_result[["estimate_result"]],
-#'   other_prior = list(cell.plates = sample(1:2, 500, replace = TRUE),
-#'                      nGenes = 10000,
-#'                      de.prob = 0.2,
-#'                      fc.group = 2),
-#'   return_format = "list",
-#'   verbose = TRUE,
-#'   seed = 111
-#' )
-#' count_data <- simulate_result[["simulate_result"]][["count_data"]]
-#' dim(count_data)
-#' ## cell information
-#' col_data <- simulate_result[["simulate_result"]][["col_meta"]]
-#' head(col_data)
-#' table(col_data$plate)
-#' ## gene information
-#' row_data <- simulate_result[["simulate_result"]][["row_meta"]]
-#' head(row_data)
-#' ### The result of Lun2 contains the factors of different groups and uses can
-#' ### calculate the fold change by division. For example, the DEFactors of A gene
-#' ### in Ingroup and Outgroup are respectively 2 and 1, and the fold change of A gene
-#' ### is 2/1=2 or 1/2=0.5.
-#' fc_ingroup_to_outgroup <- row_data$DEFacIngroup/row_data$DEFacOutgroup
-#' table(fc_ingroup_to_outgroup != 1)[2]/10000 ## de.prob = 0.2
-#' ### number of all DEGs
-#' table(row_data$de_gene)[2]/10000 ## de.prob = 0.2
 #' }
 #'
 Lun2_simulation <- function(parameters,
@@ -203,35 +171,31 @@ Lun2_simulation <- function(parameters,
                                            other_prior = other_prior,
                                            method = "Lun2")
   }
-  # de.prob
-  if(!is.null(other_prior[["de.prob"]])){
-    nPlates <- splatter::getParam(parameters, "nPlates")
-    parameters <- splatter::setParam(parameters,
-                                     name = "de.nGenes",
-                                     value = round(other_prior[["de.prob"]]*parameters@nGenes))
-    de.prob <- other_prior[["de.prob"]]
-  }else{
-    de.prob <- parameters@de.nGenes/parameters@nGenes
-  }
-  # fc.group
-  if(!is.null(other_prior[["fc.group"]])){
-    parameters <- splatter::setParam(parameters,
-                                     name = "de.fc",
-                                     value = other_prior[["fc.group"]])
-  }
+  # # de.prob
+  # if(!is.null(other_prior[["de.prob"]])){
+  #   nPlates <- splatter::getParam(parameters, "nPlates")
+  #   parameters <- splatter::setParam(parameters,
+  #                                    name = "de.nGenes",
+  #                                    value = round(other_prior[["de.prob"]]*parameters@nGenes))
+  #   de.prob <- other_prior[["de.prob"]]
+  # }else{
+  #   de.prob <- parameters@de.nGenes/parameters@nGenes
+  # }
+  # # fc.group
+  # if(!is.null(other_prior[["fc.group"]])){
+  #   parameters <- splatter::setParam(parameters,
+  #                                    name = "de.fc",
+  #                                    value = other_prior[["fc.group"]])
+  # }
   # Get params to check
   params_check <- splatter::getParams(parameters, c("nCells",
                                                     "nGenes",
-                                                    "nPlates",
-                                                    "de.nGenes",
-                                                    "de.fc"))
+                                                    "nPlates"))
 
   # Return to users
   message(paste0("nCells: ", params_check[['nCells']]))
   message(paste0("nGenes: ", params_check[['nGenes']]))
   message(paste0("nPlates: ", params_check[['nPlates']]))
-  message(paste0("de.prob: ", de.prob))
-  message(paste0("fc.group: ", params_check[['de.fc']]))
   ##############################################################################
   ####                            Simulation                                 ###
   ##############################################################################

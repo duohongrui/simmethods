@@ -41,8 +41,6 @@ The customed parameters you can set are below:
 \enumerate{
 \item nCells. In Lun2, you can not set nCells directly and should set cell.plates instead. For example, if you want to simulate 1000 cells, you can type \code{other_prior = list(cell.plates = sample(1:3, 1000, replace = TRUE))} and you will get three plates or groups of cells. If you only want to simulate one plate or group, just type \code{other_prior = list(cell.plates = rep(1, 1000))}
 \item nGenes. You can directly set \code{other_prior = list(nGenes = 5000)} to simulate 5000 genes.
-\item de.prob. You can directly set \code{other_prior = list(de.prob = 0.2)} to simulate DEGs that account for 20 percent of all genes.
-\item fc.group. You can directly set \code{other_prior = list(fc.group. = 2)} to specify the foldchange of DEGs.
 }
 
 For more customed parameters in Lun2, please check \code{\link[splatter:Lun2Params]{splatter::Lun2Params()}}.
@@ -52,7 +50,7 @@ For more customed parameters in Lun2, please check \code{\link[splatter:Lun2Para
 ref_data <- simmethods::data
 group_condition <- simmethods::group_condition
 ## group_condition must be a numeric vector
-other_prior <- list(group.condition = as.numeric(group_condition))
+other_prior <- list(batch.condition = as.numeric(group_condition))
 ## Estimation
 estimate_result <- simmethods::Lun2_estimation(ref_data = ref_data,
                                                other_prior = other_prior,
@@ -78,36 +76,6 @@ head(col_data)
 ## row_data
 row_data <- simulate_result[["simulate_result"]][["row_meta"]]
 head(row_data)
-
-
-# (2) Simulate two groups (de.prob = 0.2, fc.group = 2)
-simulate_result <- simmethods::Lun2_simulation(
-  parameters = estimate_result[["estimate_result"]],
-  other_prior = list(cell.plates = sample(1:2, 500, replace = TRUE),
-                     nGenes = 10000,
-                     de.prob = 0.2,
-                     fc.group = 2),
-  return_format = "list",
-  verbose = TRUE,
-  seed = 111
-)
-count_data <- simulate_result[["simulate_result"]][["count_data"]]
-dim(count_data)
-## cell information
-col_data <- simulate_result[["simulate_result"]][["col_meta"]]
-head(col_data)
-table(col_data$plate)
-## gene information
-row_data <- simulate_result[["simulate_result"]][["row_meta"]]
-head(row_data)
-### The result of Lun2 contains the factors of different groups and uses can
-### calculate the fold change by division. For example, the DEFactors of A gene
-### in Ingroup and Outgroup are respectively 2 and 1, and the fold change of A gene
-### is 2/1=2 or 1/2=0.5.
-fc_ingroup_to_outgroup <- row_data$DEFacIngroup/row_data$DEFacOutgroup
-table(fc_ingroup_to_outgroup != 1)[2]/10000 ## de.prob = 0.2
-### number of all DEGs
-table(row_data$de_gene)[2]/10000 ## de.prob = 0.2
 }
 
 }
