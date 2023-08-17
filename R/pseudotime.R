@@ -28,8 +28,13 @@ pseudotime_info <- function(ref_data, other_prior, col_data, seed){
     }
     if(is.null(dynwrap_data$grouping)){
       start_cell <- col_data$cell_name[which(other_prior$group.condition %in% start_milestone)]
+      if(S4Vectors::isEmpty(start_cell)){
+        start_cell <- col_data$cell_name[which(other_prior$group.condition %in% unique(other_prior$group.condition)[1])]
+      }
+      groups <- other_prior$group.condition
     }else{
       start_cell <- names(dynwrap_data$grouping)[which(dynwrap_data$grouping %in% start_milestone)]
+      groups <- dynwrap_data$grouping
     }
     set.seed(seed)
     start_cell_id <- start_cell[sample(1:length(start_cell), size = 1)]
@@ -42,12 +47,12 @@ pseudotime_info <- function(ref_data, other_prior, col_data, seed){
                                                                                 milestone_network$from)][2],
                     inter_name)
       dist <- parallelDist::parallelDist(dimred) %>% as.matrix()
-      dist1 <- parallelDist::parallelDist(dimred[which(dynwrap_data$grouping %in% li1_name), ]) %>% as.matrix()
-      dist2 <- parallelDist::parallelDist(dimred[which(dynwrap_data$grouping %in% li2_name), ]) %>% as.matrix()
-      pseudotime1 <- data.frame("cell_name" = names(dist[which(dynwrap_data$grouping %in% li1_name), start_cell_id]),
-                                "pseudotime1" = S4Vectors::unname(dist[which(dynwrap_data$grouping %in% li1_name), start_cell_id]))
-      pseudotime2 <- data.frame("cell_name" = names(dist[which(dynwrap_data$grouping %in% li2_name), start_cell_id]),
-                                "pseudotime2" = S4Vectors::unname(dist[which(dynwrap_data$grouping %in% li2_name), start_cell_id]))
+      dist1 <- parallelDist::parallelDist(dimred[which(groups %in% li1_name), ]) %>% as.matrix()
+      dist2 <- parallelDist::parallelDist(dimred[which(groups %in% li2_name), ]) %>% as.matrix()
+      pseudotime1 <- data.frame("cell_name" = names(dist[which(groups %in% li1_name), start_cell_id]),
+                                "pseudotime1" = S4Vectors::unname(dist[which(groups %in% li1_name), start_cell_id]))
+      pseudotime2 <- data.frame("cell_name" = names(dist[which(groups %in% li2_name), start_cell_id]),
+                                "pseudotime2" = S4Vectors::unname(dist[which(groups %in% li2_name), start_cell_id]))
       col_data <- col_data %>%
         dplyr::full_join(pseudotime1, by = "cell_name") %>%
         dplyr::full_join(pseudotime2, by = "cell_name") %>%
