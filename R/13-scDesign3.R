@@ -364,8 +364,13 @@ scDesign3_simulation <- function(parameters,
   ### group
   if(nGroups != 1){
     if(!is.null(scDeisgn3_data[["newCovariate"]])){
-      group <- as.character(scDeisgn3_data[["newCovariate"]][["corr_group"]])
-      col_data$group <- group
+      if(is.null(scDeisgn3_data[["newCovariate"]][["corr_group"]])){
+        group <- scDeisgn3_data[["dat"]][["corr_group"]]
+        col_data$group <- group
+      }else{
+        group <- as.character(scDeisgn3_data[["newCovariate"]][["corr_group"]])
+        col_data$group <- group
+      }
     }else{
       group <- scDeisgn3_data[["dat"]][["corr_group"]]
       col_data$group <- group
@@ -373,7 +378,15 @@ scDesign3_simulation <- function(parameters,
   }
   ### batch
   if(nBatches != 1){
-    if(is.null(scDeisgn3_data[["newCovariate"]])){
+    if(!is.null(scDeisgn3_data[["newCovariate"]])){
+      if(is.null(scDeisgn3_data[["newCovariate"]][["batch.condition"]])){
+        batch <- scDeisgn3_data[["dat"]][["batch.condition"]]
+        col_data$batch <- batch
+      }else{
+        batch <- scDeisgn3_data[["newCovariate"]][["batch.condition"]]
+        col_data$batch <- batch
+      }
+    }else{
       batch <- scDeisgn3_data[["dat"]][["batch.condition"]]
       col_data$batch <- batch
     }
