@@ -151,7 +151,6 @@ scDesign3_estimation <- function(ref_data,
       family_use = ifelse(!is.null(other_prior[["family_use"]]), other_prior[["family_use"]], "nb"),
       copula = ifelse(!is.null(other_prior[["copula"]]), other_prior[["copula"]], "gaussian"),
       n_cores = ifelse(!is.null(other_prior[["n_cores"]]), other_prior[["n_cores"]], 1),
-      new_covariate = NULL,
       input_data = scDeisgn3_data$dat
     )
 
