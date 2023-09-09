@@ -352,7 +352,8 @@ scDesign3_simulation <- function(parameters,
       family_use = ifelse(!is.null(other_prior[["family_use"]]), other_prior[["family_use"]], "nb"),
       input_data = scDeisgn3_data$dat,
       new_covariate = scDeisgn3_data$newCovariate,
-      important_feature = scDeisgn3_copula$important_feature
+      important_feature = scDeisgn3_copula$important_feature,
+      filtered_gene = scDeisgn3_data$filtered_gene
     )
   )
   ##############################################################################
