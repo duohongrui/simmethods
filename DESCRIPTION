@@ -26,7 +26,6 @@ Imports:
     simutils (>= 0.0.0.9000),
     BiocManager,
     methods,
-    tislingshot,
     BiocGenerics,
     splatter (>= 1.14.1),
     BiocParallel,
@@ -81,7 +80,8 @@ Suggests:
     CancerInSilico,
     SimBPDD,
     scDesign3,
-    SRTsim
+    SRTsim,
+    tislingshot
 Remotes: 
     duohongrui/simutils@master,
     kdzimm/hierarchicell@master,

@@ -171,16 +171,16 @@ Lun2_simulation <- function(parameters,
                                            other_prior = other_prior,
                                            method = "Lun2")
   }
-  # # de.prob
-  # if(!is.null(other_prior[["de.prob"]])){
-  #   nPlates <- splatter::getParam(parameters, "nPlates")
-  #   parameters <- splatter::setParam(parameters,
-  #                                    name = "de.nGenes",
-  #                                    value = round(other_prior[["de.prob"]]*parameters@nGenes))
-  #   de.prob <- other_prior[["de.prob"]]
-  # }else{
-  #   de.prob <- parameters@de.nGenes/parameters@nGenes
-  # }
+  # de.prob
+  if(!is.null(other_prior[["de.prob"]])){
+    nPlates <- splatter::getParam(parameters, "nPlates")
+    parameters <- splatter::setParam(parameters,
+                                     name = "de.nGenes",
+                                     value = round(other_prior[["de.prob"]]*parameters@nGenes))
+    de.prob <- other_prior[["de.prob"]]
+  }else{
+    de.prob <- parameters@de.nGenes/parameters@nGenes
+  }
   # # fc.group
   # if(!is.null(other_prior[["fc.group"]])){
   #   parameters <- splatter::setParam(parameters,
