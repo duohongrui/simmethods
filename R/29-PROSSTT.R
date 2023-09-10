@@ -231,11 +231,11 @@ PROSSTT_simulation <- function(parameters,
     message("Installing reticulate...")
     utils::install.packages("reticulate")
   }
-  a <- system("which python", ignore.stdout = TRUE)
+  a <- system("which python", intern = TRUE)
   if(a == 1){
-    reticulate::use_python(system("which python3"))
+    reticulate::use_python(system("which python3", intern = TRUE))
   }else{
-    reticulate::use_python(system("which python"))
+    reticulate::use_python(a)
   }
   reticulate::source_python(exec_text)
   simulation_params <- list(newick_string = newick_tree,
