@@ -232,7 +232,7 @@ PROSSTT_simulation <- function(parameters,
     utils::install.packages("reticulate")
   }
   a <- system("which python", intern = TRUE)
-  if(a == 1){
+  if(S4Vectors::isEmpty(a)){
     reticulate::use_python(system("which python3", intern = TRUE))
   }else{
     reticulate::use_python(a)
