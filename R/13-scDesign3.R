@@ -361,6 +361,11 @@ scDesign3_simulation <- function(parameters,
   ##############################################################################
   counts <- as.matrix(simulate_result)
   col_data <- data.frame("cell_name" = colnames(counts))
+  ### spatial information
+  if(!is.null(scDeisgn3_data[["newCovariate"]][["spatial.x"]])){
+    col_data$"x" <- scDeisgn3_data[["newCovariate"]][["spatial.x"]]
+    col_data$"y" <- scDeisgn3_data[["newCovariate"]][["spatial.y"]]
+  }
   ### group
   if(nGroups != 1){
     if(!is.null(scDeisgn3_data[["newCovariate"]])){
