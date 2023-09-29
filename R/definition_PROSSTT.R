@@ -83,7 +83,8 @@ PROSSTT_method_definition <- function(...){
       date = "2019",
       peer_review = TRUE
     ),
-    description = "PROSSTT is a package with code for the simulation of scRNAseq data for dynamic processes such as cell differentiation.")
+    description = "PROSSTT is a package with code for the simulation of scRNAseq data for dynamic processes such as cell differentiation.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/29-prosstt/")
 
   list(PROSSTT_method = PROSSTT_method,
        PROSSTT_parameters = PROSSTT_parameters)

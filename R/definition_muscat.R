@@ -205,7 +205,8 @@ muscat_method_definition <- function(...){
       date = "2020",
       peer_review = TRUE
     ),
-    description = "Multi-sample multi-group scRNA-seq analysis tools.")
+    description = "Multi-sample multi-group scRNA-seq analysis tools.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/23-muscat/")
 
   list(muscat_method = muscat_method,
        muscat_parameters = muscat_parameters)

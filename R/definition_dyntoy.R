@@ -70,7 +70,8 @@ dyntoy_method_definition <- function(...){
       date = NULL,
       peer_review = NULL
     ),
-    description = NULL)
+    description = NULL,
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/32-dyntoy/")
 
   list(dyntoy_method = dyntoy_method,
        dyntoy_parameters = dyntoy_parameters)

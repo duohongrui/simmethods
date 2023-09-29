@@ -156,7 +156,8 @@ SparseDC_method_definition <- function(...){
       date = "2018",
       peer_review = TRUE
     ),
-    description = "This algorithm clusters samples from two different populations, links the clusters across the conditions and identifies marker genes for these changes. The package was designed for scRNA-Seq data but is also applicable to many other data types, just replace cells with samples and genes with variables.")
+    description = "This algorithm clusters samples from two different populations, links the clusters across the conditions and identifies marker genes for these changes. The package was designed for scRNA-Seq data but is also applicable to many other data types, just replace cells with samples and genes with variables.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/22-sparsedc/")
 
   list(SparseDC_method = SparseDC_method,
        SparseDC_parameters = SparseDC_parameters)

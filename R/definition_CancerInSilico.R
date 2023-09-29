@@ -56,7 +56,8 @@ CancerInSilico_method_definition <- function(...){
       date = "2019",
       peer_review = TRUE
     ),
-    description = "The CancerInSilico package provides an R interface for running mathematical models of tumor progresson and generating gene expression data from the results.")
+    description = "The CancerInSilico package provides an R interface for running mathematical models of tumor progresson and generating gene expression data from the results.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/25-cancerinsilico/")
 
   list(CancerInSilico_method = CancerInSilico_method,
        CancerInSilico_parameters = CancerInSilico_parameters)

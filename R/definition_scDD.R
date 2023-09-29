@@ -93,7 +93,8 @@ scDD_method_definition <- function(...){
       date = "2016",
       peer_review = TRUE
     ),
-    description = "This package implements a method to analyze single-cell RNA- seq Data utilizing flexible Dirichlet Process mixture models. Genes with differential distributions of expression are classified into several interesting patterns of differences between two conditions. The package also includes functions for simulating data with these patterns from negative binomial distributions.")
+    description = "This package implements a method to analyze single-cell RNA- seq Data utilizing flexible Dirichlet Process mixture models. Genes with differential distributions of expression are classified into several interesting patterns of differences between two conditions. The package also includes functions for simulating data with these patterns from negative binomial distributions.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/10-scdd/")
 
   list(scDD_method = scDD_method,
        scDD_parameters = scDD_parameters)

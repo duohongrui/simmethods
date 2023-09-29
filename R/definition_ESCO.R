@@ -356,7 +356,8 @@ ESCO_method_definition <- function(...){
       date = "2021",
       peer_review = TRUE
     ),
-    description = "Single cell simulator with gene co-expression.")
+    description = "Single cell simulator with gene co-expression.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/21-esco/")
 
   list(ESCO_method = ESCO_method,
        ESCO_parameters = ESCO_parameters)

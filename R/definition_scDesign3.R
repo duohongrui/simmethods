@@ -169,7 +169,8 @@ scDesign3_method_definition <- function(...){
       date = "2023",
       peer_review = TRUE
     ),
-    description = "The R package scDesign3 is an all-in-one single-cell data simulation tool by using reference datasets with different cell states (cell types, trajectories or and spatial coordinates), different modalities (gene expression, chromatin accessibility, protein abundance, DNA methylation, etc), and complex experimental designs.")
+    description = "The R package scDesign3 is an all-in-one single-cell data simulation tool by using reference datasets with different cell states (cell types, trajectories or and spatial coordinates), different modalities (gene expression, chromatin accessibility, protein abundance, DNA methylation, etc), and complex experimental designs.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/13-scdesign3/")
 
   list(scDesign3_method = scDesign3_method,
        scDesign3_parameters = scDesign3_parameters)

@@ -181,7 +181,8 @@ SymSim_method_definition <- function(...){
       date = 2019,
       peer_review = TRUE
     ),
-    description = NULL)
+    description = NULL,
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/34-symsim/")
 
   list(SymSim_method = SymSim_method,
        SymSim_parameters = SymSim_parameters)

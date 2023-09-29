@@ -83,7 +83,8 @@ POWSC_method_definition <- function(...){
       date = "2020",
       peer_review = TRUE
     ),
-    description = "POWSC, a simulation-based method, is designed to provide power evaluation and sample size recommendation for single-cell RNA sequencing DE analysis")
+    description = "POWSC, a simulation-based method, is designed to provide power evaluation and sample size recommendation for single-cell RNA sequencing DE analysis",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/9-powsc/")
 
   list(POWSC_method = POWSC_method,
        POWSC_parameters = POWSC_parameters)

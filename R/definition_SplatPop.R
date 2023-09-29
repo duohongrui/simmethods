@@ -519,7 +519,8 @@ SplatPop_method_definition <- function(...){
       date = "2021",
       peer_review = TRUE
     ),
-    description = "Splatter is a package for the simulation of single-cell RNA sequencing count data")
+    description = "Splatter is a package for the simulation of single-cell RNA sequencing count data",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/4-splatpop/")
 
   list(SplatPop_method = SplatPop_method,
        SplatPop_parameters = SplatPop_parameters)

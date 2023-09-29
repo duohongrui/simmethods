@@ -146,7 +146,8 @@ scDesign2_method_definition <- function(...){
       date = "2021",
       peer_review = TRUE
     ),
-    description = "An interpretable simulator that generates realistic single-cell gene expression count data with gene correlations recapitulated.")
+    description = "An interpretable simulator that generates realistic single-cell gene expression count data with gene correlations recapitulated.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/12-scdesign2/")
 
   list(scDesign2_method = scDesign2_method,
        scDesign2_parameters = scDesign2_parameters)

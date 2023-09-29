@@ -151,7 +151,8 @@ zingeR_method_definition <- function(...){
       date = "2018",
       peer_review = TRUE
     ),
-    description = "Zero-inflated negative binomial gene expression in R.")
+    description = "Zero-inflated negative binomial gene expression in R.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/15-zinger/")
 
   list(zingeR_method = zingeR_method,
        zingeR_parameters = zingeR_parameters)

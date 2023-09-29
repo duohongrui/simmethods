@@ -75,7 +75,8 @@ SimBPDD_method_definition <- function(...){
       date = "2021",
       peer_review = TRUE
     ),
-    description = "Simulating differential distributions for Beta-Poisson models, in particular for single-cell RNA-sequencing (scRNA-seq) data.")
+    description = "Simulating differential distributions for Beta-Poisson models, in particular for single-cell RNA-sequencing (scRNA-seq) data.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/24-simbpdd/")
 
   list(SimBPDD_method = SimBPDD_method,
        SimBPDD_parameters = SimBPDD_parameters)

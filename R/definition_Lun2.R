@@ -166,7 +166,8 @@ Lun2_method_definition <- function(...){
       date = "2017",
       peer_review = TRUE
     ),
-    description = "Splatter is a package for the simulation of single-cell RNA sequencing count data")
+    description = "Splatter is a package for the simulation of single-cell RNA sequencing count data",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/6-lun2/")
 
   list(Lun2_method = Lun2_method,
        Lun2_parameters = Lun2_parameters)

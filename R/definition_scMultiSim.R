@@ -128,7 +128,8 @@ scMultiSim_method_definition <- function(...){
       date = "2022",
       peer_review = FALSE
     ),
-    description = "scMultiSim is an in silico simulator that generates multi-modality data of single-cells, including gene expression, chromatin accessibility, RNA velocity, and spatial location of cells. It takes a cell differential tree and a gene regulatory network (GRN) as input, and simulates spliced and unspliced counts while accounting for the relationships between modalities.")
+    description = "scMultiSim is an in silico simulator that generates multi-modality data of single-cells, including gene expression, chromatin accessibility, RNA velocity, and spatial location of cells. It takes a cell differential tree and a gene regulatory network (GRN) as input, and simulates spliced and unspliced counts while accounting for the relationships between modalities.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/31-scmultisim/")
 
   list(scMultiSim_method = scMultiSim_method,
        scMultiSim_parameters = scMultiSim_parameters)

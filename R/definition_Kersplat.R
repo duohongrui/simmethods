@@ -220,7 +220,8 @@ Kersplat_method_definition <- function(...){
       date = "2017",
       peer_review = TRUE
     ),
-    description = "Splatter is a package for the simulation of single-cell RNA sequencing count data")
+    description = "Splatter is a package for the simulation of single-cell RNA sequencing count data",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/3-kersplat/")
 
   list(Kersplat_method = Kersplat_method,
        Kersplat_parameters = Kersplat_parameters)

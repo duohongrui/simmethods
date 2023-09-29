@@ -100,7 +100,8 @@ MFA_method_definition <- function(...){
       date = "2017",
       peer_review = TRUE
     ),
-    description = "Probabilistic inference of single-cell bifurcations.")
+    description = "Probabilistic inference of single-cell bifurcations.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/36-mfa/")
 
   list(MFA_method = MFA_method,
        MFA_parameters = MFA_parameters)

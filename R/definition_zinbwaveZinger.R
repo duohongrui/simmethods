@@ -148,7 +148,8 @@ zinbwaveZinger_method_definition <- function(...){
       date = "2018",
       peer_review = TRUE
     ),
-    description = "Integrating zingeR with ZINB-WaVE weights.")
+    description = "Integrating zingeR with ZINB-WaVE weights.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/16-zinbwavezinger/")
 
   list(zinbwaveZinger_method = zinbwaveZinger_method,
        zinbwaveZinger_parameters = zinbwaveZinger_parameters)

@@ -144,7 +144,8 @@ dyngen_method_definition <- function(...){
       date = "2021",
       peer_review = TRUE
     ),
-    description = "Simulating single-cell data using gene regulatory networks.")
+    description = "Simulating single-cell data using gene regulatory networks.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/33-dyngen/")
 
   list(dyngen_method = dyngen_method,
        dyngen_parameters = dyngen_parameters)

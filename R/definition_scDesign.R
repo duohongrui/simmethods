@@ -109,7 +109,8 @@ scDesign_method_definition <- function(...){
       date = "2019",
       peer_review = TRUE
     ),
-    description = "A statistical simulator for rational scRNA-seq experimental design.")
+    description = "A statistical simulator for rational scRNA-seq experimental design.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/11-scdesign/")
 
   list(scDesign_method = scDesign_method,
        scDesign_parameters = scDesign_parameters)

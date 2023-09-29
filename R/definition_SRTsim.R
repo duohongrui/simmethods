@@ -140,7 +140,8 @@ SRTsim_method_definition <- function(...){
       date = "2023",
       peer_review = TRUE
     ),
-    description = "An independent, reproducible, and flexible Spatially Resolved Transcriptomics (SRT) simulation framework that can be used to facilitate the development of SRT analytical methods for a wide variety of SRT-specific analyses.")
+    description = "An independent, reproducible, and flexible Spatially Resolved Transcriptomics (SRT) simulation framework that can be used to facilitate the development of SRT analytical methods for a wide variety of SRT-specific analyses.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/28-srtsim/")
 
   list(SRTsim_method = SRTsim_method,
        SRTsim_parameters = SRTsim_parameters)

@@ -334,7 +334,8 @@ powsimR_method_definition <- function(...){
       date = "2017",
       peer_review = TRUE
     ),
-    description = "Power analysis for bulk and single cell RNA-seq experiments")
+    description = "Power analysis for bulk and single cell RNA-seq experiments",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/8-powsimr/")
 
   list(powsimR_method = powsimR_method,
        powsimR_parameters = powsimR_parameters)

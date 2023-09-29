@@ -96,7 +96,8 @@ phenopath_method_definition <- function(...){
       date = "2017",
       peer_review = FALSE
     ),
-    description = "Genomic trajectories (pseudotimes) in the presence of heterogenous environmental and genetic backgrounds.")
+    description = "Genomic trajectories (pseudotimes) in the presence of heterogenous environmental and genetic backgrounds.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/37-phenopath/")
 
   list(phenopath_method = phenopath_method,
        phenopath_parameters = phenopath_parameters)

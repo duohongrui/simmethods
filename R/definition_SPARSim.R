@@ -89,7 +89,8 @@ SPARSim_method_definition <- function(...){
       date = "2019",
       peer_review = TRUE
     ),
-    description = "SPARSim is an R tool for the simulation of single cell RNA-seq (scRNA-seq) count table.")
+    description = "SPARSim is an R tool for the simulation of single cell RNA-seq (scRNA-seq) count table.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/19-sparsim/")
 
   list(SPARSim_method = SPARSim_method,
        SPARSim_parameters = SPARSim_parameters)

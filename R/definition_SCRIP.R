@@ -340,7 +340,8 @@ SCRIP_method_definition <- function(...){
       date = "2022",
       peer_review = TRUE
     ),
-    description = "We provide a comprehensive scheme that is capable of simulating Single Cell RNA Sequencing data for various parameters of Biological Coefficient of Variation, busting kinetics, differential expression (DE), cell or sample groups, cell trajectory, batch effect and other experimental designs. 'SCRIP' proposed and compared two frameworks with Gamma-Poisson and Beta-Gamma-Poisson models for simulating Single Cell RNA Sequencing data.")
+    description = "We provide a comprehensive scheme that is capable of simulating Single Cell RNA Sequencing data for various parameters of Biological Coefficient of Variation, busting kinetics, differential expression (DE), cell or sample groups, cell trajectory, batch effect and other experimental designs. 'SCRIP' proposed and compared two frameworks with Gamma-Poisson and Beta-Gamma-Poisson models for simulating Single Cell RNA Sequencing data.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/7-scrip/")
 
   list(SCRIP_method = SCRIP_method,
        SCRIP_parameters = SCRIP_parameters)

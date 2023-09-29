@@ -117,7 +117,8 @@ zinbwave_method_definition <- function(...){
       date = "2018",
       peer_review = TRUE
     ),
-    description = "Implements a general and flexible zero-inflated negative binomial model that can be used to provide a low-dimensional representations of single-cell RNA-seq data. The model accounts for zero inflation (dropouts), over-dispersion, and the count nature of the data. The model also accounts for the difference in library sizes and optionally for batch effects and/or other covariates, avoiding the need for pre-normalize the data.")
+    description = "Implements a general and flexible zero-inflated negative binomial model that can be used to provide a low-dimensional representations of single-cell RNA-seq data. The model accounts for zero inflation (dropouts), over-dispersion, and the count nature of the data. The model also accounts for the difference in library sizes and optionally for batch effects and/or other covariates, avoiding the need for pre-normalize the data.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/14-zinbwave/")
 
   list(zinbwave_method = zinbwave_method,
        zinbwave_parameters = zinbwave_parameters)

@@ -208,7 +208,8 @@ SPsimSeq_method_definition <- function(...){
       date = "2020",
       peer_review = TRUE
     ),
-    description = "SPsimSeq uses a specially designed exponential family for density estimation to constructs the distribution of gene expression levels from a given real RNA sequencing data.")
+    description = "SPsimSeq uses a specially designed exponential family for density estimation to constructs the distribution of gene expression levels from a given real RNA sequencing data.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/20-spsimseq/")
 
   list(SPsimSeq_method = SPsimSeq_method,
        SPsimSeq_parameters = SPsimSeq_parameters)

@@ -122,7 +122,8 @@ BEARscc_method_definition <- function(...){
       date = "2018",
       peer_review = TRUE
     ),
-    description = "BEARscc is a noise estimation and injection tool that is designed to assess putative single-cell RNA-seq clusters in the context of experimental noise estimated by ERCC spike-in controls.")
+    description = "BEARscc is a noise estimation and injection tool that is designed to assess putative single-cell RNA-seq clusters in the context of experimental noise estimated by ERCC spike-in controls.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/18-bearscc/")
 
   list(BEARscc_method = BEARscc_method,
        BEARscc_parameters = BEARscc_parameters)

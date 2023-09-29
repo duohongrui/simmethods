@@ -73,7 +73,8 @@ dropsim_method_definition <- function(...){
       date = NULL,
       peer_review = NULL
     ),
-    description = "R Package for Single Cell RNAseq Synthetic Data Simulation.")
+    description = "R Package for Single Cell RNAseq Synthetic Data Simulation.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/27-dropsim/")
 
   list(dropsim_method = dropsim_method,
        dropsim_parameters = dropsim_parameters)

@@ -132,7 +132,8 @@ hierarchicell_method_definition <- function(...){
       date = "2021",
       peer_review = TRUE
     ),
-    description = "An R package for simulating cell-type specific and hierarchical single-cell expression data.")
+    description = "An R package for simulating cell-type specific and hierarchical single-cell expression data.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/26-hierarchicell/")
 
   list(hierarchicell_method = hierarchicell_method,
        hierarchicell_parameters = hierarchicell_parameters)

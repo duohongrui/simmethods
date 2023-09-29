@@ -168,7 +168,8 @@ VeloSim_method_definition <- function(...){
       date = 2021,
       peer_review = FALSE
     ),
-    description = "This package simulates single cell RNA sequencing data during cell developmental process, the simulation includes unspliced RNA count, spliced RNA count, RNA velocity and cell developmental pseudo-time. The simulation can be used to benchmark computational methods including trajectory inference and RNA velocity inference.")
+    description = "This package simulates single cell RNA sequencing data during cell developmental process, the simulation includes unspliced RNA count, spliced RNA count, RNA velocity and cell developmental pseudo-time. The simulation can be used to benchmark computational methods including trajectory inference and RNA velocity inference.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/35-velosim/")
 
   list(VeloSim_method = VeloSim_method,
        VeloSim_parameters = VeloSim_parameters)

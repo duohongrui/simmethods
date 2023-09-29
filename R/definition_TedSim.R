@@ -92,7 +92,8 @@ TedSim_method_definition <- function(...){
       date = "2022",
       peer_review = TRUE
     ),
-    description = "Temporal dynamics simulation of single-cell RNA sequencing data and cell division history")
+    description = "Temporal dynamics simulation of single-cell RNA sequencing data and cell division history",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/30-tedsim/")
 
   list(TedSim_method = TedSim_method,
        TedSim_parameters = TedSim_parameters)

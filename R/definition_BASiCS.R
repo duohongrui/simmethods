@@ -109,7 +109,8 @@ BASiCS_method_definition <- function(...){
       date = "2015",
       peer_review = TRUE
     ),
-    description = "BASiCS (Bayesian Analysis of Single-Cell Sequencing data) is an integrated Bayesian hierarchical model to perform statistical analyses of single-cell RNA sequencing datasets in the context of supervised experiments (where the groups of cells of interest are known a priori.")
+    description = "BASiCS (Bayesian Analysis of Single-Cell Sequencing data) is an integrated Bayesian hierarchical model to perform statistical analyses of single-cell RNA sequencing datasets in the context of supervised experiments (where the groups of cells of interest are known a priori.",
+    vignette = "http://47.254.148.113/software/Simsite/references/methods/17-basics/")
 
   list(BASiCS_method = BASiCS_method,
        BASiCS_parameters = BASiCS_parameters)
