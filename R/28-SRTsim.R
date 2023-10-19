@@ -144,6 +144,7 @@ SRTsim_simulation <- function(parameters,
   }
   # Seed
   set.seed(seed)
+  other_prior <- other_prior[intersect(names(other_prior), names(formals(SRTsim::srtsim_count)))]
   simulate_detection <- peakRAM::peakRAM(
     simulate_result <- BiocGenerics::do.call(SRTsim::srtsim_count, other_prior)
   )
